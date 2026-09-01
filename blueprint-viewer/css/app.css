@@ -710,3 +710,23 @@ body.is-mobile .browser-add { padding: 9px 10px; }
 body.is-locked [for="fileInput"],
 body.is-locked #fileInput,
 body.is-locked .browser-add { display: none !important; }
+
+/* Deep-linked session: swap the dropzone for a quiet loading state up front,
+   so the "choose a file" UI is never painted, even on a slow load. */
+html.locked-boot .dropzone-inner > * { display: none !important; }
+html.locked-boot .dropzone-inner::after {
+  content: "Loading blueprint\2026";
+  font: 500 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-faint, rgba(198,212,238,.45));
+  animation: lockedPulse 1.4s ease-in-out infinite;
+}
+@keyframes lockedPulse { 0%, 100% { opacity: .45 } 50% { opacity: .95 } }
+html.locked-boot [for="fileInput"],
+html.locked-boot #fileInput,
+html.locked-boot .browser-add { display: none !important; }
+
+/* Nothing claims "No asset loaded." while a deep-linked preload is in flight. */
+html.locked-boot .sidebar-empty,
+html.locked-boot .inspector-empty { visibility: hidden !important; }

@@ -97,13 +97,11 @@
         if (pair) reads.push(readFile(pair));
         return Promise.all(reads).then(function (buffers) {
           var entry = addAsset(main.name, buffers[0], buffers[1] || null, main.size);
-          if (!firstAdded) firstAdded = entry;
+          if (!firstAdded) { firstAdded = entry; selectAsset(firstAdded.id); }
         });
       });
     });
-    chain.then(function () {
-      if (firstAdded) selectAsset(firstAdded.id);
-    }).catch(function (err) {
+    chain.catch(function (err) {
       showError('Could not read the file', (err && err.message) || String(err));
     });
   }
@@ -874,10 +872,8 @@
       dz.querySelectorAll('label, .hint').forEach(function (el) {
         if (el.parentNode) el.parentNode.removeChild(el);
       });
-      var h = dz.querySelector('h1');
-      if (h) h.textContent = 'Loading blueprint…';
-      var lead = dz.querySelector('p');
-      if (lead) lead.textContent = 'Reading the Unreal Engine asset in your browser.';
+      var inner = dz.querySelector('.dropzone-inner');
+      if (inner) inner.innerHTML = '';
     }
   }
 
@@ -971,12 +967,17 @@
         }).then(function (buf) {
           var name = decodeURIComponent(url.split('/').pop().split('?')[0]);
           var entry = addAsset(name, buf, null, buf.byteLength);
-          if (!first) first = entry;
+          if (!first) {
+            first = entry;
+            /* Render immediately — waiting for the whole batch leaves the user
+               staring at an empty outline for as long as the slowest asset. */
+            selectAsset(first.id);
+            document.documentElement.classList.remove('locked-boot');
+          }
         });
       });
     });
     chain.then(function () {
-      if (first) selectAsset(first.id);
       var g = params.get('graph');
       if (g && state.model) {
         var hit = (state.model.graphs || []).filter(function (gr) {

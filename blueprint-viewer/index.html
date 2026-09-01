@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UAsset Blueprint Viewer</title>
 <link rel="stylesheet" href="css/app.css">
+<script>
+/* Runs before first paint: a deep-linked (?src=) session must never flash the
+   file-picker dropzone on its way to loading the preloaded asset. */
+(function () {
+  var p = new URLSearchParams(location.search);
+  if (p.get('lock') === '0') return;
+  if (p.get('lock') === '1' || p.getAll('src').length) document.documentElement.classList.add('locked-boot');
+})();
+</script>
 </head>
 <body>
 <div id="app">

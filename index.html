@@ -55,22 +55,22 @@
     <div style="position:relative; z-index:1; display:grid; grid-template-rows:auto 1fr auto; min-height:0;">
 
       <div style="display:flex; align-items:stretch; justify-content:space-between; border-bottom:1px solid rgba(198,228,208,.15); padding:{{ headPad }}; gap:{{ headGap }}; flex-direction:{{ headDir }}; max-height:{{ headH }}; opacity:{{ headO }}; overflow:hidden; pointer-events:{{ headPE }}; border-bottom-color:{{ headBd }}; transition:max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease;">
-        <div style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:none;">
+        <div onClick="{{ goHome }}" title="Back to Status" style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:none; cursor:pointer; transition:opacity .2s ease;" style-hover="opacity:.72;">
           <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ nameFS }}; letter-spacing:.16em; line-height:1;">ERIK THOMAS</div>
           <div style="font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:{{ dAcc }}; margin-top:8px;">Game Designer / Gameplay Programmer</div>
         </div>
 
-        <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; min-height:{{ tabRowH }}; overflow:{{ tabOverflow }}; scrollbar-width:none;">
+        <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; margin:{{ tabRowM }}; min-height:{{ tabRowH }}; border-top:1px solid {{ tabRowBd }};">
           <span style="position:absolute; bottom:-1px; height:2px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }}; left:0; width:{{ barW }}; transform:translateX({{ barX }}); opacity:{{ barO }}; transition:transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease;"></span>
           <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:none; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:7px; position:relative; transition:color .25s ease; color:rgba(220,231,223,.55); background-image:{{ dBloom }}; background-repeat:no-repeat; background-position:center; background-size:0% 0%; transition:background-size .4s cubic-bezier(.22,.9,.24,1), color .25s ease;" style-hover="background-size:190% 190%; color:#e8f3ec;">
-              <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.2em; text-transform:uppercase; color:{{ t.fg }};">{{ t.label }}</span>
+            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; transition:color .25s ease; color:rgba(220,231,223,.55); background-image:{{ dBloom }}; background-repeat:no-repeat; background-position:center; background-size:0% 0%; transition:background-size .4s cubic-bezier(.22,.9,.24,1), color .25s ease;" style-hover="background-size:190% 190%; color:#e8f3ec;">
+              <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:{{ tabFS }}; letter-spacing:{{ tabLS }}; text-transform:uppercase; white-space:nowrap; color:{{ t.fg }};">{{ t.label }}</span>
               <sc-if value="{{ t.flash }}">
                 <span style="position:absolute; inset:0; border-radius:12px; pointer-events:none; background:rgba(150,200,168,.2); animation:tabFlash 2.6s ease-in-out infinite;"></span>
-                <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.24em; text-transform:uppercase; color:#7aa88a; animation:subFlash 2.6s ease-in-out infinite;">{{ t.sub }}</span>
+                <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:{{ tabSubFS }}; letter-spacing:.24em; text-transform:uppercase; color:#7aa88a; animation:subFlash 2.6s ease-in-out infinite;">{{ t.sub }}</span>
               </sc-if>
               <sc-if value="{{ t.subStill }}">
-                <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.24em; text-transform:uppercase; color:{{ dAccDim }};">{{ t.sub }}</span>
+                <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:{{ tabSubFS }}; letter-spacing:.24em; text-transform:uppercase; color:{{ dAccDim }};">{{ t.sub }}</span>
               </sc-if>
             </button>
           </sc-for>
@@ -123,12 +123,12 @@
                   <div style="position:relative; flex:1 1 190px; max-width:190px; min-width:150px; aspect-ratio:16/10; border-radius:14px; overflow:hidden; border:1px solid rgba(198,228,208,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px), rgba(30,48,38,.22); display:flex; align-items:center; justify-content:center;">
                     <sc-if value="{{ featured.hasCover }}">
                       <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
-                      <img src="assets/faceless-cover.png" alt="{{ featured.name }}" data-fade="featured" style="opacity:{{ featured.coverOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 42%;">
+                      <div role="img" aria-label="{{ featured.name }}" data-fade="featured" style="background-image:{{ featured.coverBg }}; opacity:{{ featured.coverOp }}; transition:opacity .5s ease; position:absolute; inset:0; background-size:cover; background-position:50% 42%;"></div>
                     </sc-if>
                     <sc-if value="{{ featured.noCover }}" hint-placeholder-val="{{ true }}">
                       <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; color:rgba(197,221,205,.45);">{{ featured.thumb }}</span>
                     </sc-if>
-                    <span style="position:absolute; top:8px; left:9px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.16em; color:rgba(160,206,176,.9);">{{ featured.slot }}</span>
+                    <span style="position:absolute; top:8px; left:9px; z-index:2; padding:2px 6px; border-radius:6px; background:rgba(8,16,11,.55); backdrop-filter:blur(4px); font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.16em; color:rgba(190,222,202,.95);">{{ featured.slot }}</span>
                   </div>
                   <div style="flex:1 1 230px; min-width:0; display:flex; flex-direction:column; gap:9px;">
                     <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:17px; letter-spacing:.05em; color:#eaf3ec;">{{ featured.name }}</div>
@@ -184,19 +184,20 @@
                   <div style="position:relative; aspect-ratio:16/10; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px); border-bottom:1px solid rgba(198,228,208,.14); display:flex; align-items:center; justify-content:center; overflow:hidden;">
                     <sc-if value="{{ p.hasCover }}">
                       <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
-                      <img src="assets/faceless-cover.png" alt="{{ p.name }}" data-fade="{{ p.fadeKey }}" style="opacity:{{ p.coverOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 42%;">
+                      <div role="img" aria-label="{{ p.name }}" data-fade="{{ p.fadeKey }}" style="background-image:{{ p.coverBg }}; opacity:{{ p.coverOp }}; transition:opacity .5s ease; position:absolute; inset:0; background-size:cover; background-position:50% 42%;"></div>
                     </sc-if>
                     <sc-if value="{{ p.noCover }}" hint-placeholder-val="{{ true }}">
                       <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:rgba(197,221,205,.45);">{{ p.thumb }}</span>
                     </sc-if>
-                    <span style="position:absolute; top:9px; left:10px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.16em; color:rgba(122,168,138,.9);">{{ p.slot }}</span>
+                    <span style="position:absolute; top:9px; left:10px; z-index:2; padding:2px 6px; border-radius:6px; background:rgba(8,16,11,.55); backdrop-filter:blur(4px); font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.16em; color:rgba(178,214,190,.95);">{{ p.slot }}</span>
                   </div>
                   <div style="padding:14px 15px 16px; display:flex; flex-direction:column; gap:9px;">
                     <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:15.5px; letter-spacing:.06em; color:#e8f1ea;">{{ p.name }}</div>
                     <div style="font-size:12.5px; line-height:1.55; color:rgba(217,230,221,.6);">{{ p.blurb }}</div>
-                    <div style="display:flex; gap:7px; margin-top:2px;">
-                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 8px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ p.engine }}</span>
-                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 8px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ p.year }}</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:2px;">
+                      <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="2">
+                        <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 8px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ tag }}</span>
+                      </sc-for>
                     </div>
                   </div>
                 </button>
@@ -449,6 +450,13 @@ class Component extends DCLogic {
 
   onKey = (e) => {
     const k = e.key && e.key.toLowerCase();
+    if (e.key === 'Escape') {
+      /* Unwind one layer at a time: overlay first, then the case study. */
+      if (this.state.bp) { this.setState({ bp: null }); return; }
+      if (this.state.theater != null && this.state.theater !== false) { this.setState({ theater: null }); return; }
+      if (this.state.tab === 'inventory' && this.state.sel !== null) { this.select(); this.swap({ sel: null }); }
+      return;
+    }
     if (k !== 'e' && k !== 'q') return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const t = e.target;
@@ -485,6 +493,19 @@ class Component extends DCLogic {
   }
 
   checkFades() {
+    /* Covers paint as background-image (a src hole would fire a bogus request
+       before values resolve), so preload the URL to drive the same fade. */
+    document.querySelectorAll('div[data-fade]').forEach((el) => {
+      const k = el.dataset.fade || '';
+      if (!k || k.indexOf('{{') === 0 || el.dataset.fadeBound === '1') return;
+      const url = (getComputedStyle(el).backgroundImage.match(/url\(["']?(.*?)["']?\)/) || [])[1];
+      if (!url) return;
+      el.dataset.fadeBound = '1';
+      const pre = new Image();
+      pre.onload = pre.onerror = () => this.markFade(k);
+      pre.src = url;
+      if (pre.complete) this.markFade(k);
+    });
     document.querySelectorAll('img[data-fade]').forEach((el) => {
       const k = el.dataset.fade || '';
       if (!k || k.indexOf('{{') === 0) return;
@@ -600,7 +621,7 @@ class Component extends DCLogic {
     return [
       { slot: '01', name: 'Faceless', engine: 'Unreal', year: '2025', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
         video: 'https://www.youtube-nocookie.com/embed/pt9L98uNJyE?rel=0&modestbranding=1&playsinline=1',
-        cover: 'assets/faceless-cover.png', cold: true,
+        cover: 'assets/sys02-shot-d.png', cold: true,
         videoLink: 'https://youtu.be/pt9L98uNJyE',
         blurb: 'A horror demo built on an old creepypasta — you are hunted, and the map only opens if you solve it.',
         summary: 'A horror project demo featuring an old creepypasta, the Slenderman, and drawing inspiration from the classic horrors Resident Evil and Silent Hill.',
@@ -613,11 +634,27 @@ class Component extends DCLogic {
           { title: 'Weapon system', body: 'The map is a linear spine of locked areas, each opened by a single puzzle whose pieces are placed one region behind it. Backtracking is short and always rewarded, and the gate order doubles as the difficulty curve for the stalker AI.', tags: ['Level design', 'Gating', 'Key items'], clip: 'assets/sys03-weapons.mp4', shots: [] },
           { title: 'Level design and events', body: 'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player\u2019s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.', tags: ['Level events', 'Interaction prompts', 'World state'], images: ['assets/sys04-interactions.png'], clip: 'assets/sys04-events.mp4', shots: [] }
         ] },
-      { slot: '02', name: 'Project 02', engine: 'Unreal', year: '2024', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
-        blurb: 'One line on the hook — what the player does and why it feels good.',
-        summary: 'A short paragraph framing the project: the pitch, your remit, and the systems problem worth reading about.',
-        meta: [{k:'Role',v:'Designer / Programmer'},{k:'Team',v:'Solo'},{k:'Engine',v:'Unreal / C++'},{k:'Duration',v:'5 months'}],
-        built: ['The headline system, in one sentence each.', 'A second system, with the constraint that made it hard.', 'The tuning pass — what changed once it was in players\u2019 hands.'] },
+      { slot: '02', name: 'Sam\u2019s Journey', engine: 'Unreal', year: '2024', tags: ['Unreal', '2024', 'VR'],
+        thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
+        cover: 'assets/sams-journey-cover.jpg',
+        video: 'https://www.youtube-nocookie.com/embed/w4zUx0xE9WU?rel=0&modestbranding=1&playsinline=1',
+        videoLink: 'https://youtu.be/w4zUx0xE9WU',
+        blurb: 'A calming VR world you explore without hands or controllers — built to hold a patient\u2019s attention through medical treatment.',
+        summary: 'A school project built for the client VRelax: an interactive VR experience that asks nothing of the player\u2019s hands. Patients undergoing treatments that would otherwise make them anxious are often unable — or unwilling — to hold a controller, so every interaction had to be reachable without one, and the world had to stay gentle enough to be a distraction rather than a demand.',
+        meta: [{k:'Role',v:'Designer / Programmer'},{k:'Client',v:'VRelax'},{k:'Team',v:'2 person team'},{k:'Engine',v:'Unreal / VR'},{k:'Duration',v:'3 months'}],
+        built: ['VR Interaction system', 'Objective driven easy gameplay'],
+        systems: [
+          { title: 'VR Controller and world',
+            body: 'The pawn owns everything the player is: motion controller tracking, locomotion, and the grab logic that decides what a hand is allowed to hold. A shared function library keeps that behaviour in one place, and the level blueprint drives the world state around it.',
+            tags: ['VR pawn', 'Locomotion', 'Level script'],
+            blueprint: 'blueprint-viewer/index.html?src=assets/VRPawn.uasset,assets/MyFunctionLibrary.uasset,assets/Map_1.umap',
+            shots: [] },
+          { title: 'Interactable items',
+            body: 'Every pickup is an actor with the same interaction contract, so the hand never needs to know what it is holding — a stick, an apple, a bucket, or a fishing rod all answer the same grab, use, and release calls, and doors read the same interface.',
+            tags: ['Grab interface', 'Pickups', 'Doors'],
+            blueprint: 'blueprint-viewer/index.html?src=assets/StickActor.uasset,assets/FishingRodActor.uasset,assets/ShovelActor.uasset,assets/doorActor.uasset,assets/doorActor1.uasset,assets/CoconutActor.uasset,assets/AppleActor.uasset,assets/FlowerActor.uasset,assets/BucketActor.uasset,assets/LogActor.uasset',
+            shots: [] }
+        ] },
       { slot: '03', name: 'Project 03', engine: 'Godot', year: '2024', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
         blurb: 'One line on the hook — what the player does and why it feels good.',
         summary: 'A short paragraph framing the project: the pitch, your remit, and the systems problem worth reading about.',
@@ -752,11 +789,13 @@ class Component extends DCLogic {
     const fadeOf = (k) => ((st.fade && st.fade[k]) ? 1 : 0);
     const slots = projects.map((p, i) => ({
       ...p, dim: 1, cursor: 'pointer', hasCover: !!p.cover, noCover: !p.cover,
+      tags: p.tags || [p.engine, p.year],
+      coverBg: p.cover ? 'url("' + p.cover + '")' : 'none',
       fadeKey: 'cover' + i, coverOp: fadeOf('cover' + i), onCover: () => this.markFade('cover' + i),
       onHover: () => {},
       onClick: () => { this.select(); this.swap({ sel: i }); }
     })).concat(empties.map(e => ({
-      slot: e.slot, name: 'Empty slot', engine: '—', year: '—', thumb: 'available', hasCover: false, noCover: true,
+      slot: e.slot, name: 'Empty slot', engine: '—', year: '—', tags: ['—', '—'], thumb: 'available', hasCover: false, noCover: true,
       blurb: 'Reserved for the next shipped thing.', dim: .42, cursor: 'default',
       onHover: () => {}, onClick: () => {}
     })));
@@ -782,6 +821,7 @@ class Component extends DCLogic {
         onClick: () => this.go(id)
       })),
       featured: { ...projects[0], hasCover: !!projects[0].cover, noCover: !projects[0].cover,
+        coverBg: projects[0].cover ? 'url("' + projects[0].cover + '")' : 'none',
         coverOp: fadeOf('featured'), onCover: () => this.markFade('featured') },
       portraitOp: fadeOf('portrait'), onPortrait: () => this.markFade('portrait'),
       openFeatured: () => { this.select(); this.setState({ uiTab: 'inventory', invSeen: true }); this.swap({ tab: 'inventory', sel: 0 }); },
@@ -805,9 +845,16 @@ class Component extends DCLogic {
       headDir: m ? 'column' : 'row',
       headTitlePad: m ? '15px 0 9px' : '18px 0',
       nameFS: m ? '18px' : '23px',
-      tabRowH: m ? '54px' : 'auto',
-      tabOverflow: m ? 'auto hidden' : 'visible',
-      tabPad: m ? '0 15px 0 0' : '0 20px',
+      tabRowH: m ? '52px' : 'auto',
+      tabRowM: m ? '0 -15px' : '0',
+      goHome: () => this.go('status'),
+      tabRowBd: m ? 'rgba(198,228,208,.12)' : 'transparent',
+      tabFlex: m ? '1 1 0' : 'none',
+      tabAlign: m ? 'center' : 'flex-start',
+      tabFS: m ? '10px' : '12.5px',
+      tabLS: m ? '.12em' : '.2em',
+      tabSubFS: m ? '7.5px' : '8.5px',
+      tabPad: m ? '0 4px' : '0 20px',
       viewPad: m ? '20px 16px 30px' : '36px 40px',
       statusCols: m ? '1fr' : '300px 1fr',
       statusGap: m ? '26px' : '44px',

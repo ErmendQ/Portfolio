@@ -213,6 +213,10 @@
     /* Construction script reads better as its own section. */
     model.graphs.forEach(function (gr) {
       if (gr.name === 'UserConstructionScript') { gr.category = 'Construction Script'; gr.displayName = 'Construction Script'; }
+      /* A .umap's script lives on the LevelScriptBlueprint — name it as the editor does. */
+      if (model.asset.className === 'LevelScriptBlueprint' && gr.category === 'Event Graph') {
+        gr.displayName = 'Level Blueprint';
+      }
     });
 
     /* ---- variables ---- */
