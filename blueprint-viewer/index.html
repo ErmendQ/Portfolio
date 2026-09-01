@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UAsset Blueprint Viewer</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app">
+  <input type="file" id="fileInput" accept=".uasset,.umap,.uexp,.ubulk" multiple hidden>
+
+
+  <div class="browser" id="browser" hidden>
+    <div class="browser-list" id="browserList"></div>
+    <label class="btn browser-add" for="fileInput" title="Add another asset">+ Add</label>
+  </div>
+
+  <div class="scrim" id="scrim" hidden></div>
+
+  <div class="body">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-empty" id="sidebarEmpty">
+        <p>No asset loaded.</p>
+      </div>
+      <div id="sidebarContent" hidden></div>
+    </aside>
+
+    <main class="stage">
+      <div class="stage-toolbar" id="stageToolbar" hidden>
+        <button class="btn btn-icon drawer-toggle" id="navToggle" type="button"
+                aria-label="Browse this asset" title="Browse this asset">☰</button>
+        <div class="crumbs" id="crumbs"></div>
+        <div class="spacer"></div>
+        <div class="zoom-group">
+          <button class="btn btn-icon" id="zoomOut" title="Zoom out">−</button>
+          <span class="zoom-level" id="zoomLevel">100%</span>
+          <button class="btn btn-icon" id="zoomIn" title="Zoom in">+</button>
+          <button class="btn" id="zoomFit" title="Fit graph to view">Fit</button>
+        </div>
+        <button class="btn btn-icon drawer-toggle" id="inspToggle" type="button"
+                aria-label="Node details" title="Node details">◧</button>
+      </div>
+      <div class="canvas" id="canvas"></div>
+
+      <div class="dropzone" id="dropzone">
+        <div class="dropzone-inner">
+          <svg width="46" height="46" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 15V4m0 0L8 8m4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h1>Drop a <code>.uasset</code> here</h1>
+          <p>Reads Unreal Engine assets entirely in your browser — nothing is uploaded.
+             Blueprint graphs, functions, macros and their wiring are reconstructed from the file.</p>
+          <label class="btn btn-primary" for="fileInput">Choose a file</label>
+          <p class="hint">Cooked packages also need their <code>.uexp</code> — select both together.
+             Graphs only exist in uncooked editor assets from a project's <code>Content</code> folder.</p>
+        </div>
+      </div>
+
+      <div class="stage-error" id="stageError" hidden></div>
+    </main>
+
+    <aside class="inspector" id="inspector">
+      <div class="inspector-empty" id="inspectorEmpty">
+        <p>Select a node to inspect its properties.</p>
+      </div>
+      <div id="inspectorContent" hidden></div>
+    </aside>
+  </div>
+
+  <footer class="statusbar">
+    <div id="statusLeft" class="status-left"></div>
+    <div class="spacer"></div>
+    <div id="statusRight" class="status-right"></div>
+  </footer>
+</div>
+
+<script src="js/binreader.js"></script>
+<script src="js/uasset.js"></script>
+<script src="js/properties.js"></script>
+<script src="js/pins.js"></script>
+<script src="js/nodeinfo.js"></script>
+<script src="js/blueprint.js"></script>
+<script src="js/graphview.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

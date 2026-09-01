@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin:0; padding:0; background:#09130d; }
+  body { font-family:'IBM Plex Sans', system-ui, sans-serif; }
+  a { color:#b9d8c4; text-decoration:none; }
+  a:hover { color:#e8f3ec; }
+  ::selection { background:rgba(122,168,138,.35); }
+  @keyframes drift { 0%{transform:scale(1.08) translate3d(0,0,0)} 50%{transform:scale(1.14) translate3d(-1.5%,-1%,0)} 100%{transform:scale(1.08) translate3d(0,0,0)} }
+  @keyframes panelIn { from{opacity:0; transform:translateY(14px) scale(.985)} to{opacity:1; transform:none} }
+  @keyframes viewIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
+  @keyframes lineIn { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  @keyframes caret { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  @keyframes sweep { from{transform:translateY(-100%)} to{transform:translateY(400%)} }
+  @keyframes tabFlash { 0%,100%{opacity:.12} 50%{opacity:.55} }
+  @keyframes subFlash { 0%,100%{opacity:.45} 50%{opacity:.95} }
+  *::-webkit-scrollbar { width:9px; height:9px; }
+  *::-webkit-scrollbar-track { background:transparent; }
+  *::-webkit-scrollbar-thumb { background:rgba(178,214,190,.22); border-radius:999px; border:2px solid transparent; background-clip:padding-box; }
+  *::-webkit-scrollbar-thumb:hover { background:rgba(178,214,190,.38); background-clip:padding-box; }
+  * { scrollbar-width:thin; scrollbar-color:rgba(178,214,190,.28) transparent; }
+</style>
+</helmet>
+<div style="position:relative; width:100%; min-height:100vh; overflow:hidden; background:#09130d; color:#dbe8de; display:flex; align-items:center; justify-content:center; padding:28px; box-sizing:border-box; font-family:'IBM Plex Sans', system-ui, sans-serif;">
+
+  <div style="position:absolute; inset:-6%; background-image:url('assets/backdrop.jpg'); background-size:cover; background-position:center; filter:blur(9px) saturate(1.05) hue-rotate(-8deg) brightness(.5); animation:drift 46s ease-in-out infinite;"></div>
+  <div style="position:absolute; inset:-6%; background-image:url('assets/faceless-cover.png'); background-size:cover; background-position:center; filter:blur(11px) saturate(1.15) brightness(.62); animation:drift 46s ease-in-out infinite; opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
+  <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 40%, rgba(12,32,22,.34) 0%, rgba(5,16,11,.78) 78%);"></div>
+  <div style="position:absolute; inset:0; background:rgba(30,84,58,.14); mix-blend-mode:soft-light; opacity:{{ warmOn }}; transition:opacity .6s ease;"></div>
+  <div style="position:absolute; inset:0; background:rgba(26,52,96,.16); mix-blend-mode:soft-light; opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
+
+  <div style="position:relative; width:100%; max-width:{{ shellW }}; height:{{ shellH }}; border-radius:34px; transition:max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1); border:1px solid rgba(198,228,208,.2); background:linear-gradient(158deg, rgba(56,100,76,.32) 0%, rgba(18,38,28,.27) 46%, rgba(8,22,15,.35) 100%); backdrop-filter:blur(44px) saturate(1.5) brightness(1.06); -webkit-backdrop-filter:blur(44px) saturate(1.5) brightness(1.06); box-shadow:0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.3), inset 0 1.5px 0 rgba(226,244,232,.26), inset 0 -1px 0 rgba(160,198,172,.09), inset 0 0 60px rgba(122,168,138,.05); display:grid; grid-template-columns:44px 1fr; overflow:hidden; animation:panelIn .7s cubic-bezier(.2,.7,.25,1) both;" ref="{{ panelRef }}">
+    <div style="position:absolute; inset:0; pointer-events:none; z-index:0; background:linear-gradient(158deg, rgba(60,88,134,.34) 0%, rgba(22,34,54,.29) 46%, rgba(8,14,24,.37) 100%); opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
+    <div style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:{{ glowO }}; transition:opacity .35s ease; background:radial-gradient(52px circle at {{ glowX }} {{ glowY }}, rgba(210,248,222,.12), rgba(150,206,170,.05) 46%, transparent 74%); mix-blend-mode:screen; filter:blur(7px);"></div>
+
+    <div style="position:relative; z-index:1; border-right:1px solid {{ dLine }}; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:16px 0; background:rgba(12,22,17,.16);">
+      <div style="width:7px; height:7px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }};"></div>
+      <div style="writing-mode:vertical-rl; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.42em; text-transform:uppercase; color:rgba(197,221,205,.5);">Portfolio — 2026</div>
+      <div style="width:7px; height:7px;"></div>
+    </div>
+
+    <div style="position:relative; z-index:1; display:grid; grid-template-rows:auto 1fr auto; min-height:0;">
+
+      <div style="display:flex; align-items:stretch; justify-content:space-between; border-bottom:1px solid rgba(198,228,208,.15); padding:0 22px; gap:24px; max-height:{{ headH }}; opacity:{{ headO }}; overflow:hidden; pointer-events:{{ headPE }}; border-bottom-color:{{ headBd }}; transition:max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease;">
+        <div style="display:flex; flex-direction:column; justify-content:center; padding:18px 0;">
+          <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:23px; letter-spacing:.16em; line-height:1;">ERIK THOMAS</div>
+          <div style="font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:{{ dAcc }}; margin-top:8px;">Game Designer / Gameplay Programmer</div>
+        </div>
+
+        <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px;">
+          <span style="position:absolute; bottom:-1px; height:2px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }}; left:0; width:{{ barW }}; transform:translateX({{ barX }}); opacity:{{ barO }}; transition:transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease;"></span>
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:0 20px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:7px; position:relative; transition:color .25s ease; color:rgba(220,231,223,.55); background-image:{{ dBloom }}; background-repeat:no-repeat; background-position:center; background-size:0% 0%; transition:background-size .4s cubic-bezier(.22,.9,.24,1), color .25s ease;" style-hover="background-size:190% 190%; color:#e8f3ec;">
+              <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.2em; text-transform:uppercase; color:{{ t.fg }};">{{ t.label }}</span>
+              <sc-if value="{{ t.flash }}">
+                <span style="position:absolute; inset:0; border-radius:12px; pointer-events:none; background:rgba(150,200,168,.2); animation:tabFlash 2.6s ease-in-out infinite;"></span>
+                <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.24em; text-transform:uppercase; color:#7aa88a; animation:subFlash 2.6s ease-in-out infinite;">{{ t.sub }}</span>
+              </sc-if>
+              <sc-if value="{{ t.subStill }}">
+                <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.24em; text-transform:uppercase; color:{{ dAccDim }};">{{ t.sub }}</span>
+              </sc-if>
+            </button>
+          </sc-for>
+        </div>
+
+      </div>
+
+      <div style="min-height:0; overflow:auto; position:relative; filter:{{ viewBlur }}; opacity:{{ viewOpacity }}; transform:{{ viewScale }}; transition:filter .34s cubic-bezier(.3,.7,.3,1), opacity .3s ease, transform .34s cubic-bezier(.3,.7,.3,1); will-change:filter, opacity;">
+
+        <sc-if value="{{ isStatus }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:36px 40px; display:grid; grid-template-columns:300px 1fr; gap:44px;">
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div style="position:relative; aspect-ratio:3/4; border-radius:22px; border:1px solid rgba(198,228,208,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px), rgba(30,48,38,.24); display:flex; align-items:flex-end; padding:14px; overflow:hidden;">
+                <div style="position:absolute; top:10px; left:10px; width:14px; height:14px; border-top:1px solid rgba(122,168,138,.8); border-left:1px solid rgba(122,168,138,.8); z-index:3;"></div>
+                <div style="position:absolute; bottom:10px; right:10px; width:14px; height:14px; border-bottom:1px solid rgba(122,168,138,.8); border-right:1px solid rgba(122,168,138,.8); z-index:3;"></div>
+                <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
+                <img src="assets/portrait.jpg" alt="Erik Thomas" data-fade="portrait" style="opacity:{{ portraitOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 26%; transform:scale(1.08); transform-origin:50% 26%;">
+                <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(14,26,19,0) 0%, rgba(14,26,19,.04) 50%, rgba(14,26,19,.55) 100%);"></div>
+                <div style="position:absolute; inset:-1px; border-radius:22px; pointer-events:none; background:radial-gradient(115% 105% at 50% 42%, rgba(30,48,38,0) 42%, rgba(30,48,38,.34) 74%, rgba(26,44,34,.72) 100%);"></div>
+                <div style="position:relative; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.2em; color:rgba(226,244,232,.82);">ERIK THOMAS</div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(198,228,208,.14); border:1px solid rgba(198,228,208,.16); border-radius:18px; overflow:hidden;">
+                <sc-for list="{{ vitals }}" as="v" hint-placeholder-count="4">
+                  <div style="background:rgba(28,44,36,.30); padding:12px 13px;">
+                    <div style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; color:rgba(197,221,205,.45); text-transform:uppercase;">{{ v.k }}</div>
+                    <div style="font-family:'Archivo', sans-serif; font-weight:600; font-size:13px; margin-top:6px; color:#e2ede5;">{{ v.v }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:30px; min-width:0;">
+              <div>
+                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Profile</div>
+                <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:26px; line-height:1.4; letter-spacing:-.01em; margin:14px 0 0; text-wrap:pretty; color:#eaf2ec;">I build complex gameplay systems that feel simple in the hand — combat, movement, interaction loops tuned until they read as effortless.</p>
+                <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.72); margin:18px 0 0; text-wrap:pretty;">Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.</p>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
+                <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+                  <div style="background:rgba(28,44,36,.26); padding:18px 20px;">
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#b9d8c4;">{{ f.t }}</div>
+                    <div style="font-size:13.5px; line-height:1.6; color:rgba(217,230,221,.66); margin-top:8px;">{{ f.d }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div>
+                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Highlighted project</div>
+                <button type="button" onClick="{{ openFeatured }}" onMouseEnter="{{ featured.onHover }}" style="appearance:none; text-align:left; cursor:pointer; margin-top:14px; width:100%; box-sizing:border-box; display:flex; flex-wrap:wrap; gap:18px; align-items:center; padding:16px; border-radius:20px; border:1px solid rgba(198,228,208,.18); background:rgba(30,48,38,.26); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.14); transition:transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease;" style-hover="transform:translateY(-3px); border-color:rgba(160,206,176,.55); background:rgba(48,74,60,.34);">
+                  <div style="position:relative; flex:1 1 190px; max-width:190px; min-width:150px; aspect-ratio:16/10; border-radius:14px; overflow:hidden; border:1px solid rgba(198,228,208,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px), rgba(30,48,38,.22); display:flex; align-items:center; justify-content:center;">
+                    <sc-if value="{{ featured.hasCover }}">
+                      <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
+                      <img src="assets/faceless-cover.png" alt="{{ featured.name }}" data-fade="featured" style="opacity:{{ featured.coverOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 42%;">
+                    </sc-if>
+                    <sc-if value="{{ featured.noCover }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; color:rgba(197,221,205,.45);">{{ featured.thumb }}</span>
+                    </sc-if>
+                    <span style="position:absolute; top:8px; left:9px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.16em; color:rgba(160,206,176,.9);">{{ featured.slot }}</span>
+                  </div>
+                  <div style="flex:1 1 230px; min-width:0; display:flex; flex-direction:column; gap:9px;">
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:17px; letter-spacing:.05em; color:#eaf3ec;">{{ featured.name }}</div>
+                    <div style="font-size:13.5px; line-height:1.55; color:rgba(217,230,221,.66);">{{ featured.blurb }}</div>
+                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:9px; margin-top:2px;">
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 9px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ featured.engine }}</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 9px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ featured.year }}</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; color:#7aa88a; margin-left:auto; white-space:nowrap; flex-shrink:0;">OPEN CASE STUDY →</span>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isSkills }}">
+          <div style="padding:34px 40px 44px;">
+            
+            <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px; align-items:start;">
+              <sc-for list="{{ skillGroups }}" as="g" hint-placeholder-count="4">
+                <div style="display:flex; flex-direction:column; gap:0;">
+                  <div style="border:1px solid {{ g.cLine }}; background:{{ g.cFill }}; box-shadow:inset 0 1px 0 rgba(240,250,244,.16), 0 0 22px {{ g.cGlow }}; border-radius:16px; padding:13px 14px 12px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:12.5px; letter-spacing:.13em; text-transform:uppercase; color:{{ g.cText }}; text-wrap:pretty;">{{ g.title }}</div>
+                    <div style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.15em; color:rgba(197,221,205,.42); margin-top:6px; text-transform:uppercase;">{{ g.note }}</div>
+                  </div>
+                  <div style="width:1px; height:14px; margin-left:22px; background:linear-gradient(180deg, {{ g.cStem }}, {{ g.cStem }});"></div>
+                  <div style="position:relative; padding-left:22px; display:flex; flex-direction:column; gap:7px;">
+                    <div style="position:absolute; left:22px; top:0; bottom:13px; width:1px; background:{{ g.cStem }};"></div>
+                    <sc-for list="{{ g.items }}" as="s" hint-placeholder-count="6">
+                      <div style="position:relative; display:flex; align-items:center; gap:8px;">
+                        <div style="position:absolute; left:-22px; top:50%; width:15px; height:1px; background:{{ g.cStem }};"></div>
+                        <div style="position:absolute; left:-9px; top:50%; width:5px; height:5px; margin-top:-2.5px; border-radius:1px; transform:rotate(45deg); background:{{ s.dot }};"></div>
+                        <span style="flex:1; font-family:'IBM Plex Mono', monospace; font-weight:{{ s.weight }}; font-size:11px; letter-spacing:.06em; padding:7px 11px; border-radius:9px; border:1px solid {{ s.line }}; background:{{ s.fill }}; box-shadow:{{ s.shadow }}; color:{{ s.color }}; transition:all .2s ease;" style-hover="filter:brightness(1.28); border-color:{{ s.lineHot }};">{{ s.label }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isGrid }}">
+          <div style="padding:32px 40px 40px;">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:20px;">
+              <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Inventory — select a slot to inspect</div>
+              <div style="font-family:'IBM Plex Mono', monospace; font-size:10px; color:rgba(197,221,205,.4);">{{ slotCount }}</div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+              <sc-for list="{{ slots }}" as="p" hint-placeholder-count="6">
+                <button type="button" onClick="{{ p.onClick }}" onMouseEnter="{{ p.onHover }}" style="appearance:none; text-align:left; cursor:{{ p.cursor }}; border:1px solid rgba(198,228,208,.16); background:rgba(30,48,38,.26); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.14); border-radius:20px; padding:0; overflow:hidden; display:flex; flex-direction:column; transition:transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease; opacity:{{ p.dim }};" style-hover="transform:translateY(-3px); border-color:rgba(160,206,176,.55); background:rgba(48,74,60,.34);">
+                  <div style="position:relative; aspect-ratio:16/10; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px); border-bottom:1px solid rgba(198,228,208,.14); display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                    <sc-if value="{{ p.hasCover }}">
+                      <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
+                      <img src="assets/faceless-cover.png" alt="{{ p.name }}" data-fade="{{ p.fadeKey }}" style="opacity:{{ p.coverOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 42%;">
+                    </sc-if>
+                    <sc-if value="{{ p.noCover }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:rgba(197,221,205,.45);">{{ p.thumb }}</span>
+                    </sc-if>
+                    <span style="position:absolute; top:9px; left:10px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.16em; color:rgba(122,168,138,.9);">{{ p.slot }}</span>
+                  </div>
+                  <div style="padding:14px 15px 16px; display:flex; flex-direction:column; gap:9px;">
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:15.5px; letter-spacing:.06em; color:#e8f1ea;">{{ p.name }}</div>
+                    <div style="font-size:12.5px; line-height:1.55; color:rgba(217,230,221,.6);">{{ p.blurb }}</div>
+                    <div style="display:flex; gap:7px; margin-top:2px;">
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 8px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ p.engine }}</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 8px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ p.year }}</span>
+                    </div>
+                  </div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isDetail }}">
+          <div style="padding:26px 40px 44px;">
+            <div style="position:sticky; top:0; z-index:12; margin:-26px -40px 0; padding:20px 40px 14px; display:flex; background:linear-gradient(180deg, rgba(8,14,20,.86) 0%, rgba(8,14,20,.6) 62%, rgba(8,14,20,0) 100%); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);">
+              <button type="button" onClick="{{ back }}" style="appearance:none; cursor:pointer; border-radius:999px; border:1px solid rgba(255,255,255,.5); background:rgba(255,255,255,.9); box-shadow:0 4px 18px rgba(0,0,0,.35); color:#101820; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:10px; letter-spacing:.2em; padding:10px 17px; transition:all .2s ease;" style-hover="background:#fff; border-color:#fff; box-shadow:0 6px 22px rgba(0,0,0,.45);">← BACK TO INVENTORY</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1.35fr 1fr; gap:40px; margin-top:24px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <div style="position:relative; z-index:7; aspect-ratio:16/9; border-radius:22px; overflow:hidden; border:1px solid {{ dLine }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 10px, rgba(214,236,222,0) 10px 20px), {{ dCard }}; display:flex; align-items:center; justify-content:center;">
+                  <sc-if value="{{ sel.hasVideo }}">
+                    <iframe src="{{ sel.video }}" title="Gameplay capture" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" style="position:absolute; inset:0; width:100%; height:100%; border:0; display:block;"></iframe>
+                    <a href="{{ sel.videoLink }}" target="_blank" rel="noopener noreferrer" style="position:absolute; right:12px; bottom:12px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; padding:8px 12px; border-radius:10px; border:1px solid {{ dLine }}; background:rgba(9,19,13,.62); backdrop-filter:blur(8px); color:rgba(226,244,232,.8); text-decoration:none;" style-hover="background:rgba(9,19,13,.85); color:#f2f8f4;">Open on YouTube</a>
+                  </sc-if>
+                  <sc-if value="{{ sel.videoOffline }}">
+                    <a href="{{ sel.videoLink }}" target="_blank" rel="noopener noreferrer" style="position:absolute; inset:0; z-index:7; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-decoration:none; background:radial-gradient(120% 100% at 50% 0%, rgba(20,42,28,.35), rgba(6,14,9,.82));">
+                      <span style="width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(226,244,232,.34); background:rgba(9,19,13,.6); backdrop-filter:blur(10px); color:#f2f8f4; font-size:19px; padding-left:4px;">▶</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:rgba(226,244,232,.82);">Watch on YouTube</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.14em; color:rgba(226,244,232,.4); max-width:280px; text-align:center; line-height:1.7;">Embedded playback needs the site to be served over http — it works once published.</span>
+                    </a>
+                  </sc-if>
+                  <sc-if value="{{ sel.noVideo }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.22em; color:{{ dMuted }};">{{ sel.hero }}</span>
+                  </sc-if>
+                </div>
+              </div>
+
+              <div style="display:flex; flex-direction:column; gap:24px;">
+                <div>
+                  <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }};">{{ sel.slot }} — CASE STUDY</div>
+                  <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:34px; letter-spacing:-.01em; margin-top:10px; color:{{ dHead }};">{{ sel.name }}</div>
+                  <div style="font-size:14.5px; line-height:1.65; color:{{ dBody }}; margin-top:12px; text-wrap:pretty;">{{ sel.summary }}</div>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:{{ dLine }}; border:1px solid {{ dLine }}; border-radius:18px; overflow:hidden;">
+                  <sc-for list="{{ sel.meta }}" as="m" hint-placeholder-count="4">
+                    <div style="background:{{ dCard }}; padding:12px 14px;">
+                      <div style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; color:{{ dMuted }}; text-transform:uppercase;">{{ m.k }}</div>
+                      <div style="font-family:'Archivo', sans-serif; font-weight:600; font-size:13px; margin-top:6px; color:{{ dHead }};">{{ m.v }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+                <div>
+                  <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }}; text-transform:uppercase;">What I built</div>
+                  <div style="display:flex; flex-direction:column; gap:11px; margin-top:14px;">
+                    <sc-for list="{{ sel.built }}" as="b" hint-placeholder-count="3">
+                      <div style="display:grid; grid-template-columns:14px 1fr; gap:11px; align-items:start;">
+                        <span style="width:6px; height:6px; background:{{ dAcc }}; margin-top:7px;"></span>
+                        <span style="font-size:14px; line-height:1.6; color:{{ dBody }};">{{ b }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <sc-if value="{{ sel.hasSystems }}">
+              <div style="margin-top:52px; border-top:1px solid {{ dLine }}; padding-top:34px;">
+                <div style="display:flex; align-items:baseline; justify-content:space-between; gap:20px;">
+                  <div>
+                    <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:{{ dAcc }}; text-transform:uppercase;">Systems breakdown</div>
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:26px; letter-spacing:-.01em; margin-top:11px; color:{{ dHead }};">How it works under the hood</div>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono', monospace; font-size:10px; color:{{ dMuted }};">{{ sel.systemCount }}</div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:18px; margin-top:26px;">
+                  <sc-for list="{{ sel.systems }}" as="sy" hint-placeholder-count="3">
+                    <div style="display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:30px; align-items:start; border:1px solid {{ dLine }}; border-radius:22px; background:{{ dCard }}; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.13); padding:24px 26px;">
+                      <div style="display:flex; flex-direction:column; align-items:flex-start; gap:13px;">
+                        <div style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.22em; color:{{ dAcc }};">{{ sy.idx }}</div>
+                        <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:18px; letter-spacing:.01em; color:{{ dHead }};">{{ sy.title }}</div>
+                        <p style="font-size:13.5px; line-height:1.7; color:{{ dBody }}; margin:0; text-wrap:pretty;">{{ sy.body }}</p>
+                        <div style="display:flex; gap:7px; flex-wrap:wrap;">
+                          <sc-for list="{{ sy.tags }}" as="tg" hint-placeholder-count="2">
+                            <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase; padding:4px 9px; border-radius:999px; border:1px solid {{ dLine }}; background:{{ dChip }}; color:{{ dMuted }};">{{ tg }}</span>
+                          </sc-for>
+                        </div>
+                        <sc-if value="{{ sy.hasBlueprint }}" hint-placeholder-val="{{ true }}">
+                        <button type="button" onClick="{{ sy.openBlueprint }}" style="margin-top:5px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; display:inline-flex; align-items:center; gap:9px; width:fit-content; padding:11px 17px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:{{ dBtnBg }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:{{ dBtnBgHi }}; border-color:{{ dBtnBdHi }};"><span>SEE BLUEPRINT</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; flex:none;"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"></path></svg></button>
+                        </sc-if>
+                      </div>
+                      <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden; border:1px solid {{ dLine }}; background:#0a0f0d;">
+                          <sc-if value="{{ sy.activeIsVideo }}">
+                            <video data-src="{{ sy.activeSrc }}" data-clip="1" onCanPlay="{{ sy.onReady }}" onLoadedData="{{ sy.onReady }}" onClick="{{ togglePlay }}" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" preload="metadata" style="filter:{{ sy.activeFilter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
+                            <button type="button" onClick="{{ sy.openTheater }}" title="Big screen" style="position:absolute; top:10px; right:10px; z-index:3; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; padding:7px 11px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">⤡ Big screen</button>
+                          </sc-if>
+                          <sc-if value="{{ sy.activeIsImage }}">
+                            <img data-src="{{ sy.activeSrc }}" alt="{{ sy.activeLabel }}" onLoad="{{ sy.onReady }}" onError="{{ sy.onReady }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                            <button type="button" onClick="{{ sy.openTheater }}" title="Big screen" style="position:absolute; top:10px; right:10px; z-index:3; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; padding:7px 11px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">⤡ Big screen</button>
+                          </sc-if>
+                          <sc-if value="{{ sy.activeIsStill }}" hint-placeholder-val="{{ true }}">
+                            <div style="position:absolute; inset:0; background:repeating-linear-gradient(135deg, rgba(214,236,222,.045) 0 8px, rgba(214,236,222,0) 8px 16px), {{ dCard }}; display:flex; align-items:flex-end; padding:13px 15px;">
+                              <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:{{ dMuted }};">{{ sy.activeLabel }}</span>
+                            </div>
+                          </sc-if>
+                          <div style="position:absolute; inset:0; z-index:2; pointer-events:none; background:#05080b; opacity:{{ sy.veilOp }}; transition:opacity .17s ease;"></div>
+                          <sc-if value="{{ sy.multi }}">
+                            <button type="button" onClick="{{ sy.prev }}" title="Previous" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); z-index:3; width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-size:15px; line-height:1; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">‹</button>
+                            <button type="button" onClick="{{ sy.next }}" title="Next" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); z-index:3; width:34px; height:34px; display:flex; align-items:center; justify-content:center; font-size:15px; line-height:1; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">›</button>
+                            <span style="position:absolute; left:50%; bottom:10px; transform:translateX(-50%); z-index:3; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.2em; padding:5px 10px; border-radius:999px; background:rgba(8,14,20,.55); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dMuted }};">{{ sy.counter }}</span>
+                          </sc-if>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                          <sc-for list="{{ sy.media }}" as="m" hint-placeholder-count="4">
+                            <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:92px; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), {{ dCard }}; opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end; justify-content:flex-start;" style-hover="opacity:1; border-color:{{ dBtnBdHi }};">
+                              <sc-if value="{{ m.isVideo }}">
+                                <video data-src="{{ m.src }}" muted="muted" playsinline="playsinline" preload="metadata" style="filter:{{ m.filter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
+                                <span style="position:absolute; top:5px; left:6px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.16em; padding:2px 5px; border-radius:5px; background:rgba(8,14,20,.68); color:{{ dHead }};">▶</span>
+                              </sc-if>
+                              <sc-if value="{{ m.isImage }}">
+                                <img data-src="{{ m.src }}" alt="{{ m.label }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                              </sc-if>
+                              <sc-if value="{{ m.isStill }}">
+                                <span style="position:relative; z-index:2; padding:6px 7px; text-align:left; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.14em; text-transform:uppercase; color:{{ dMuted }};">{{ m.label }}</span>
+                              </sc-if>
+                            </button>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isContact }}">
+          <div style="padding:44px 40px; display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:start;">
+            <div>
+              <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Recruit</div>
+              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:28px; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">Available for gameplay programming and systems design — contract or full-time.</p>
+              <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.68); margin:18px 0 0; text-wrap:pretty;">Happiest on a team that ships. Send a build, a design doc, or a rough idea and I'll tell you honestly what I'd do with it.</p>
+              <a href="mailto:erikthom.dev@proton.me" style="display:inline-block; margin-top:26px; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:15px 24px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;">SEND A MESSAGE →</a>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
+              <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
+                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" style="background:rgba(28,44,36,.28); padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
+                  <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:rgba(197,221,205,.45); text-transform:uppercase; min-width:76px;">{{ l.k }}</span>
+                  <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:14px; color:#dfeae2; flex:1;">{{ l.v }}</span>
+                  <span style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:#7aa88a;">↗</span>
+                </a>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="border-top:1px solid rgba(198,228,208,.15); padding:11px 22px; display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.18em; color:rgba(197,221,205,.42); background:rgba(12,22,17,.16);">
+        <div style="display:flex; align-items:center; gap:16px;">
+          <span>{{ footHint }}</span>
+          <span style="display:flex; align-items:center; gap:7px; color:rgba(197,221,205,.5);">
+            <span style="border-radius:5px; border:1px solid rgba(198,228,208,.24); background:{{ dChip }}; padding:2px 6px; font-size:9px;">Q</span>
+            <span style="border-radius:5px; border:1px solid rgba(198,228,208,.24); background:{{ dChip }}; padding:2px 6px; font-size:9px;">E</span>
+            CYCLE TABS
+          </span>
+        </div>
+        
+      </div>
+    </div>
+
+    <sc-if value="{{ booting }}">
+      <div style="position:absolute; inset:0; background:rgba(9,16,12,.82); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; z-index:5;">
+        <sc-for list="{{ bootLines }}" as="l" hint-placeholder-count="1">
+          <div style="font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.26em; color:#7aa88a; animation:lineIn .3s ease both;">{{ l }}</div>
+        </sc-for>
+        <div style="width:8px; height:14px; background:#7aa88a; animation:caret .9s steps(1) infinite;"></div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ theaterOn }}">
+    <div onClick="{{ closeTheater }}" style="position:fixed; inset:0; z-index:60; background:rgba(4,8,12,.9); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center; padding:6vh 5vw;">
+      <div onClick="{{ stopBubble }}" style="position:relative; width:100%; max-width:1500px; display:flex; flex-direction:column; gap:14px;">
+        <div style="position:relative; width:100%; aspect-ratio:16/9; max-height:76vh; margin:0 auto; border-radius:18px; overflow:hidden; border:1px solid rgba(196,214,240,.2); background:#05080b;">
+          <sc-if value="{{ th.activeIsVideo }}">
+            <video data-src="{{ th.activeSrc }}" data-clip="1" onCanPlay="{{ th.onReady }}" onLoadedData="{{ th.onReady }}" onClick="{{ togglePlay }}" autoplay="autoplay" loop="loop" playsinline="playsinline" style="filter:{{ th.activeFilter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; background:#05080b;"></video>
+          </sc-if>
+          <sc-if value="{{ th.activeIsImage }}">
+            <img data-src="{{ th.activeSrc }}" alt="{{ th.activeLabel }}" onLoad="{{ th.onReady }}" onError="{{ th.onReady }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; background:#05080b;">
+          </sc-if>
+          <sc-if value="{{ th.activeIsStill }}">
+            <div style="position:absolute; inset:0; background:repeating-linear-gradient(135deg, rgba(214,236,222,.045) 0 10px, rgba(214,236,222,0) 10px 20px), rgba(28,40,62,.26); display:flex; align-items:flex-end; padding:18px 20px;">
+              <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:rgba(198,212,238,.5);">{{ th.activeLabel }}</span>
+            </div>
+          </sc-if>
+          <div style="position:absolute; inset:0; z-index:2; pointer-events:none; background:#05080b; opacity:{{ th.veilOp }}; transition:opacity .17s ease;"></div>
+          <sc-if value="{{ th.multi }}">
+            <button type="button" onClick="{{ th.prev }}" title="Previous" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:3; width:42px; height:42px; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#eef2f9; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.9); border-color:rgba(168,194,232,.75);">‹</button>
+            <button type="button" onClick="{{ th.next }}" title="Next" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:3; width:42px; height:42px; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#eef2f9; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.9); border-color:rgba(168,194,232,.75);">›</button>
+          </sc-if>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <sc-for list="{{ th.media }}" as="m" hint-placeholder-count="4">
+              <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:104px; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), rgba(28,40,62,.3); opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end;" style-hover="opacity:1;">
+                <sc-if value="{{ m.isVideo }}">
+                  <video data-src="{{ m.src }}" muted="muted" playsinline="playsinline" preload="metadata" style="filter:{{ m.filter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
+                  <span style="position:absolute; top:5px; left:6px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:7.5px; padding:2px 5px; border-radius:5px; background:rgba(8,14,20,.68); color:#eef2f9;">▶</span>
+                </sc-if>
+                <sc-if value="{{ m.isImage }}">
+                  <img data-src="{{ m.src }}" alt="{{ m.label }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                </sc-if>
+                <sc-if value="{{ m.isStill }}">
+                  <span style="position:relative; z-index:2; padding:6px 7px; text-align:left; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(198,212,238,.5);">{{ m.label }}</span>
+                </sc-if>
+              </button>
+            </sc-for>
+          </div>
+          <div style="display:flex; align-items:center; gap:14px;">
+            <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; color:rgba(198,212,238,.45);">{{ th.counter }}</span>
+            <button type="button" onClick="{{ closeTheater }}" style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(148,178,222,.15); color:#eef2f9; cursor:pointer;" style-hover="background:rgba(148,178,222,.3);">Close ✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ bpOn }}">
+    <div style="position:fixed; inset:0; z-index:70; background:rgba(4,8,12,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; flex-direction:column; gap:12px; padding:22px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+        <div style="display:flex; align-items:baseline; gap:14px;">
+          <span style="font-family:'Archivo', sans-serif; font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#eef2f9;">{{ bpTitle }}</span>
+          <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(198,212,238,.45);">Blueprint viewer</span>
+        </div>
+        <button type="button" onClick="{{ closeBlueprint }}" style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(148,178,222,.15); color:#eef2f9; cursor:pointer;" style-hover="background:rgba(148,178,222,.3);">Close ✕</button>
+      </div>
+      <iframe src="{{ bpHref }}" title="{{ bpTitle }}" style="flex:1; width:100%; border:1px solid rgba(196,214,240,.2); border-radius:16px; background:#05080b; display:block;"></iframe>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 'status', sel: null, booting: true, boot: [], sound: true, bar: null, invSeen: false };
+  tabRow = React.createRef();
+  panel = React.createRef();
+
+  onKey = (e) => {
+    const k = e.key && e.key.toLowerCase();
+    if (k !== 'e' && k !== 'q') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName || ''))) return;
+    const ids = ['status','skills','inventory','contact'];
+    const i = ids.indexOf(this.state.uiTab || this.state.tab);
+    this.go(ids[(i + (k === 'e' ? 1 : ids.length - 1)) % ids.length]);
+  };
+
+  trackCursor = (e) => {
+    const el = this.panel.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const inside = x >= -60 && y >= -60 && x <= r.width + 60 && y <= r.height + 60;
+    const t = e.target;
+    const onControl = !!(t && t.closest && t.closest('button, a'));
+    this._glow = { x, y, on: inside && !onControl };
+    if (!this._raf) this._raf = requestAnimationFrame(() => { this._raf = null; this.forceUpdate(); });
+  };
+
+  measureBar() {
+    const row = this.tabRow.current; if (!row) return;
+    const i = ['status','skills','inventory','contact'].indexOf(this.state.uiTab || this.state.tab);
+    const btn = row.querySelectorAll('button')[i]; if (!btn) return;
+    const bar = { x: btn.offsetLeft, w: btn.offsetWidth };
+    const cur = this.state.bar;
+    if (!cur || cur.x !== bar.x || cur.w !== bar.w) this.setState({ bar });
+  }
+
+  markFade(k) {
+    if (!k || (this.state.fade && this.state.fade[k])) return;
+    this.setState((st) => ({ fade: { ...(st.fade || {}), [k]: true } }));
+  }
+
+  checkFades() {
+    document.querySelectorAll('img[data-fade]').forEach((el) => {
+      const k = el.dataset.fade || '';
+      if (!k || k.indexOf('{{') === 0) return;
+      if (el.naturalWidth || (el.complete && el.currentSrc)) { this.markFade(k); return; }
+      if (el.dataset.fadeBound === '1') return;
+      el.dataset.fadeBound = '1';
+      const done = () => this.markFade(k);
+      el.addEventListener('load', done, { once: true });
+      el.addEventListener('error', done, { once: true });
+    });
+  }
+
+  /* The preview host authorises requests with query params on the document URL;
+     a bare relative link to another project file drops them and is rejected. */
+  withHostParams(href) {
+    if (!href) return '#';
+    try {
+      const parts = href.split('?');
+      const out = new URLSearchParams(parts[1] || '');
+      new URLSearchParams(window.location.search).forEach((v, k) => { if (!out.has(k)) out.set(k, v); });
+      const q = out.toString();
+      return parts[0] + (q ? '?' + q : '');
+    } catch (e) { return href; }
+  }
+
+  lift(i) {
+    if (this._vs && this._vs[i]) clearTimeout(this._vs[i]);
+    this.setState((st) => (st.veil && st.veil[i] ? { veil: { ...st.veil, [i]: false } } : null));
+  }
+
+  syncVideos() {
+    document.querySelectorAll('img[data-src]').forEach((el) => {
+      const want = el.dataset.src || '';
+      if (!want || want.indexOf('{{') === 0) { if (el.getAttribute('src')) el.removeAttribute('src'); return; }
+      if (el.getAttribute('src') !== want) el.setAttribute('src', want);
+    });
+    document.querySelectorAll('video[data-src]').forEach((v) => {
+      const want = v.dataset.src || '';
+      if (!want || want.indexOf('{{') === 0) { if (v.getAttribute('src')) v.removeAttribute('src'); return; }
+      if (v.getAttribute('src') !== want) {
+        v.setAttribute('src', want);
+        v.load();
+        if (v.autoplay) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+      }
+    });
+  }
+
+  componentDidUpdate() {
+    this.measureBar();
+    this.syncVideos();
+    this.checkFades();
+    const root = this.panel.current; if (!root) return;
+    const theaterOpen = this.state.theater != null && this.state.theater !== false;
+    root.querySelectorAll('video[data-clip]').forEach((v) => {
+      if (theaterOpen) { if (!v.paused) v.pause(); return; }
+      if (v.paused && v.autoplay && v.dataset.userPaused !== '1') { const r = v.play(); if (r && r.catch) r.catch(() => {}); }
+    });
+  }
+
+  componentDidMount() {
+    this.checkFades();
+    window.addEventListener('pointermove', this.trackCursor, { passive: true });
+    window.addEventListener('keydown', this.onKey);
+    this._ro = new ResizeObserver(() => this.measureBar());
+    if (this.tabRow.current) this._ro.observe(this.tabRow.current);
+    requestAnimationFrame(() => { this.measureBar(); this.syncVideos(); });
+    document.fonts && document.fonts.ready.then(() => this.measureBar());
+    this.state.sound = this.props.sound !== false;
+    if (this.props.bootSequence === false) { this.setState({ booting: false }); return; }
+    const lines = ['INITIALIZING INTERFACE', 'LOADING PROFILE — E. THOMAS', 'READY'];
+    let i = 0;
+    this._t = setInterval(() => {
+      i++;
+      this.setState({ boot: lines.slice(0, i) });
+      if (i >= lines.length) {
+        clearInterval(this._t);
+        this._end = setTimeout(() => this.setState({ booting: false }), 520);
+      }
+    }, 300);
+  }
+  componentWillUnmount() { clearInterval(this._t); clearTimeout(this._end); this._ro && this._ro.disconnect(); window.removeEventListener('pointermove', this.trackCursor); window.removeEventListener('keydown', this.onKey); cancelAnimationFrame(this._raf); }
+
+  blip(freq, dur, gain) {
+    if (!this.state.sound) return;
+    try {
+      if (!this._ac) this._ac = new (window.AudioContext || window.webkitAudioContext)();
+      const ac = this._ac; if (ac.state === 'suspended') ac.resume();
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'triangle'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0, ac.currentTime);
+      g.gain.linearRampToValueAtTime(gain, ac.currentTime + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
+      o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime + dur + 0.02);
+    } catch (e) {}
+  }
+
+  projects() {
+    return [
+      { slot: '01', name: 'Faceless', engine: 'Unreal', year: '2025', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
+        video: 'https://www.youtube-nocookie.com/embed/pt9L98uNJyE?rel=0&modestbranding=1&playsinline=1',
+        cover: 'assets/faceless-cover.png', cold: true,
+        videoLink: 'https://youtu.be/pt9L98uNJyE',
+        blurb: 'A horror demo built on an old creepypasta — you are hunted, and the map only opens if you solve it.',
+        summary: 'A horror project demo featuring an old creepypasta, the Slenderman, and drawing inspiration from the classic horrors Resident Evil and Silent Hill.',
+        stills: [],
+        meta: [{k:'Role',v:'Product Owner'},{k:'Team',v:'Solo development'},{k:'Engine',v:'Unreal Engine / Blueprints'},{k:'Duration',v:'4 months'}],
+        built: ['Slot based classic horror inventory system', 'Horror events with basic combat', 'Linear puzzle based map design including level optimization'],
+        systems: [
+          { title: 'Slot based inventory', body: 'A fixed grid of slots holds everything the player carries: pick-ups occupy real space, so keeping the shotgun means leaving the herb. Items combine into crafted results and can be pulled out and rotated for inspection, hiding codes and hints on the models themselves.', tags: ['Grid slots', 'Crafting', 'Inspection'], blueprint: 'blueprint-viewer/index.html?src=assets/BPC_SurvivalHorrorInventory.uasset,assets/BP_ItemNew.uasset', images: ['assets/sys01-shot-b.png', 'assets/sys01-shot-a.png', 'assets/sys01-shot-c.png'], clip: 'assets/sys01-inventory.mp4', clips2: 'assets/sys01-crafting.mp4', shots: ['inventory grid', 'crafting combine'] },
+          { title: 'Scare sequencing', body: 'Scares are authored as sequences rather than one-off jump triggers — a director picks which beat fires next based on where the player has been and how long since the last scare, so encounters stay varied across replays and never stack twice in the same corridor.', tags: ['Encounter director', 'Pacing', 'Audio cues'], images: ['assets/sys02-shot-d.png', 'assets/sys02-shot-f.png', 'assets/sys02-poster-decay.png'], clip: 'assets/sys02-scare.mp4', clips2: 'assets/sys02-stalker.mp4', bright: ['assets/sys02-scare.mp4', 'assets/sys02-stalker.mp4'], shots: ['sequence trigger', 'stalker approach', 'set piece', 'audio map'] },
+          { title: 'Weapon system', body: 'The map is a linear spine of locked areas, each opened by a single puzzle whose pieces are placed one region behind it. Backtracking is short and always rewarded, and the gate order doubles as the difficulty curve for the stalker AI.', tags: ['Level design', 'Gating', 'Key items'], clip: 'assets/sys03-weapons.mp4', shots: [] },
+          { title: 'Level design and events', body: 'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player\u2019s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.', tags: ['Level events', 'Interaction prompts', 'World state'], images: ['assets/sys04-interactions.png'], clip: 'assets/sys04-events.mp4', shots: [] }
+        ] },
+      { slot: '02', name: 'Project 02', engine: 'Unreal', year: '2024', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
+        blurb: 'One line on the hook — what the player does and why it feels good.',
+        summary: 'A short paragraph framing the project: the pitch, your remit, and the systems problem worth reading about.',
+        meta: [{k:'Role',v:'Designer / Programmer'},{k:'Team',v:'Solo'},{k:'Engine',v:'Unreal / C++'},{k:'Duration',v:'5 months'}],
+        built: ['The headline system, in one sentence each.', 'A second system, with the constraint that made it hard.', 'The tuning pass — what changed once it was in players\u2019 hands.'] },
+      { slot: '03', name: 'Project 03', engine: 'Godot', year: '2024', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
+        blurb: 'One line on the hook — what the player does and why it feels good.',
+        summary: 'A short paragraph framing the project: the pitch, your remit, and the systems problem worth reading about.',
+        meta: [{k:'Role',v:'Gameplay Programmer'},{k:'Team',v:'3 people'},{k:'Engine',v:'Godot / GDScript'},{k:'Duration',v:'48 hours'}],
+        built: ['The headline system, in one sentence each.', 'A second system, with the constraint that made it hard.', 'The tuning pass — what changed once it was in players\u2019 hands.'] }
+    ];
+  }
+
+  swap(next) {
+    if (this._sw) return;
+    const wasDetail = this.state.tab === 'inventory' && this.state.sel !== null;
+    const nextTab = next.tab !== undefined ? next.tab : this.state.tab;
+    const nextSel = next.sel !== undefined ? next.sel : this.state.sel;
+    const willDetail = nextTab === 'inventory' && nextSel !== null;
+    const sizeChange = wasDetail !== willDetail;
+    this.setState({ blur: true });
+    this._sw = setTimeout(() => {
+      this.setState(Object.assign({ blur: false, resizing: sizeChange }, next));
+      this._sw = null;
+      if (sizeChange) {
+        clearTimeout(this._rz);
+        this._rz = setTimeout(() => this.setState({ resizing: false }), 360);
+      }
+    }, 190);
+  }
+
+  go(tab) {
+    this.blip(520, 0.07, 0.05);
+    if (tab === 'inventory' && !this.state.invSeen) this.setState({ invSeen: true });
+    if (tab === this.state.tab && this.state.sel === null) return;
+    this.setState({ uiTab: tab });
+    this.swap({ tab, sel: null });
+  }
+
+  renderVals() {
+    const st = this.state, projects = this.projects(), uiTab = st.uiTab || st.tab;
+    const branch = (hex, soft) => ({
+      cLine: 'rgba(' + hex + ',.42)', cFill: 'rgba(' + hex + ',.16)', cGlow: 'rgba(' + hex + ',.16)',
+      cText: 'rgb(' + soft + ')', cStem: 'rgba(' + hex + ',.34)'
+    });
+    const node = (hex, soft) => (label, hot) => ({
+      label,
+      dot: hot ? 'rgb(' + soft + ')' : 'rgba(' + hex + ',.55)',
+      line: hot ? 'rgba(' + hex + ',.75)' : 'rgba(198,228,208,.16)',
+      fill: hot ? 'rgba(' + hex + ',.3)' : 'rgba(' + hex + ',.09)',
+      lineHot: 'rgba(' + hex + ',.7)',
+      shadow: hot ? 'inset 0 1px 0 rgba(240,250,244,.26), 0 0 16px rgba(' + hex + ',.3)' : 'inset 0 1px 0 rgba(226,244,232,.1)',
+      color: hot ? 'rgb(' + soft + ')' : '#cadecf',
+      weight: hot ? 600 : 400
+    });
+    const tree = [
+      { title: 'Gameplay Systems', note: 'What I build', hex: '178,86,79', soft: '234,176,168',
+        list: [['Combat systems', 1], ['Character controllers', 0], ['Inventory & crafting', 1], ['AI behaviour trees', 0], ['Progression & economy', 0], ['Save systems', 0], ['Physics interactions', 0], ['Ability frameworks', 0]] },
+      { title: 'Engines & Tools', note: 'Where I build it', hex: '186,152,72', soft: '238,214,152',
+        list: [['Unreal Engine', 1], ['Unity', 0], ['GameMaker', 0], ['Perforce', 0], ['Git', 0], ['YouTrack', 0], ['Miro', 0], ['Figma', 0], ['Blender (basics)', 0], ['Custom editor tooling', 0]] },
+      { title: 'Languages', note: 'How I build it', hex: '110,168,130', soft: '196,234,208',
+        list: [['Blueprints', 1], ['C#', 0], ['C++', 0], ['Python', 0]] },
+      { title: 'Design', note: 'The other half', hex: '92,140,176', soft: '186,214,238',
+        list: [['Systems design', 1], ['Level blockout', 0], ['Rapid prototyping', 0], ['Playtest facilitation', 0], ['Design documentation', 0], ['Balance & tuning', 0]] }
+    ];
+    const skillGroups = tree.map((b) => {
+      const mk = node(b.hex, b.soft);
+      return { title: b.title, note: b.note, ...branch(b.hex, b.soft), items: b.list.map(([l, h]) => mk(l, !!h)) };
+    });
+    const skillCount = skillGroups.reduce((n, g) => n + g.items.length, 0) + ' NODES / 4 BRANCHES';
+    const plain = (a) => a.map(label => ({ label, hot: false, normal: true }));
+    const defs = [ ['status','Status'], ['skills','Skills'], ['inventory','Inventory'], ['contact','Contact'] ];
+    const empties = [
+      { slot: '04', empty: true }, { slot: '05', empty: true }, { slot: '06', empty: true }
+    ];
+    const cold = st.tab === 'inventory' && st.sel !== null && !!projects[st.sel].cold;
+    const selObj = st.sel !== null ? (() => {
+        const p = projects[st.sel];
+        const sys = (p.systems || []).map((s, i) => ({
+          ...s,
+          idx: 'SYS ' + String(i + 1).padStart(2, '0'),
+          hasClip: !!s.clip,
+          cols: s.shots.length > 3 ? '1fr 1fr' : '1fr',
+          ...(() => {
+            const vids = [s.clip, s.clips2].filter(Boolean);
+            const boost = (src) => ((s.bright || []).indexOf(src) >= 0 ? 'brightness(1.5) contrast(1.04) saturate(1.06)' : 'none');
+            const list = (s.images || []).map((src, n) => ({ type: 'image', src, label: 'Shot ' + String(n + 1).padStart(2, '0') }))
+              .concat(vids.map((src, n) => ({ type: 'video', src, label: 'Clip ' + String(n + 1).padStart(2, '0') })))
+              .concat((s.shots || []).map((lb) => ({ type: 'still', src: '', label: lb })));
+            const cur = Math.min((this.state.mi && this.state.mi[i]) || 0, Math.max(list.length - 1, 0));
+            const veilOn = !!(this.state.veil && this.state.veil[i]);
+            const go = (n) => {
+              const t = ((n % list.length) + list.length) % list.length;
+              if (t === cur || veilOn) return;
+              this._vt = this._vt || {}; this._vs = this._vs || {};
+              clearTimeout(this._vt[i]); clearTimeout(this._vs[i]);
+              this.setState((st2) => ({ veil: { ...(st2.veil || {}), [i]: true } }));
+              this._vt[i] = setTimeout(() => {
+                this.setState((st2) => ({ mi: { ...(st2.mi || {}), [i]: t } }));
+                const instant = (list[t] || {}).type === 'still';
+                this._vs[i] = setTimeout(() => this.lift(i), instant ? 40 : 1400);
+              }, 170);
+            };
+            const set = (n) => go(n);
+            const step = (d) => go(cur + d);
+            const a = list[cur] || { type: 'still', label: '' };
+            return {
+              media: list.map((m, n) => ({
+                ...m, isVideo: m.type === 'video', isImage: m.type === 'image', isStill: m.type === 'still', filter: boost(m.src),
+                op: n === cur ? 1 : 0.55,
+                bd: n === cur ? (cold ? 'rgba(168,194,232,.72)' : 'rgba(160,206,176,.7)') : (cold ? 'rgba(196,214,240,.15)' : 'rgba(198,228,208,.15)'),
+                pick: () => set(n)
+              })),
+              multi: list.length > 1,
+              counter: (cur + 1) + ' / ' + list.length,
+              activeIsVideo: a.type === 'video', activeIsImage: a.type === 'image', activeIsStill: a.type === 'still',
+              activeSrc: a.src, activeLabel: a.label, activeFilter: boost(a.src),
+              prev: () => step(-1), next: () => step(1),
+              veilOp: veilOn ? 1 : 0,
+              onReady: () => this.lift(i),
+              openTheater: () => this.setState({ theater: i })
+            };
+          })(),
+          blueprint: this.withHostParams(s.blueprint), hasBlueprint: !!s.blueprint,
+          openBlueprint: () => this.setState({ bp: { href: this.withHostParams(s.blueprint), title: s.title } })
+        }));
+        /* YouTube rejects embeds from a file:// page (null referrer → error 153),
+           so offline copies get a click-through poster instead of a dead player. */
+        const offline = typeof location !== 'undefined' && location.protocol === 'file:';
+        return { ...p, hasVideo: !!p.video && !offline, videoOffline: !!p.video && offline,
+          noVideo: !p.video, stills: p.stills || [],
+          systems: sys, hasSystems: sys.length > 0,
+          systemCount: sys.length + ' SYSTEMS' };
+    })() : {};
+    const th = (selObj.systems && st.theater != null && st.theater !== false) ? selObj.systems[st.theater] : null;
+    const fadeOf = (k) => ((st.fade && st.fade[k]) ? 1 : 0);
+    const slots = projects.map((p, i) => ({
+      ...p, dim: 1, cursor: 'pointer', hasCover: !!p.cover, noCover: !p.cover,
+      fadeKey: 'cover' + i, coverOp: fadeOf('cover' + i), onCover: () => this.markFade('cover' + i),
+      onHover: () => this.blip(880, 0.035, 0.022),
+      onClick: () => { this.blip(660, 0.09, 0.055); this.swap({ sel: i }); }
+    })).concat(empties.map(e => ({
+      slot: e.slot, name: 'Empty slot', engine: '—', year: '—', thumb: 'available', hasCover: false, noCover: true,
+      blurb: 'Reserved for the next shipped thing.', dim: .42, cursor: 'default',
+      onHover: () => {}, onClick: () => {}
+    })));
+
+    return {
+      booting: st.booting, bootLines: st.boot,
+      tabRowRef: this.tabRow,
+      panelRef: this.panel,
+      glowX: (this._glow ? this._glow.x : 0) + 'px',
+      glowY: (this._glow ? this._glow.y : 0) + 'px',
+      glowO: this._glow && this._glow.on ? 1 : 0,
+      barX: st.bar ? st.bar.x + 'px' : '0px',
+      barW: st.bar ? st.bar.w + 'px' : '0px',
+      barO: st.bar ? 1 : 0,
+      tabs: defs.map(([id, label]) => ({
+        id, label,
+        hasSub: id === 'inventory',
+        flash: id === 'inventory' && !st.invSeen,
+        subStill: id === 'inventory' && st.invSeen,
+        sub: 'Projects',
+        fg: uiTab === id ? '#f2f8f4' : 'inherit',
+        onHover: () => this.blip(760, 0.03, 0.018),
+        onClick: () => this.go(id)
+      })),
+      featured: { ...projects[0], hasCover: !!projects[0].cover, noCover: !projects[0].cover,
+        coverOp: fadeOf('featured'), onCover: () => this.markFade('featured') },
+      portraitOp: fadeOf('portrait'), onPortrait: () => this.markFade('portrait'),
+      openFeatured: () => { this.blip(660, 0.09, 0.055); this.setState({ uiTab: 'inventory', invSeen: true }); this.swap({ tab: 'inventory', sel: 0 }); },
+      isStatus: st.tab === 'status',
+      isContact: st.tab === 'contact',
+      isSkills: st.tab === 'skills',
+      bpOn: !!st.bp, bpHref: (st.bp || {}).href || '', bpTitle: (st.bp || {}).title || '',
+      closeBlueprint: () => this.setState({ bp: null }),
+      skillCount: skillCount,
+      isGrid: st.tab === 'inventory' && st.sel === null && !st.resizing,
+      isDetail: st.tab === 'inventory' && st.sel !== null && !st.resizing,
+      shellW: (st.tab === 'inventory' && st.sel !== null) ? 'max(1360px, 92vw)' : '1360px',
+      shellH: (st.tab === 'inventory' && st.sel !== null) ? 'max(min(860px, calc(100vh - 56px)), min(92vh, calc(100vh - 24px)))' : 'min(860px, calc(100vh - 56px))',
+      headH: (st.tab === 'inventory' && st.sel !== null) ? '0px' : '96px',
+      headO: (st.tab === 'inventory' && st.sel !== null) ? 0 : 1,
+      headPE: (st.tab === 'inventory' && st.sel !== null) ? 'none' : 'auto',
+      headBd: (st.tab === 'inventory' && st.sel !== null) ? 'transparent' : 'rgba(198,228,208,.15)',
+      coldOn: cold ? 1 : 0,
+      theaterOn: !!th,
+      th: th || {},
+      closeTheater: () => this.setState({ theater: null }),
+      togglePlay: (e) => {
+        const v = e.currentTarget;
+        if (v.paused) { v.dataset.userPaused = ''; delete v.dataset.userPaused; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+        else { v.dataset.userPaused = '1'; v.pause(); }
+      },
+      stopBubble: (e) => e.stopPropagation(),
+      dAcc: cold ? '#8fabcd' : '#7aa88a',
+      dAccDim: cold ? 'rgba(143,171,205,.62)' : 'rgba(122,168,138,.62)',
+      dBloom: cold
+        ? 'radial-gradient(circle at center, rgba(168,196,235,.17) 0%, rgba(140,170,212,.15) 62%, rgba(140,170,212,.1) 100%)'
+        : 'radial-gradient(circle at center, rgba(150,200,168,.17) 0%, rgba(122,168,138,.15) 62%, rgba(122,168,138,.1) 100%)',
+      dGlow: cold ? 'rgba(143,171,205,.75)' : 'rgba(122,168,138,.9)',
+      dLine: cold ? 'rgba(196,214,240,.15)' : 'rgba(198,228,208,.15)',
+      dCard: cold ? 'rgba(28,40,62,.26)' : 'rgba(30,48,38,.22)',
+      dChip: cold ? 'rgba(130,160,205,.09)' : 'rgba(122,168,138,.08)',
+      dBtnBg: cold ? 'rgba(148,178,222,.15)' : 'rgba(140,192,158,.14)',
+      dBtnBgHi: cold ? 'rgba(148,178,222,.27)' : 'rgba(140,192,158,.26)',
+      dBtnBd: cold ? 'rgba(168,194,232,.45)' : 'rgba(160,206,176,.42)',
+      dBtnBdHi: cold ? 'rgba(168,194,232,.72)' : 'rgba(160,206,176,.7)',
+      dHead: cold ? '#eef2f9' : '#eef5f0',
+      dBody: cold ? 'rgba(214,224,240,.72)' : 'rgba(217,230,221,.72)',
+      dMuted: cold ? 'rgba(198,212,238,.45)' : 'rgba(197,221,205,.45)',
+      warmOn: cold ? 0 : 1,
+      slots, slotCount: projects.length + ' / ' + slots.length + ' SLOTS FILLED',
+      sel: selObj,
+      back: () => { this.blip(400, 0.08, 0.05); this.swap({ sel: null }); },
+      viewBlur: st.blur ? 'blur(14px)' : 'blur(0px)',
+      viewOpacity: st.blur ? 0 : 1,
+      viewScale: st.blur ? 'scale(1.012)' : 'scale(1)',
+      footHint: st.tab === 'inventory' ? (st.sel !== null ? 'BACK RETURNS TO THE GRID' : 'SELECT A SLOT TO INSPECT') : 'FOUR TABS — STATUS, SKILLS, INVENTORY, CONTACT',
+      vitals: [ {k:'Based in',v:'Budapest, HU'}, {k:'Timezone',v:'CET / UTC+1'}, {k:'Focus',v:'Gameplay systems'}, {k:'Status',v:'Open to work'} ],
+      focus: [
+        { t:'Systems', d:'Combat, movement, inventory, progression — architected to stay changeable late.' },
+        { t:'Game feel', d:'Input buffering, timings, camera and feedback tuned until the mechanic reads as effortless.' },
+        { t:'Prototyping', d:'Fast, disposable builds that answer one design question before the real work starts.' },
+        { t:'Collaboration', d:'Comfortable owning a feature end to end with designers, artists and audio.' }
+      ],
+      skillGroups: skillGroups,
+      links: [
+        { k:'Email', v:'erikthom.dev@proton.me', href:'mailto:erikthom.dev@proton.me' },
+        { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer' },
+        { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer' },
+        { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer' },
+        { k:'Résumé', v:'Download PDF', href:'#' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
