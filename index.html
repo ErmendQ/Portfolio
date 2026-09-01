@@ -32,7 +32,7 @@
   * { scrollbar-width:thin; scrollbar-color:rgba(178,214,190,.28) transparent; }
 </style>
 </helmet>
-<div style="position:relative; width:100%; min-height:100vh; overflow:hidden; background:#09130d; color:#dbe8de; display:flex; align-items:center; justify-content:center; padding:28px; box-sizing:border-box; font-family:'IBM Plex Sans', system-ui, sans-serif;">
+<div style="position:relative; width:100%; min-height:100vh; overflow:hidden; background:#09130d; color:#dbe8de; display:flex; align-items:center; justify-content:center; padding:{{ padOuter }}; box-sizing:border-box; font-family:'IBM Plex Sans', system-ui, sans-serif;">
 
   <div style="position:absolute; inset:-6%; background-image:url('assets/backdrop.jpg'); background-size:cover; background-position:center; filter:blur(9px) saturate(1.05) hue-rotate(-8deg) brightness(.5); animation:drift 46s ease-in-out infinite;"></div>
   <div style="position:absolute; inset:-6%; background-image:url('assets/faceless-cover.png'); background-size:cover; background-position:center; filter:blur(11px) saturate(1.15) brightness(.62); animation:drift 46s ease-in-out infinite; opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
@@ -40,28 +40,30 @@
   <div style="position:absolute; inset:0; background:rgba(30,84,58,.14); mix-blend-mode:soft-light; opacity:{{ warmOn }}; transition:opacity .6s ease;"></div>
   <div style="position:absolute; inset:0; background:rgba(26,52,96,.16); mix-blend-mode:soft-light; opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
 
-  <div style="position:relative; width:100%; max-width:{{ shellW }}; height:{{ shellH }}; border-radius:34px; transition:max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1); border:1px solid rgba(198,228,208,.2); background:linear-gradient(158deg, rgba(56,100,76,.32) 0%, rgba(18,38,28,.27) 46%, rgba(8,22,15,.35) 100%); backdrop-filter:blur(44px) saturate(1.5) brightness(1.06); -webkit-backdrop-filter:blur(44px) saturate(1.5) brightness(1.06); box-shadow:0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.3), inset 0 1.5px 0 rgba(226,244,232,.26), inset 0 -1px 0 rgba(160,198,172,.09), inset 0 0 60px rgba(122,168,138,.05); display:grid; grid-template-columns:44px 1fr; overflow:hidden; animation:panelIn .7s cubic-bezier(.2,.7,.25,1) both;" ref="{{ panelRef }}">
+  <div style="position:relative; width:100%; max-width:{{ shellW }}; height:{{ shellH }}; border-radius:{{ shellR }}; transition:max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1); border:1px solid rgba(198,228,208,.2); background:linear-gradient(158deg, rgba(56,100,76,.32) 0%, rgba(18,38,28,.27) 46%, rgba(8,22,15,.35) 100%); backdrop-filter:blur(44px) saturate(1.5) brightness(1.06); -webkit-backdrop-filter:blur(44px) saturate(1.5) brightness(1.06); box-shadow:0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.3), inset 0 1.5px 0 rgba(226,244,232,.26), inset 0 -1px 0 rgba(160,198,172,.09), inset 0 0 60px rgba(122,168,138,.05); display:grid; grid-template-columns:{{ shellCols }}; overflow:hidden; animation:panelIn .7s cubic-bezier(.2,.7,.25,1) both;" ref="{{ panelRef }}">
     <div style="position:absolute; inset:0; pointer-events:none; z-index:0; background:linear-gradient(158deg, rgba(60,88,134,.34) 0%, rgba(22,34,54,.29) 46%, rgba(8,14,24,.37) 100%); opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
     <div style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:{{ glowO }}; transition:opacity .35s ease; background:radial-gradient(52px circle at {{ glowX }} {{ glowY }}, rgba(210,248,222,.12), rgba(150,206,170,.05) 46%, transparent 74%); mix-blend-mode:screen; filter:blur(7px);"></div>
 
+    <sc-if value="{{ showRail }}" hint-placeholder-val="{{ true }}">
     <div style="position:relative; z-index:1; border-right:1px solid {{ dLine }}; display:flex; flex-direction:column; align-items:center; justify-content:space-between; padding:16px 0; background:rgba(12,22,17,.16);">
       <div style="width:7px; height:7px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }};"></div>
       <div style="writing-mode:vertical-rl; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.42em; text-transform:uppercase; color:rgba(197,221,205,.5);">Portfolio — 2026</div>
       <div style="width:7px; height:7px;"></div>
     </div>
+    </sc-if>
 
     <div style="position:relative; z-index:1; display:grid; grid-template-rows:auto 1fr auto; min-height:0;">
 
-      <div style="display:flex; align-items:stretch; justify-content:space-between; border-bottom:1px solid rgba(198,228,208,.15); padding:0 22px; gap:24px; max-height:{{ headH }}; opacity:{{ headO }}; overflow:hidden; pointer-events:{{ headPE }}; border-bottom-color:{{ headBd }}; transition:max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease;">
-        <div style="display:flex; flex-direction:column; justify-content:center; padding:18px 0;">
-          <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:23px; letter-spacing:.16em; line-height:1;">ERIK THOMAS</div>
+      <div style="display:flex; align-items:stretch; justify-content:space-between; border-bottom:1px solid rgba(198,228,208,.15); padding:{{ headPad }}; gap:{{ headGap }}; flex-direction:{{ headDir }}; max-height:{{ headH }}; opacity:{{ headO }}; overflow:hidden; pointer-events:{{ headPE }}; border-bottom-color:{{ headBd }}; transition:max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease;">
+        <div style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:none;">
+          <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ nameFS }}; letter-spacing:.16em; line-height:1;">ERIK THOMAS</div>
           <div style="font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:{{ dAcc }}; margin-top:8px;">Game Designer / Gameplay Programmer</div>
         </div>
 
-        <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px;">
+        <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; min-height:{{ tabRowH }}; overflow:{{ tabOverflow }}; scrollbar-width:none;">
           <span style="position:absolute; bottom:-1px; height:2px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }}; left:0; width:{{ barW }}; transform:translateX({{ barX }}); opacity:{{ barO }}; transition:transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease;"></span>
           <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:0 20px; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:7px; position:relative; transition:color .25s ease; color:rgba(220,231,223,.55); background-image:{{ dBloom }}; background-repeat:no-repeat; background-position:center; background-size:0% 0%; transition:background-size .4s cubic-bezier(.22,.9,.24,1), color .25s ease;" style-hover="background-size:190% 190%; color:#e8f3ec;">
+            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:none; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:7px; position:relative; transition:color .25s ease; color:rgba(220,231,223,.55); background-image:{{ dBloom }}; background-repeat:no-repeat; background-position:center; background-size:0% 0%; transition:background-size .4s cubic-bezier(.22,.9,.24,1), color .25s ease;" style-hover="background-size:190% 190%; color:#e8f3ec;">
               <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.2em; text-transform:uppercase; color:{{ t.fg }};">{{ t.label }}</span>
               <sc-if value="{{ t.flash }}">
                 <span style="position:absolute; inset:0; border-radius:12px; pointer-events:none; background:rgba(150,200,168,.2); animation:tabFlash 2.6s ease-in-out infinite;"></span>
@@ -79,13 +81,13 @@
       <div style="min-height:0; overflow:auto; position:relative; filter:{{ viewBlur }}; opacity:{{ viewOpacity }}; transform:{{ viewScale }}; transition:filter .34s cubic-bezier(.3,.7,.3,1), opacity .3s ease, transform .34s cubic-bezier(.3,.7,.3,1); will-change:filter, opacity;">
 
         <sc-if value="{{ isStatus }}" hint-placeholder-val="{{ true }}">
-          <div style="padding:36px 40px; display:grid; grid-template-columns:300px 1fr; gap:44px;">
+          <div style="padding:{{ viewPad }}; display:grid; grid-template-columns:{{ statusCols }}; gap:{{ statusGap }};">
             <div style="display:flex; flex-direction:column; gap:14px;">
-              <div style="position:relative; aspect-ratio:3/4; border-radius:22px; border:1px solid rgba(198,228,208,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px), rgba(30,48,38,.24); display:flex; align-items:flex-end; padding:14px; overflow:hidden;">
+              <div style="position:relative; aspect-ratio:{{ portraitAR }}; border-radius:22px; border:1px solid rgba(198,228,208,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px), rgba(30,48,38,.24); display:flex; align-items:flex-end; padding:14px; overflow:hidden;">
                 <div style="position:absolute; top:10px; left:10px; width:14px; height:14px; border-top:1px solid rgba(122,168,138,.8); border-left:1px solid rgba(122,168,138,.8); z-index:3;"></div>
                 <div style="position:absolute; bottom:10px; right:10px; width:14px; height:14px; border-bottom:1px solid rgba(122,168,138,.8); border-right:1px solid rgba(122,168,138,.8); z-index:3;"></div>
                 <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
-                <img src="assets/portrait.jpg" alt="Erik Thomas" data-fade="portrait" style="opacity:{{ portraitOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 26%; transform:scale(1.08); transform-origin:50% 26%;">
+                <img src="assets/portrait-web.jpg" alt="Erik Thomas" width="900" height="1350" decoding="async" fetchpriority="high" data-fade="portrait" style="opacity:{{ portraitOp }}; transition:opacity .5s ease; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 26%; transform:scale(1.08); transform-origin:50% 26%;">
                 <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(14,26,19,0) 0%, rgba(14,26,19,.04) 50%, rgba(14,26,19,.55) 100%);"></div>
                 <div style="position:absolute; inset:-1px; border-radius:22px; pointer-events:none; background:radial-gradient(115% 105% at 50% 42%, rgba(30,48,38,0) 42%, rgba(30,48,38,.34) 74%, rgba(26,44,34,.72) 100%);"></div>
                 <div style="position:relative; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.2em; color:rgba(226,244,232,.82);">ERIK THOMAS</div>
@@ -103,10 +105,10 @@
             <div style="display:flex; flex-direction:column; gap:30px; min-width:0;">
               <div>
                 <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Profile</div>
-                <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:26px; line-height:1.4; letter-spacing:-.01em; margin:14px 0 0; text-wrap:pretty; color:#eaf2ec;">I build complex gameplay systems that feel simple in the hand — combat, movement, interaction loops tuned until they read as effortless.</p>
+                <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.4; letter-spacing:-.01em; margin:14px 0 0; text-wrap:pretty; color:#eaf2ec;">I build complex gameplay systems that feel simple in the hand — combat, movement, interaction loops tuned until they read as effortless.</p>
                 <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.72); margin:18px 0 0; text-wrap:pretty;">Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.</p>
               </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
+              <div style="display:grid; grid-template-columns:{{ focusCols }}; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
                 <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
                   <div style="background:rgba(28,44,36,.26); padding:18px 20px;">
                     <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:#b9d8c4;">{{ f.t }}</div>
@@ -144,9 +146,9 @@
         </sc-if>
 
         <sc-if value="{{ isSkills }}">
-          <div style="padding:34px 40px 44px;">
+          <div style="padding:{{ skillsPad }};">
             
-            <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px; align-items:start;">
+            <div style="display:grid; grid-template-columns:{{ skillCols }}; gap:16px; align-items:start;">
               <sc-for list="{{ skillGroups }}" as="g" hint-placeholder-count="4">
                 <div style="display:flex; flex-direction:column; gap:0;">
                   <div style="border:1px solid {{ g.cLine }}; background:{{ g.cFill }}; box-shadow:inset 0 1px 0 rgba(240,250,244,.16), 0 0 22px {{ g.cGlow }}; border-radius:16px; padding:13px 14px 12px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);">
@@ -171,12 +173,12 @@
         </sc-if>
 
         <sc-if value="{{ isGrid }}">
-          <div style="padding:32px 40px 40px;">
-            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:20px;">
+          <div style="padding:{{ gridPad }};">
+            <div style="display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:20px;">
               <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Inventory — select a slot to inspect</div>
               <div style="font-family:'IBM Plex Mono', monospace; font-size:10px; color:rgba(197,221,205,.4);">{{ slotCount }}</div>
             </div>
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;">
+            <div style="display:grid; grid-template-columns:{{ gridCols }}; gap:14px;">
               <sc-for list="{{ slots }}" as="p" hint-placeholder-count="6">
                 <button type="button" onClick="{{ p.onClick }}" onMouseEnter="{{ p.onHover }}" style="appearance:none; text-align:left; cursor:{{ p.cursor }}; border:1px solid rgba(198,228,208,.16); background:rgba(30,48,38,.26); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.14); border-radius:20px; padding:0; overflow:hidden; display:flex; flex-direction:column; transition:transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease; opacity:{{ p.dim }};" style-hover="transform:translateY(-3px); border-color:rgba(160,206,176,.55); background:rgba(48,74,60,.34);">
                   <div style="position:relative; aspect-ratio:16/10; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px); border-bottom:1px solid rgba(198,228,208,.14); display:flex; align-items:center; justify-content:center; overflow:hidden;">
@@ -204,12 +206,12 @@
         </sc-if>
 
         <sc-if value="{{ isDetail }}">
-          <div style="padding:26px 40px 44px;">
-            <div style="position:sticky; top:0; z-index:12; margin:-26px -40px 0; padding:20px 40px 14px; display:flex; background:linear-gradient(180deg, rgba(8,14,20,.86) 0%, rgba(8,14,20,.6) 62%, rgba(8,14,20,0) 100%); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);">
+          <div style="padding:{{ detailPad }};">
+            <div style="position:sticky; top:0; z-index:12; margin:{{ stickyMargin }}; padding:{{ stickyPad }}; display:flex; background:linear-gradient(180deg, rgba(8,14,20,.86) 0%, rgba(8,14,20,.6) 62%, rgba(8,14,20,0) 100%); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);">
               <button type="button" onClick="{{ back }}" style="appearance:none; cursor:pointer; border-radius:999px; border:1px solid rgba(255,255,255,.5); background:rgba(255,255,255,.9); box-shadow:0 4px 18px rgba(0,0,0,.35); color:#101820; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:10px; letter-spacing:.2em; padding:10px 17px; transition:all .2s ease;" style-hover="background:#fff; border-color:#fff; box-shadow:0 6px 22px rgba(0,0,0,.45);">← BACK TO INVENTORY</button>
             </div>
 
-            <div style="display:grid; grid-template-columns:1.35fr 1fr; gap:40px; margin-top:24px; align-items:start;">
+            <div style="display:grid; grid-template-columns:{{ detailCols }}; gap:{{ detailGap }}; margin-top:24px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:16px;">
                 <div style="position:relative; z-index:7; aspect-ratio:16/9; border-radius:22px; overflow:hidden; border:1px solid {{ dLine }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 10px, rgba(214,236,222,0) 10px 20px), {{ dCard }}; display:flex; align-items:center; justify-content:center;">
                   <sc-if value="{{ sel.hasVideo }}">
@@ -232,7 +234,7 @@
               <div style="display:flex; flex-direction:column; gap:24px;">
                 <div>
                   <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }};">{{ sel.slot }} — CASE STUDY</div>
-                  <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:34px; letter-spacing:-.01em; margin-top:10px; color:{{ dHead }};">{{ sel.name }}</div>
+                  <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ titleFS }}; letter-spacing:-.01em; margin-top:10px; color:{{ dHead }};">{{ sel.name }}</div>
                   <div style="font-size:14.5px; line-height:1.65; color:{{ dBody }}; margin-top:12px; text-wrap:pretty;">{{ sel.summary }}</div>
                 </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:{{ dLine }}; border:1px solid {{ dLine }}; border-radius:18px; overflow:hidden;">
@@ -259,17 +261,17 @@
 
             <sc-if value="{{ sel.hasSystems }}">
               <div style="margin-top:52px; border-top:1px solid {{ dLine }}; padding-top:34px;">
-                <div style="display:flex; align-items:baseline; justify-content:space-between; gap:20px;">
+                <div style="display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:20px;">
                   <div>
                     <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:{{ dAcc }}; text-transform:uppercase;">Systems breakdown</div>
-                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:26px; letter-spacing:-.01em; margin-top:11px; color:{{ dHead }};">How it works under the hood</div>
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:{{ h2FS }}; letter-spacing:-.01em; margin-top:11px; color:{{ dHead }};">How it works under the hood</div>
                   </div>
                   <div style="font-family:'IBM Plex Mono', monospace; font-size:10px; color:{{ dMuted }};">{{ sel.systemCount }}</div>
                 </div>
 
                 <div style="display:flex; flex-direction:column; gap:18px; margin-top:26px;">
                   <sc-for list="{{ sel.systems }}" as="sy" hint-placeholder-count="3">
-                    <div style="display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:30px; align-items:start; border:1px solid {{ dLine }}; border-radius:22px; background:{{ dCard }}; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.13); padding:24px 26px;">
+                    <div style="display:grid; grid-template-columns:{{ sysCols }}; gap:{{ sysGap }}; align-items:start; border:1px solid {{ dLine }}; border-radius:22px; background:{{ dCard }}; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.13); padding:{{ sysPad }};">
                       <div style="display:flex; flex-direction:column; align-items:flex-start; gap:13px;">
                         <div style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.22em; color:{{ dAcc }};">{{ sy.idx }}</div>
                         <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:18px; letter-spacing:.01em; color:{{ dHead }};">{{ sy.title }}</div>
@@ -307,7 +309,7 @@
                         </div>
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
                           <sc-for list="{{ sy.media }}" as="m" hint-placeholder-count="4">
-                            <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:92px; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), {{ dCard }}; opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end; justify-content:flex-start;" style-hover="opacity:1; border-color:{{ dBtnBdHi }};">
+                            <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:{{ thumbW }}; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), {{ dCard }}; opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end; justify-content:flex-start;" style-hover="opacity:1; border-color:{{ dBtnBdHi }};">
                               <sc-if value="{{ m.isVideo }}">
                                 <video data-src="{{ m.src }}" muted="muted" playsinline="playsinline" preload="metadata" style="filter:{{ m.filter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
                                 <span style="position:absolute; top:5px; left:6px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.16em; padding:2px 5px; border-radius:5px; background:rgba(8,14,20,.68); color:{{ dHead }};">▶</span>
@@ -331,10 +333,10 @@
         </sc-if>
 
         <sc-if value="{{ isContact }}">
-          <div style="padding:44px 40px; display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:start;">
+          <div style="padding:{{ contactPad }}; display:grid; grid-template-columns:{{ contactCols }}; gap:{{ contactGap }}; align-items:start;">
             <div>
               <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Recruit</div>
-              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:28px; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">Available for gameplay programming and systems design — contract or full-time.</p>
+              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">Available for gameplay programming and systems design — contract or full-time.</p>
               <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.68); margin:18px 0 0; text-wrap:pretty;">Happiest on a team that ships. Send a build, a design doc, or a rough idea and I'll tell you honestly what I'd do with it.</p>
               <a href="mailto:erikthom.dev@proton.me" style="display:inline-block; margin-top:26px; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:15px 24px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;">SEND A MESSAGE →</a>
             </div>
@@ -351,14 +353,16 @@
         </sc-if>
       </div>
 
-      <div style="border-top:1px solid rgba(198,228,208,.15); padding:11px 22px; display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.18em; color:rgba(197,221,205,.42); background:rgba(12,22,17,.16);">
+      <div style="border-top:1px solid rgba(198,228,208,.15); padding:{{ footPad }}; display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.18em; color:rgba(197,221,205,.42); background:rgba(12,22,17,.16);">
         <div style="display:flex; align-items:center; gap:16px;">
           <span>{{ footHint }}</span>
+          <sc-if value="{{ showKeys }}" hint-placeholder-val="{{ true }}">
           <span style="display:flex; align-items:center; gap:7px; color:rgba(197,221,205,.5);">
             <span style="border-radius:5px; border:1px solid rgba(198,228,208,.24); background:{{ dChip }}; padding:2px 6px; font-size:9px;">Q</span>
             <span style="border-radius:5px; border:1px solid rgba(198,228,208,.24); background:{{ dChip }}; padding:2px 6px; font-size:9px;">E</span>
             CYCLE TABS
           </span>
+          </sc-if>
         </div>
         
       </div>
@@ -375,7 +379,7 @@
   </div>
 
   <sc-if value="{{ theaterOn }}">
-    <div onClick="{{ closeTheater }}" style="position:fixed; inset:0; z-index:60; background:rgba(4,8,12,.9); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center; padding:6vh 5vw;">
+    <div onClick="{{ closeTheater }}" style="position:fixed; inset:0; z-index:60; background:rgba(4,8,12,.9); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center; padding:{{ theaterPad }};">
       <div onClick="{{ stopBubble }}" style="position:relative; width:100%; max-width:1500px; display:flex; flex-direction:column; gap:14px;">
         <div style="position:relative; width:100%; aspect-ratio:16/9; max-height:76vh; margin:0 auto; border-radius:18px; overflow:hidden; border:1px solid rgba(196,214,240,.2); background:#05080b;">
           <sc-if value="{{ th.activeIsVideo }}">
@@ -398,7 +402,7 @@
         <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <sc-for list="{{ th.media }}" as="m" hint-placeholder-count="4">
-              <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:104px; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), rgba(28,40,62,.3); opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end;" style-hover="opacity:1;">
+              <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:{{ thumbW }}; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), rgba(28,40,62,.3); opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end;" style-hover="opacity:1;">
                 <sc-if value="{{ m.isVideo }}">
                   <video data-src="{{ m.src }}" muted="muted" playsinline="playsinline" preload="metadata" style="filter:{{ m.filter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
                   <span style="position:absolute; top:5px; left:6px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:7.5px; padding:2px 5px; border-radius:5px; background:rgba(8,14,20,.68); color:#eef2f9;">▶</span>
@@ -422,7 +426,7 @@
   </sc-if>
 
   <sc-if value="{{ bpOn }}">
-    <div style="position:fixed; inset:0; z-index:70; background:rgba(4,8,12,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; flex-direction:column; gap:12px; padding:22px;">
+    <div style="position:fixed; inset:0; z-index:70; background:rgba(4,8,12,.92); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); display:flex; flex-direction:column; gap:12px; padding:{{ bpPad }};">
       <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
         <div style="display:flex; align-items:baseline; gap:14px;">
           <span style="font-family:'Archivo', sans-serif; font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#eef2f9;">{{ bpTitle }}</span>
@@ -438,7 +442,8 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
 class Component extends DCLogic {
-  state = { tab: 'status', sel: null, booting: true, boot: [], sound: true, bar: null, invSeen: false };
+  state = { tab: 'status', sel: null, booting: true, boot: [], sound: true, bar: null, invSeen: false,
+    mobile: typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches };
   tabRow = React.createRef();
   panel = React.createRef();
 
@@ -454,6 +459,7 @@ class Component extends DCLogic {
   };
 
   trackCursor = (e) => {
+    if (this.state.mobile) return;
     const el = this.panel.current; if (!el) return;
     const r = el.getBoundingClientRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;
@@ -540,6 +546,10 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this.checkFades();
+    this._mq = window.matchMedia('(max-width: 860px)');
+    this._onMQ = () => this.setState({ mobile: this._mq.matches });
+    if (this._mq.addEventListener) this._mq.addEventListener('change', this._onMQ); else this._mq.addListener(this._onMQ);
+    this._onMQ();
     window.addEventListener('pointermove', this.trackCursor, { passive: true });
     window.addEventListener('keydown', this.onKey);
     this._ro = new ResizeObserver(() => this.measureBar());
@@ -559,7 +569,18 @@ class Component extends DCLogic {
       }
     }, 300);
   }
-  componentWillUnmount() { clearInterval(this._t); clearTimeout(this._end); this._ro && this._ro.disconnect(); window.removeEventListener('pointermove', this.trackCursor); window.removeEventListener('keydown', this.onKey); cancelAnimationFrame(this._raf); }
+  componentWillUnmount() { if (this._mq) { if (this._mq.removeEventListener) this._mq.removeEventListener('change', this._onMQ); else this._mq.removeListener(this._onMQ); } clearInterval(this._t); clearTimeout(this._end); this._ro && this._ro.disconnect(); window.removeEventListener('pointermove', this.trackCursor); window.removeEventListener('keydown', this.onKey); cancelAnimationFrame(this._raf); }
+
+  /* Selection sound — a real sample; hovers keep the synthesized ticks. */
+  select() {
+    if (!this.state.sound) return;
+    try {
+      if (!this._sel) { this._sel = new Audio('assets/ui-select.wav'); this._sel.preload = 'auto'; }
+      this._sel.currentTime = 0;
+      const p = this._sel.play();
+      if (p && p.catch) p.catch(() => {});
+    } catch (e) {}
+  }
 
   blip(freq, dur, gain) {
     if (!this.state.sound) return;
@@ -624,7 +645,7 @@ class Component extends DCLogic {
   }
 
   go(tab) {
-    this.blip(520, 0.07, 0.05);
+    this.select();
     if (tab === 'inventory' && !this.state.invSeen) this.setState({ invSeen: true });
     if (tab === this.state.tab && this.state.sel === null) return;
     this.setState({ uiTab: tab });
@@ -633,6 +654,7 @@ class Component extends DCLogic {
 
   renderVals() {
     const st = this.state, projects = this.projects(), uiTab = st.uiTab || st.tab;
+    const m = !!st.mobile;
     const branch = (hex, soft) => ({
       cLine: 'rgba(' + hex + ',.42)', cFill: 'rgba(' + hex + ',.16)', cGlow: 'rgba(' + hex + ',.16)',
       cText: 'rgb(' + soft + ')', cStem: 'rgba(' + hex + ',.34)'
@@ -731,8 +753,8 @@ class Component extends DCLogic {
     const slots = projects.map((p, i) => ({
       ...p, dim: 1, cursor: 'pointer', hasCover: !!p.cover, noCover: !p.cover,
       fadeKey: 'cover' + i, coverOp: fadeOf('cover' + i), onCover: () => this.markFade('cover' + i),
-      onHover: () => this.blip(880, 0.035, 0.022),
-      onClick: () => { this.blip(660, 0.09, 0.055); this.swap({ sel: i }); }
+      onHover: () => {},
+      onClick: () => { this.select(); this.swap({ sel: i }); }
     })).concat(empties.map(e => ({
       slot: e.slot, name: 'Empty slot', engine: '—', year: '—', thumb: 'available', hasCover: false, noCover: true,
       blurb: 'Reserved for the next shipped thing.', dim: .42, cursor: 'default',
@@ -756,13 +778,13 @@ class Component extends DCLogic {
         subStill: id === 'inventory' && st.invSeen,
         sub: 'Projects',
         fg: uiTab === id ? '#f2f8f4' : 'inherit',
-        onHover: () => this.blip(760, 0.03, 0.018),
+        onHover: () => {},
         onClick: () => this.go(id)
       })),
       featured: { ...projects[0], hasCover: !!projects[0].cover, noCover: !projects[0].cover,
         coverOp: fadeOf('featured'), onCover: () => this.markFade('featured') },
       portraitOp: fadeOf('portrait'), onPortrait: () => this.markFade('portrait'),
-      openFeatured: () => { this.blip(660, 0.09, 0.055); this.setState({ uiTab: 'inventory', invSeen: true }); this.swap({ tab: 'inventory', sel: 0 }); },
+      openFeatured: () => { this.select(); this.setState({ uiTab: 'inventory', invSeen: true }); this.swap({ tab: 'inventory', sel: 0 }); },
       isStatus: st.tab === 'status',
       isContact: st.tab === 'contact',
       isSkills: st.tab === 'skills',
@@ -771,9 +793,49 @@ class Component extends DCLogic {
       skillCount: skillCount,
       isGrid: st.tab === 'inventory' && st.sel === null && !st.resizing,
       isDetail: st.tab === 'inventory' && st.sel !== null && !st.resizing,
-      shellW: (st.tab === 'inventory' && st.sel !== null) ? 'max(1360px, 92vw)' : '1360px',
-      shellH: (st.tab === 'inventory' && st.sel !== null) ? 'max(min(860px, calc(100vh - 56px)), min(92vh, calc(100vh - 24px)))' : 'min(860px, calc(100vh - 56px))',
-      headH: (st.tab === 'inventory' && st.sel !== null) ? '0px' : '96px',
+      shellW: m ? '100%' : ((st.tab === 'inventory' && st.sel !== null) ? 'max(1360px, 92vw)' : '1360px'),
+      shellH: m ? '100dvh' : ((st.tab === 'inventory' && st.sel !== null) ? 'max(min(860px, calc(100vh - 56px)), min(92vh, calc(100vh - 24px)))' : 'min(860px, calc(100vh - 56px))'),
+      headH: (st.tab === 'inventory' && st.sel !== null) ? '0px' : (m ? '124px' : '96px'),
+      padOuter: m ? '0px' : '28px',
+      shellR: m ? '0px' : '34px',
+      shellCols: m ? '1fr' : '44px 1fr',
+      showRail: !m,
+      headPad: m ? '0 15px' : '0 22px',
+      headGap: m ? '0px' : '24px',
+      headDir: m ? 'column' : 'row',
+      headTitlePad: m ? '15px 0 9px' : '18px 0',
+      nameFS: m ? '18px' : '23px',
+      tabRowH: m ? '54px' : 'auto',
+      tabOverflow: m ? 'auto hidden' : 'visible',
+      tabPad: m ? '0 15px 0 0' : '0 20px',
+      viewPad: m ? '20px 16px 30px' : '36px 40px',
+      statusCols: m ? '1fr' : '300px 1fr',
+      statusGap: m ? '26px' : '44px',
+      portraitAR: m ? '16/10' : '3/4',
+      leadFS: m ? '21px' : '26px',
+      focusCols: m ? '1fr' : '1fr 1fr',
+      skillsPad: m ? '20px 16px 30px' : '34px 40px 44px',
+      skillCols: m ? '1fr' : 'repeat(4, minmax(0,1fr))',
+      gridPad: m ? '18px 16px 30px' : '32px 40px 40px',
+      gridCols: m ? '1fr' : 'repeat(3, 1fr)',
+      detailPad: m ? '16px 16px 34px' : '26px 40px 44px',
+      stickyMargin: m ? '-16px -16px 0' : '-26px -40px 0',
+      stickyPad: m ? '12px 16px 10px' : '20px 40px 14px',
+      detailCols: m ? '1fr' : '1.35fr 1fr',
+      detailGap: m ? '24px' : '40px',
+      titleFS: m ? '26px' : '34px',
+      h2FS: m ? '21px' : '26px',
+      sysCols: m ? '1fr' : 'minmax(0,.85fr) minmax(0,1.15fr)',
+      sysGap: m ? '18px' : '30px',
+      sysPad: m ? '18px 16px' : '24px 26px',
+      thumbW: m ? '78px' : '92px',
+      contactPad: m ? '24px 16px 32px' : '44px 40px',
+      contactCols: m ? '1fr' : '1.1fr 1fr',
+      contactGap: m ? '28px' : '56px',
+      footPad: m ? '10px 15px' : '11px 22px',
+      showKeys: !m,
+      theaterPad: m ? '12px' : '6vh 5vw',
+      bpPad: m ? '10px' : '22px',
       headO: (st.tab === 'inventory' && st.sel !== null) ? 0 : 1,
       headPE: (st.tab === 'inventory' && st.sel !== null) ? 'none' : 'auto',
       headBd: (st.tab === 'inventory' && st.sel !== null) ? 'transparent' : 'rgba(198,228,208,.15)',
@@ -806,7 +868,7 @@ class Component extends DCLogic {
       warmOn: cold ? 0 : 1,
       slots, slotCount: projects.length + ' / ' + slots.length + ' SLOTS FILLED',
       sel: selObj,
-      back: () => { this.blip(400, 0.08, 0.05); this.swap({ sel: null }); },
+      back: () => { this.select(); this.swap({ sel: null }); },
       viewBlur: st.blur ? 'blur(14px)' : 'blur(0px)',
       viewOpacity: st.blur ? 0 : 1,
       viewScale: st.blur ? 'scale(1.012)' : 'scale(1)',
