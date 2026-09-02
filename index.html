@@ -343,7 +343,7 @@
             </div>
             <div style="display:flex; flex-direction:column; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
               <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
-                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" style="background:rgba(28,44,36,.28); padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
+                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" download="{{ l.download }}" onClick="{{ onLinkClick }}" style="background:rgba(28,44,36,.28); padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
                   <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:rgba(197,221,205,.45); text-transform:uppercase; min-width:76px;">{{ l.k }}</span>
                   <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:14px; color:#dfeae2; flex:1;">{{ l.v }}</span>
                   <span style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:#7aa88a;">↗</span>
@@ -928,12 +928,23 @@ class Component extends DCLogic {
         { t:'Collaboration', d:'Comfortable owning a feature end to end with designers, artists and audio.' }
       ],
       skillGroups: skillGroups,
+      onLinkClick: (e) => {
+        const a = e.currentTarget;
+        if (!a || !a.hasAttribute('download')) return;
+        e.preventDefault();
+        const url = a.getAttribute('href'), name = a.getAttribute('download');
+        fetch(url).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(b => {
+          const u = URL.createObjectURL(b), t = document.createElement('a');
+          t.href = u; t.download = name; document.body.appendChild(t); t.click();
+          t.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+        }).catch(() => window.open(url, '_blank', 'noopener'));
+      },
       links: [
         { k:'Email', v:'erikthom.dev@proton.me', href:'mailto:erikthom.dev@proton.me' },
         { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer' },
         { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer' },
         { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer' },
-        { k:'Résumé', v:'Download PDF', href:'#' }
+        { k:'Résumé', v:'Download PDF', href:'assets/Erik-Thomas-CV.pdf', download:'Erik-Thomas-CV.pdf', target:'_blank', rel:'noopener noreferrer' }
       ]
     };
   }
