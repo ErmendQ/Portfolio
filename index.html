@@ -10,7 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400&amp;display=swap" rel="stylesheet">
 <style>
   html, body { margin:0; padding:0; background:#09130d; }
   body { font-family:'IBM Plex Sans', system-ui, sans-serif; }
@@ -46,17 +46,17 @@
   <div style="position:absolute; inset:0; background:rgba(30,84,58,.14); mix-blend-mode:soft-light; opacity:{{ warmOn }}; transition:opacity .6s ease;"></div>
   <div style="position:absolute; inset:0; background:{{ tintCol }}; mix-blend-mode:soft-light; opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
 
-  <div style="position:relative; width:100%; max-width:{{ shellW }}; height:{{ shellH }}; border-radius:{{ shellR }}; transition:max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1); border:1px solid rgba(226,244,232,.17); background:linear-gradient(158deg, rgba(236,248,240,.07) 0%, rgba(210,232,218,.035) 46%, rgba(6,14,10,.14) 100%); backdrop-filter:blur(42px) saturate(2.3) brightness(1.04); -webkit-backdrop-filter:blur(42px) saturate(2.3) brightness(1.04); box-shadow:0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.26), 0 0 0 .5px rgba(226,244,232,.16), inset 0 1px 0 rgba(242,254,246,.36), inset 0 -1px 0 rgba(200,226,210,.09), inset 0 -40px 70px -50px rgba(0,0,0,.42); display:grid; grid-template-columns:{{ shellCols }}; overflow:hidden; animation:panelIn .7s cubic-bezier(.2,.7,.25,1) both;" ref="{{ panelRef }}">
+  <div style="position:relative; width:100%; max-width:{{ shellW }}; height:{{ shellH }}; border-radius:{{ shellR }}; transition:max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1); border:1px solid rgba(226,244,232,.17); background:linear-gradient(158deg, rgba(236,248,240,.07) 0%, rgba(210,232,218,.035) 46%, rgba(6,14,10,.14) 100%); backdrop-filter:blur(42px) saturate(2.3) brightness(1.04); -webkit-backdrop-filter:blur(42px) saturate(2.3) brightness(1.04); box-shadow:0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.26), 0 0 0 .5px rgba(226,244,232,.16), inset 0 1px 0 rgba(242,254,246,.36), inset 0 -1px 0 rgba(200,226,210,.09), inset 0 -40px 70px -50px rgba(0,0,0,.42); display:grid; grid-template-columns:{{ shellCols }}; overflow:hidden; animation:panelIn .7s cubic-bezier(.2,.7,.25,1) both; filter:{{ glFilter }};" ref="{{ panelRef }}">
     <div style="position:absolute; inset:0; pointer-events:none; z-index:0; background:linear-gradient(158deg, rgba(196,220,255,.06) 0%, rgba(150,180,225,.03) 46%, rgba(6,10,20,.16) 100%); opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
     <div style="position:absolute; inset:0; pointer-events:none; z-index:5; border-radius:inherit; background:linear-gradient(180deg, rgba(242,254,246,.13) 0%, rgba(242,254,246,.03) 7%, rgba(242,254,246,0) 20%), radial-gradient(130% 55% at 50% 0%, rgba(226,244,232,.09), transparent 72%); mix-blend-mode:screen;"></div>
-    <div style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:{{ glowO }}; transition:opacity .35s ease; background:radial-gradient(52px circle at {{ glowX }} {{ glowY }}, rgba(210,248,222,.12), rgba(150,206,170,.05) 46%, transparent 74%); mix-blend-mode:screen; filter:blur(7px);"></div>
+    <div ref="{{ glowRef }}" style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:0; transition:opacity .35s ease; mix-blend-mode:screen; filter:blur(7px);"></div>
 
     <div style="position:relative; z-index:1; display:grid; grid-template-rows:auto 1fr auto; min-height:0;">
 
       <div style="position:relative; z-index:6; background:linear-gradient(180deg, rgba(240,250,244,.085) 0%, rgba(240,250,244,.02) 100%); backdrop-filter:blur(30px) saturate(2.1); -webkit-backdrop-filter:blur(30px) saturate(2.1); box-shadow:inset 0 1px 0 rgba(242,254,246,.24), 0 16px 30px -24px rgba(0,0,0,.6); display:flex; align-items:stretch; justify-content:space-between; border-bottom:1px solid rgba(226,244,232,.12); padding:{{ headPad }}; gap:{{ headGap }}; flex-direction:{{ headDir }}; max-height:{{ headH }}; opacity:{{ headO }}; overflow:hidden; pointer-events:{{ headPE }}; border-bottom-color:{{ headBd }}; transition:max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease;">
-        <div onClick="{{ goHome }}" title="Back to Status" style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:none; cursor:pointer; transition:opacity .2s ease;" style-hover="opacity:.72;">
-          <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ nameFS }}; letter-spacing:.16em; line-height:1;">ERIK THOMAS</div>
-          <div style="font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:{{ dAcc }}; margin-top:8px;">Game Designer / Gameplay Programmer</div>
+        <div onClick="{{ goHome }}" title="{{ tBackStatus }}" style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:0 1 auto; min-width:0; cursor:pointer; transition:opacity .2s ease;" style-hover="opacity:.72;">
+          <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ nameFS }}; letter-spacing:.16em; line-height:1; white-space:nowrap;">ERIK THOMAS</div>
+          <div style="font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:{{ dAcc }}; margin-top:8px;">{{ tRole }}</div>
         </div>
 
         <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; margin:{{ tabRowM }}; min-height:{{ tabRowH }}; border-top:1px solid {{ tabRowBd }};">
@@ -73,6 +73,12 @@
               </sc-if>
             </button>
           </sc-for>
+          <div style="display:flex; align-items:center; padding-left:14px; flex:none;">
+            <div style="display:flex; align-items:center; gap:2px; padding:3px; border-radius:999px; border:1px solid rgba(198,228,208,.22); background:rgba(18,32,24,.42); box-shadow:inset 0 1px 0 rgba(242,254,246,.16);">
+              <button type="button" onClick="{{ setEN }}" title="English" style="appearance:none; border:0; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; letter-spacing:.16em; padding:6px 10px; border-radius:999px; background:{{ enBg }}; color:{{ enFg }}; transition:background .22s ease, color .22s ease;" style-hover="color:#e8f3ec;">EN</button>
+              <button type="button" onClick="{{ setHU }}" title="Magyar" style="appearance:none; border:0; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; letter-spacing:.16em; padding:6px 10px; border-radius:999px; background:{{ huBg }}; color:{{ huFg }}; transition:background .22s ease, color .22s ease;" style-hover="color:#e8f3ec;">HU</button>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -103,9 +109,9 @@
 
             <div style="display:flex; flex-direction:column; gap:30px; min-width:0;">
               <div>
-                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Profile</div>
-                <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.4; letter-spacing:-.01em; margin:14px 0 0; text-wrap:pretty; color:#eaf2ec;">I design and build complex gameplay systems that feel simple in the hand — polished and fine-tuned until the intended player experience is achieved.</p>
-                <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.72); margin:18px 0 0; text-wrap:pretty;">Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.</p>
+                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tProfile }}</div>
+                <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.4; letter-spacing:-.01em; margin:14px 0 0; text-wrap:pretty; color:#eaf2ec;">{{ tLead }}</p>
+                <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.72); margin:18px 0 0; text-wrap:pretty;">{{ tIntro }}</p>
               </div>
               <div style="display:grid; grid-template-columns:{{ focusCols }}; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
                 <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
@@ -117,7 +123,7 @@
               </div>
 
               <div>
-                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Highlighted project</div>
+                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tHighlighted }}</div>
                 <button type="button" onClick="{{ openFeatured }}" onMouseEnter="{{ featured.onHover }}" style="appearance:none; text-align:left; cursor:pointer; margin-top:14px; width:100%; box-sizing:border-box; display:flex; flex-wrap:wrap; gap:18px; align-items:center; padding:16px; border-radius:20px; border:1px solid rgba(198,228,208,.18); background:rgba(30,48,38,.26); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); box-shadow:inset 0 1px 0 rgba(226,244,232,.14); transition:transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease;" style-hover="transform:translateY(-3px); border-color:rgba(160,206,176,.55); background:rgba(48,74,60,.34);">
                   <div style="position:relative; flex:1 1 190px; max-width:190px; min-width:150px; aspect-ratio:16/10; border-radius:14px; overflow:hidden; border:1px solid rgba(198,228,208,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px), rgba(30,48,38,.22); display:flex; align-items:center; justify-content:center;">
                     <sc-if value="{{ featured.hasCover }}">
@@ -135,7 +141,7 @@
                     <div style="display:flex; flex-wrap:wrap; align-items:center; gap:9px; margin-top:2px;">
                       <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 9px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ featured.engine }}</span>
                       <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.1em; padding:4px 9px; border-radius:999px; border:1px solid rgba(198,228,208,.2); background:rgba(122,168,138,.08); color:rgba(197,221,205,.7);">{{ featured.year }}</span>
-                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; color:#7aa88a; margin-left:auto; white-space:nowrap; flex-shrink:0;">OPEN CASE STUDY →</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; color:#7aa88a; margin-left:auto; white-space:nowrap; flex-shrink:0;">{{ tOpenCase }}</span>
                     </div>
                   </div>
                 </button>
@@ -187,7 +193,12 @@
                     <span style="position:absolute; top:9px; left:10px; z-index:2; padding:2px 6px; border-radius:6px; background:rgba(8,16,11,.46); backdrop-filter:blur(16px) saturate(1.6); -webkit-backdrop-filter:blur(16px) saturate(1.6); box-shadow:inset 0 1px 0 rgba(242,254,246,.2); font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.16em; color:rgba(178,214,190,.95);">{{ p.slot }}</span>
                   </div>
                   <div style="padding:14px 15px 16px; display:flex; flex-direction:column; gap:9px;">
-                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:15.5px; letter-spacing:.06em; color:#e8f1ea;">{{ p.name }}</div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:15.5px; letter-spacing:.06em; color:#e8f1ea;">{{ p.name }}</div>
+                      <sc-if value="{{ p.hasDownload }}">
+                        <span title="{{ tDownloadWin }}" style="display:inline-flex; align-items:center; justify-content:center; width:19px; height:19px; flex:none; border-radius:6px; border:1px solid rgba(160,206,176,.4); background:rgba(140,192,158,.18); color:#bfe0cc; font-size:11px; line-height:1;">⤓</span>
+                      </sc-if>
+                    </div>
                     <div style="font-size:12.5px; line-height:1.55; color:rgba(217,230,221,.6);">{{ p.blurb }}</div>
                     <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:2px;">
                       <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="2">
@@ -199,7 +210,7 @@
               </sc-for>
             </div>
             <sc-if value="{{ noResults }}">
-              <div style="padding:44px 10px; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.16em; color:rgba(197,221,205,.62); text-transform:uppercase;">No projects match that filter</div>
+              <div style="padding:44px 10px; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.16em; color:rgba(197,221,205,.62); text-transform:uppercase;">{{ tNoResults }}</div>
             </sc-if>
           </div>
         </sc-if>
@@ -207,7 +218,7 @@
         <sc-if value="{{ isDetail }}">
           <div style="padding:{{ detailPad }};">
             <div style="position:sticky; top:0; z-index:12; margin:{{ stickyMargin }}; padding:{{ stickyPad }}; display:flex; background:linear-gradient(180deg, rgba(8,14,20,.72) 0%, rgba(8,14,20,.46) 62%, rgba(8,14,20,0) 100%); backdrop-filter:blur(22px) saturate(1.6); -webkit-backdrop-filter:blur(22px) saturate(1.6);">
-              <button type="button" onClick="{{ back }}" style="appearance:none; cursor:pointer; border-radius:999px; border:1px solid rgba(255,255,255,.5); background:rgba(255,255,255,.9); box-shadow:0 4px 18px rgba(0,0,0,.35); color:#101820; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:10px; letter-spacing:.2em; padding:10px 17px; transition:all .2s ease;" style-hover="background:#fff; border-color:#fff; box-shadow:0 6px 22px rgba(0,0,0,.45);">← BACK TO INVENTORY</button>
+              <button type="button" onClick="{{ back }}" style="appearance:none; cursor:pointer; border-radius:999px; border:1px solid rgba(255,255,255,.5); background:rgba(255,255,255,.9); box-shadow:0 4px 18px rgba(0,0,0,.35); color:#101820; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:10px; letter-spacing:.2em; padding:10px 17px; transition:all .2s ease;" style-hover="background:#fff; border-color:#fff; box-shadow:0 6px 22px rgba(0,0,0,.45);">{{ tBackInv }}</button>
             </div>
 
             <div style="display:grid; grid-template-columns:{{ detailCols }}; gap:{{ detailGap }}; margin-top:24px; align-items:start;">
@@ -215,30 +226,36 @@
                 <div style="position:relative; z-index:7; aspect-ratio:16/9; border-radius:22px; overflow:hidden; border:1px solid {{ dLine }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 10px, rgba(214,236,222,0) 10px 20px), {{ dCard }}; display:flex; align-items:center; justify-content:center;">
                   <sc-if value="{{ sel.hasVideo }}">
                     <iframe src="{{ sel.video }}" title="Gameplay capture" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" style="position:absolute; inset:0; width:100%; height:100%; border:0; display:block;"></iframe>
-                    <a href="{{ sel.videoLink }}" target="_blank" rel="noopener noreferrer" style="position:absolute; right:12px; bottom:12px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; padding:8px 12px; border-radius:10px; border:1px solid {{ dLine }}; background:rgba(9,19,13,.5); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.2); color:rgba(226,244,232,.8); text-decoration:none;" style-hover="background:rgba(9,19,13,.85); color:#f2f8f4;">Open on YouTube</a>
+                    <a href="{{ sel.videoLink }}" target="_blank" rel="noopener noreferrer" style="position:absolute; right:12px; bottom:12px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; padding:8px 12px; border-radius:10px; border:1px solid {{ dLine }}; background:rgba(9,19,13,.5); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.2); color:rgba(226,244,232,.8); text-decoration:none;" style-hover="background:rgba(9,19,13,.85); color:#f2f8f4;">{{ tOpenYT }}</a>
                   </sc-if>
                   <sc-if value="{{ sel.videoOffline }}">
                     <a href="{{ sel.videoLink }}" target="_blank" rel="noopener noreferrer" style="position:absolute; inset:0; z-index:7; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-decoration:none; background:radial-gradient(120% 100% at 50% 0%, rgba(20,42,28,.35), rgba(6,14,9,.82));">
                       <span style="width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(226,244,232,.34); background:rgba(9,19,13,.48); backdrop-filter:blur(20px) saturate(1.7); -webkit-backdrop-filter:blur(20px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.24); color:#f2f8f4; font-size:19px; padding-left:4px;">▶</span>
-                      <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:rgba(226,244,232,.82);">Watch on YouTube</span>
-                      <span style="font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.14em; color:rgba(226,244,232,.62); max-width:280px; text-align:center; line-height:1.7;">Embedded playback needs the site to be served over http — it works once published.</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:rgba(226,244,232,.82);">{{ tWatchYT }}</span>
+                      <span style="font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.14em; color:rgba(226,244,232,.62); max-width:280px; text-align:center; line-height:1.7;">{{ tEmbedNote }}</span>
                     </a>
                   </sc-if>
                   <sc-if value="{{ sel.heroCover }}">
                     <img src="{{ sel.cover }}" alt="{{ sel.name }}" loading="lazy" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;" />
                   </sc-if>
                   <sc-if value="{{ sel.heroBlank }}" hint-placeholder-val="{{ true }}">
-                    <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.22em; color:{{ dMuted }};">Gameplay capture</span>
+                    <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.22em; color:{{ dMuted }};">{{ tGameplayCapture }}</span>
                   </sc-if>
                 </div>
               </div>
 
               <div style="display:flex; flex-direction:column; gap:24px;">
                 <div>
-                  <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }};">{{ sel.slot }} — CASE STUDY</div>
+                  <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }};">{{ sel.slot }} — {{ tCaseStudy }}</div>
                   <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ titleFS }}; letter-spacing:-.01em; margin-top:10px; color:{{ dHead }};">{{ sel.name }}</div>
                   <div style="font-size:{{ sumFS }}; line-height:{{ sumLH }}; color:{{ dBody }}; margin-top:12px; text-wrap:pretty;">{{ sel.summary }}</div>
                 </div>
+                <sc-if value="{{ sel.hasDownload }}">
+                  <a href="{{ sel.download }}" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:11px; align-self:flex-start; font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; padding:15px 24px; border-radius:999px; border:0; background:{{ dDlBg }}; box-shadow:{{ dDlShadow }}; color:{{ dDlFg }}; text-decoration:none; transition:background .2s ease, transform .2s ease;" style-hover="background:{{ dDlBgHi }}; transform:translateY(-1px);">
+                    <span style="font-size:14px; line-height:1;">⤓</span>
+                    <span>{{ tDownloadWin }}</span>
+                  </a>
+                </sc-if>
                 <sc-if value="{{ sel.hasMeta }}" hint-placeholder-val="{{ true }}">
                   <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:{{ dLine }}; border:1px solid {{ dLine }}; border-radius:18px; overflow:hidden;">
                   <sc-for list="{{ sel.meta }}" as="m" hint-placeholder-count="4">
@@ -250,7 +267,7 @@
                   </div>
                 </sc-if>
                 <sc-if value="{{ sel.hasBuilt }}" hint-placeholder-val="{{ true }}">
-                  <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }}; text-transform:uppercase;">What I built</div>
+                  <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.24em; color:{{ dAcc }}; text-transform:uppercase;">{{ tWhatBuilt }}</div>
                   <div style="display:flex; flex-direction:column; gap:11px; margin-top:14px;">
                     <sc-for list="{{ sel.built }}" as="b" hint-placeholder-count="3">
                       <div style="display:grid; grid-template-columns:14px 1fr; gap:11px; align-items:start;">
@@ -267,8 +284,8 @@
               <div style="margin-top:52px; border-top:1px solid {{ dLine }}; padding-top:34px;">
                 <div style="display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:20px;">
                   <div>
-                    <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:{{ dAcc }}; text-transform:uppercase;">Systems breakdown</div>
-                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:{{ h2FS }}; letter-spacing:-.01em; margin-top:11px; color:{{ dHead }};">How it works under the hood</div>
+                    <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:{{ dAcc }}; text-transform:uppercase;">{{ tSysBreakdown }}</div>
+                    <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:{{ h2FS }}; letter-spacing:-.01em; margin-top:11px; color:{{ dHead }};">{{ tSysHead }}</div>
                   </div>
                   <div style="font-family:'IBM Plex Mono', monospace; font-size:10px; color:{{ dMuted }};">{{ sel.systemCount }}</div>
                 </div>
@@ -280,24 +297,19 @@
                         <div style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.22em; color:{{ dAcc }};">{{ sy.idx }}</div>
                         <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:{{ sysTitleFS }}; letter-spacing:.01em; color:{{ dHead }};">{{ sy.title }}</div>
                         <p style="font-size:{{ sysBodyFS }}; line-height:1.72; color:{{ dBody }}; margin:0; text-wrap:pretty; white-space:pre-line;">{{ sy.body }}</p>
-                        <div style="display:flex; gap:7px; flex-wrap:wrap;">
-                          <sc-for list="{{ sy.tags }}" as="tg" hint-placeholder-count="2">
-                            <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.14em; text-transform:uppercase; padding:4px 9px; border-radius:999px; border:1px solid {{ dLine }}; background:{{ dChip }}; color:{{ dMuted }};">{{ tg }}</span>
-                          </sc-for>
-                        </div>
                         <sc-if value="{{ sy.hasBlueprint }}" hint-placeholder-val="{{ true }}">
-                        <button type="button" onClick="{{ sy.openBlueprint }}" style="margin-top:5px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; display:inline-flex; align-items:center; gap:9px; width:fit-content; padding:11px 17px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:{{ dBtnBg }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:{{ dBtnBgHi }}; border-color:{{ dBtnBdHi }};"><span>SEE BLUEPRINT</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; flex:none;"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"></path></svg></button>
+                        <button type="button" onClick="{{ sy.openBlueprint }}" style="margin-top:5px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; display:inline-flex; align-items:center; gap:9px; width:fit-content; padding:11px 17px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:{{ dBtnBg }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:{{ dBtnBgHi }}; border-color:{{ dBtnBdHi }};"><span>{{ tSeeBlueprint }}</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; flex:none;"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"></path></svg></button>
                         </sc-if>
                       </div>
                       <div style="display:flex; flex-direction:column; gap:10px;">
                         <div style="position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden; border:1px solid {{ dLine }}; background:#0a0f0d;">
                           <sc-if value="{{ sy.activeIsVideo }}">
                             <video data-src="{{ sy.activeSrc }}" data-clip="1" onCanPlay="{{ sy.onReady }}" onLoadedData="{{ sy.onReady }}" onClick="{{ togglePlay }}" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline" preload="metadata" style="filter:{{ sy.activeFilter }}; position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;"></video>
-                            <button type="button" onClick="{{ sy.openTheater }}" title="Big screen" style="position:absolute; top:10px; right:10px; z-index:3; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; padding:7px 11px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">⤡ Big screen</button>
+                            <button type="button" onClick="{{ sy.openTheater }}" title="{{ tBigScreen }}" style="position:absolute; top:10px; right:10px; z-index:3; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; padding:7px 11px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">⤡ {{ tBigScreen }}</button>
                           </sc-if>
                           <sc-if value="{{ sy.activeIsImage }}">
-                            <img data-src="{{ sy.activeSrc }}" alt="{{ sy.activeLabel }}" onLoad="{{ sy.onReady }}" onError="{{ sy.onReady }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
-                            <button type="button" onClick="{{ sy.openTheater }}" title="Big screen" style="position:absolute; top:10px; right:10px; z-index:3; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; padding:7px 11px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">⤡ Big screen</button>
+                            <img data-src="{{ sy.activeSrc }}" alt="{{ sy.activeLabel }}" onLoad="{{ sy.onReady }}" onError="{{ sy.onReady }}" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                            <button type="button" onClick="{{ sy.openTheater }}" title="{{ tBigScreen }}" style="position:absolute; top:10px; right:10px; z-index:3; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.18em; text-transform:uppercase; padding:7px 11px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">⤡ {{ tBigScreen }}</button>
                           </sc-if>
                           <sc-if value="{{ sy.activeIsStill }}" hint-placeholder-val="{{ true }}">
                             <div style="position:absolute; inset:0; background:repeating-linear-gradient(135deg, rgba(214,236,222,.045) 0 8px, rgba(214,236,222,0) 8px 16px), {{ dCard }}; display:flex; align-items:flex-end; padding:13px 15px;">
@@ -306,11 +318,12 @@
                           </sc-if>
                           <div style="position:absolute; inset:0; z-index:2; pointer-events:none; background:#05080b; opacity:{{ sy.veilOp }}; transition:opacity .17s ease;"></div>
                           <sc-if value="{{ sy.multi }}">
-                            <button type="button" onClick="{{ sy.prev }}" title="Previous" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); z-index:3; width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:15px; line-height:1; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.44); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.22), 0 6px 18px -10px rgba(0,0,0,.7); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">‹</button>
-                            <button type="button" onClick="{{ sy.next }}" title="Next" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); z-index:3; width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:15px; line-height:1; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.44); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.22), 0 6px 18px -10px rgba(0,0,0,.7); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">›</button>
+                            <button type="button" onClick="{{ sy.prev }}" title="{{ tPrev }}" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); z-index:3; width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:15px; line-height:1; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.44); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.22), 0 6px 18px -10px rgba(0,0,0,.7); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">‹</button>
+                            <button type="button" onClick="{{ sy.next }}" title="{{ tNext }}" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); z-index:3; width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:15px; line-height:1; border-radius:999px; border:1px solid {{ dBtnBd }}; background:rgba(8,14,20,.44); backdrop-filter:blur(18px) saturate(1.7); -webkit-backdrop-filter:blur(18px) saturate(1.7); box-shadow:inset 0 1px 0 rgba(242,254,246,.22), 0 6px 18px -10px rgba(0,0,0,.7); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.85); border-color:{{ dBtnBdHi }};">›</button>
                             <span style="position:absolute; left:50%; bottom:10px; transform:translateX(-50%); z-index:3; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:.2em; padding:5px 10px; border-radius:999px; background:rgba(8,14,20,.5); backdrop-filter:blur(16px) saturate(1.6); -webkit-backdrop-filter:blur(16px) saturate(1.6); box-shadow:inset 0 1px 0 rgba(242,254,246,.18); color:{{ dBody }};">{{ sy.counter }}</span>
                           </sc-if>
                         </div>
+                        <sc-if value="{{ sy.multi }}" hint-placeholder-val="{{ true }}">
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
                           <sc-for list="{{ sy.media }}" as="m" hint-placeholder-count="4">
                             <button type="button" onClick="{{ m.pick }}" title="{{ m.label }}" style="position:relative; width:{{ thumbW }}; aspect-ratio:16/10; padding:0; overflow:hidden; border-radius:10px; border:1px solid {{ m.bd }}; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 7px, rgba(214,236,222,0) 7px 14px), {{ dCard }}; opacity:{{ m.op }}; cursor:pointer; transition:all .2s ease; display:flex; align-items:flex-end; justify-content:flex-start;" style-hover="opacity:1; border-color:{{ dBtnBdHi }};">
@@ -319,7 +332,7 @@
                                 <span style="position:absolute; top:5px; left:6px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.16em; padding:2px 5px; border-radius:5px; background:rgba(8,14,20,.68); color:{{ dHead }};">▶</span>
                               </sc-if>
                               <sc-if value="{{ m.isImage }}">
-                                <img data-src="{{ m.src }}" alt="{{ m.label }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                                <img data-src="{{ m.src }}" alt="{{ m.label }}" loading="lazy" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
                               </sc-if>
                               <sc-if value="{{ m.isStill }}">
                                 <span style="position:relative; z-index:2; padding:6px 7px; text-align:left; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.14em; text-transform:uppercase; color:{{ dMuted }};">{{ m.label }}</span>
@@ -327,6 +340,7 @@
                             </button>
                           </sc-for>
                         </div>
+                        </sc-if>
                       </div>
                     </div>
                   </sc-for>
@@ -339,10 +353,10 @@
         <sc-if value="{{ isContact }}">
           <div style="padding:{{ contactPad }}; display:grid; grid-template-columns:{{ contactCols }}; gap:{{ contactGap }}; align-items:start;">
             <div>
-              <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">Recruit</div>
-              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">Available for gameplay programming and systems design — contract or full-time.</p>
-              <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.68); margin:18px 0 0; text-wrap:pretty;">Happiest on a team that ships. Send a build, a design doc, or a rough idea and I'll tell you honestly what I'd do with it.</p>
-              <a href="mailto:erikthom.dev@proton.me" style="display:inline-block; margin-top:26px; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:15px 24px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;">SEND A MESSAGE →</a>
+              <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tRecruit }}</div>
+              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">{{ tContactLead }}</p>
+              <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.68); margin:18px 0 0; text-wrap:pretty;">{{ tContactBody }}</p>
+              <a href="mailto:erikthom.dev@proton.me" style="display:inline-block; margin-top:26px; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:15px 24px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;">{{ tSendMsg }}</a>
             </div>
             <div style="display:flex; flex-direction:column; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
               <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
@@ -352,6 +366,24 @@
                   <span style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:#7aa88a;">↗</span>
                 </a>
               </sc-for>
+            </div>
+            <div style="grid-column:1 / -1; margin-top:6px; border:1px solid rgba(198,228,208,.15); border-radius:18px; background:rgba(28,44,36,.28); padding:22px 22px 20px;">
+              <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tFbLabel }}</div>
+              <p style="font-size:14px; line-height:1.7; color:rgba(217,230,221,.68); margin:12px 0 0; max-width:64ch; text-wrap:pretty;">{{ tFbNote }}</p>
+              <div style="display:grid; grid-template-columns:{{ fbCols }}; gap:12px; margin-top:18px;">
+                <input type="text" value="{{ fbName }}" onChange="{{ onFbName }}" placeholder="{{ tFbName }}" style="font-family:'IBM Plex Sans', sans-serif; font-size:14px; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; min-width:0;" style-focus="border-color:rgba(160,206,176,.55);">
+                <input type="email" value="{{ fbEmail }}" onChange="{{ onFbEmail }}" placeholder="{{ tFbEmail }}" style="font-family:'IBM Plex Sans', sans-serif; font-size:14px; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; min-width:0;" style-focus="border-color:rgba(160,206,176,.55);">
+              </div>
+              <textarea value="{{ fbText }}" onChange="{{ onFbText }}" placeholder="{{ tFbPlaceholder }}" rows="4" style="display:block; width:100%; box-sizing:border-box; margin-top:12px; font-family:'IBM Plex Sans', sans-serif; font-size:14px; line-height:1.65; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; resize:vertical;" style-focus="border-color:rgba(160,206,176,.55);"></textarea>
+              <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:16px;">
+                <button type="button" onClick="{{ sendFeedback }}" style="appearance:none; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:14px 22px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);">{{ tFbSend }}</button>
+                <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:{{ fbStatusCol }};">{{ fbStatus }}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px; padding-top:15px; border-top:1px solid rgba(198,228,208,.12);">
+                <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:rgba(197,221,205,.62); text-transform:uppercase;">{{ tFbAddrLabel }}</span>
+                <a href="mailto:erikthom.dev@proton.me" style="font-family:'Archivo', sans-serif; font-weight:600; font-size:13.5px; color:#dfeae2;">{{ fbAddr }}</a>
+                <button type="button" onClick="{{ copyAddr }}" style="appearance:none; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.16em; padding:6px 12px; border-radius:999px; border:1px solid rgba(198,228,208,.22); background:rgba(18,32,24,.5); color:rgba(219,236,225,.86);" style-hover="background:rgba(140,192,158,.22);">{{ tFbCopy }}</button>
+              </div>
             </div>
           </div>
         </sc-if>
@@ -387,8 +419,8 @@
           </sc-if>
           <div style="position:absolute; inset:0; z-index:2; pointer-events:none; background:#05080b; opacity:{{ th.veilOp }}; transition:opacity .17s ease;"></div>
           <sc-if value="{{ th.multi }}">
-            <button type="button" onClick="{{ th.prev }}" title="Previous" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:3; width:42px; height:42px; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#eef2f9; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.9); border-color:rgba(168,194,232,.75);">‹</button>
-            <button type="button" onClick="{{ th.next }}" title="Next" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:3; width:42px; height:42px; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#eef2f9; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.9); border-color:rgba(168,194,232,.75);">›</button>
+            <button type="button" onClick="{{ th.prev }}" title="{{ tPrev }}" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); z-index:3; width:42px; height:42px; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#eef2f9; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.9); border-color:rgba(168,194,232,.75);">‹</button>
+            <button type="button" onClick="{{ th.next }}" title="{{ tNext }}" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); z-index:3; width:42px; height:42px; display:flex; align-items:center; justify-content:center; font-size:18px; line-height:1; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(8,14,20,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); color:#eef2f9; cursor:pointer; transition:all .2s ease;" style-hover="background:rgba(8,14,20,.9); border-color:rgba(168,194,232,.75);">›</button>
           </sc-if>
         </div>
         <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
@@ -400,7 +432,7 @@
                   <span style="position:absolute; top:5px; left:6px; z-index:2; font-family:'IBM Plex Mono', monospace; font-size:7.5px; padding:2px 5px; border-radius:5px; background:rgba(8,14,20,.68); color:#eef2f9;">▶</span>
                 </sc-if>
                 <sc-if value="{{ m.isImage }}">
-                  <img data-src="{{ m.src }}" alt="{{ m.label }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
+                  <img data-src="{{ m.src }}" alt="{{ m.label }}" loading="lazy" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
                 </sc-if>
                 <sc-if value="{{ m.isStill }}">
                   <span style="position:relative; z-index:2; padding:6px 7px; text-align:left; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(198,212,238,.5);">{{ m.label }}</span>
@@ -410,7 +442,7 @@
           </div>
           <div style="display:flex; align-items:center; gap:14px;">
             <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; color:rgba(198,212,238,.45);">{{ th.counter }}</span>
-            <button type="button" onClick="{{ closeTheater }}" style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(148,178,222,.15); color:#eef2f9; cursor:pointer;" style-hover="background:rgba(148,178,222,.3);">Close ✕</button>
+            <button type="button" onClick="{{ closeTheater }}" style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(148,178,222,.15); color:#eef2f9; cursor:pointer;" style-hover="background:rgba(148,178,222,.3);">{{ tClose }}</button>
           </div>
         </div>
       </div>
@@ -422,9 +454,9 @@
       <div style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
         <div style="display:flex; align-items:baseline; gap:14px;">
           <span style="font-family:'Archivo', sans-serif; font-weight:700; font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:#eef2f9;">{{ bpTitle }}</span>
-          <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(198,212,238,.45);">Blueprint viewer</span>
+          <span style="font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(198,212,238,.45);">{{ tBpViewer }}</span>
         </div>
-        <button type="button" onClick="{{ closeBlueprint }}" style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(148,178,222,.15); color:#eef2f9; cursor:pointer;" style-hover="background:rgba(148,178,222,.3);">Close ✕</button>
+        <button type="button" onClick="{{ closeBlueprint }}" style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid rgba(168,194,232,.45); background:rgba(148,178,222,.15); color:#eef2f9; cursor:pointer;" style-hover="background:rgba(148,178,222,.3);">{{ tClose }}</button>
       </div>
       <iframe src="{{ bpHref }}" title="{{ bpTitle }}" style="flex:1; width:100%; border:1px solid rgba(196,214,240,.2); border-radius:16px; background:#05080b; display:block;"></iframe>
     </div>
@@ -435,10 +467,12 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
 class Component extends DCLogic {
   state = { tab: 'status', sel: null, booting: true, boot: [], sound: true, bar: null, invSeen: false,
+    lang: (() => { try { return localStorage.getItem('et-lang') === 'hu' ? 'hu' : 'en'; } catch (e) { return 'en'; } })(),
     mobile: typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches,
     wide: typeof window !== 'undefined' && window.matchMedia('(min-width: 1500px)').matches };
   tabRow = React.createRef();
   panel = React.createRef();
+  glow = React.createRef();
 
   onKey = (e) => {
     const k = e.key && e.key.toLowerCase();
@@ -458,16 +492,25 @@ class Component extends DCLogic {
     this.go(ids[(i + (k === 'e' ? 1 : ids.length - 1)) % ids.length]);
   };
 
+  /* The cursor glow writes straight to the layer's own style. Re-rendering the
+     tree for it would run the whole project/media derivation once per frame
+     while the mouse moves — this keeps pointer tracking off the React path. */
   trackCursor = (e) => {
     if (this.state.mobile) return;
     const el = this.panel.current; if (!el) return;
-    const r = el.getBoundingClientRect();
-    const x = e.clientX - r.left, y = e.clientY - r.top;
-    const inside = x >= -60 && y >= -60 && x <= r.width + 60 && y <= r.height + 60;
-    const t = e.target;
-    const onControl = !!(t && t.closest && t.closest('button, a'));
-    this._glow = { x, y, on: inside && !onControl };
-    if (!this._raf) this._raf = requestAnimationFrame(() => { this._raf = null; this.forceUpdate(); });
+    this._pt = { cx: e.clientX, cy: e.clientY, ctl: !!(e.target && e.target.closest && e.target.closest('button, a')) };
+    if (this._raf) return;
+    this._raf = requestAnimationFrame(() => {
+      this._raf = null;
+      const p = this._pt, host = this.panel.current, layer = this.glow.current;
+      if (!p || !host || !layer) return;
+      const r = host.getBoundingClientRect();
+      const x = p.cx - r.left, y = p.cy - r.top;
+      const on = !p.ctl && x >= -60 && y >= -60 && x <= r.width + 60 && y <= r.height + 60;
+      this._glow = { x, y, on };
+      layer.style.backgroundImage = 'radial-gradient(52px circle at ' + x + 'px ' + y + 'px, rgba(210,248,222,.12), rgba(150,206,170,.05) 46%, transparent 74%)';
+      layer.style.opacity = on ? '1' : '0';
+    });
   };
 
   measureBar() {
@@ -487,7 +530,8 @@ class Component extends DCLogic {
   checkFades() {
     /* Covers paint as background-image (a src hole would fire a bogus request
        before values resolve), so preload the URL to drive the same fade. */
-    document.querySelectorAll('div[data-fade]').forEach((el) => {
+    const root = this.panel.current || document;
+    root.querySelectorAll('div[data-fade]').forEach((el) => {
       const k = el.dataset.fade || '';
       if (!k || k.indexOf('{{') === 0 || el.dataset.fadeBound === '1') return;
       const url = (getComputedStyle(el).backgroundImage.match(/url\(["']?(.*?)["']?\)/) || [])[1];
@@ -498,7 +542,7 @@ class Component extends DCLogic {
       pre.src = url;
       if (pre.complete) this.markFade(k);
     });
-    document.querySelectorAll('img[data-fade]').forEach((el) => {
+    root.querySelectorAll('img[data-fade]').forEach((el) => {
       const k = el.dataset.fade || '';
       if (!k || k.indexOf('{{') === 0) return;
       if (el.naturalWidth || (el.complete && el.currentSrc)) { this.markFade(k); return; }
@@ -529,12 +573,13 @@ class Component extends DCLogic {
   }
 
   syncVideos() {
-    document.querySelectorAll('img[data-src]').forEach((el) => {
+    const root = this.panel.current || document;
+    root.querySelectorAll('img[data-src]').forEach((el) => {
       const want = el.dataset.src || '';
       if (!want || want.indexOf('{{') === 0) { if (el.getAttribute('src')) el.removeAttribute('src'); return; }
       if (el.getAttribute('src') !== want) el.setAttribute('src', want);
     });
-    document.querySelectorAll('video[data-src]').forEach((v) => {
+    root.querySelectorAll('video[data-src]').forEach((v) => {
       const want = v.dataset.src || '';
       if (!want || want.indexOf('{{') === 0) { if (v.getAttribute('src')) v.removeAttribute('src'); return; }
       if (v.getAttribute('src') !== want) {
@@ -543,6 +588,15 @@ class Component extends DCLogic {
         if (v.autoplay) { const p = v.play(); if (p && p.catch) p.catch(() => {}); }
       }
     });
+  }
+
+  /* Covers are full-resolution captures (up to 3 MB). The inventory grid and
+     the blurred backdrop show them small, so they read a pre-built 760px JPEG
+     instead — the full file only loads for the detail hero. */
+  small(src) {
+    if (!src) return src;
+    const name = src.split('/').pop().replace(/\.(png|jpe?g)$/i, '') + '.jpg';
+    return 'assets/thumbs/' + name;
   }
 
   ensureHue(src) {
@@ -589,19 +643,52 @@ class Component extends DCLogic {
     img.src = src;
   }
 
+  playClip(v) {
+    if (!v.paused || v.dataset.userPaused === '1') return;
+    const r = v.play(); if (r && r.catch) r.catch(() => {});
+  }
+
+  /* A project page can hold a clip per system. Decoding them all at once burns
+     bandwidth and frames, so only the ones actually on screen run. */
+  clipObserver() {
+    if (this._io) return this._io;
+    this._io = new IntersectionObserver((entries) => {
+      const theaterOpen = this.state.theater != null && this.state.theater !== false;
+      entries.forEach((en) => {
+        const v = en.target;
+        if (!en.isIntersecting) { if (!v.paused) v.pause(); return; }
+        if (!theaterOpen && v.autoplay) this.playClip(v);
+      });
+    }, { threshold: 0.2 });
+    return this._io;
+  }
+
   componentDidUpdate() {
     this.measureBar();
     this.syncVideos();
     this.checkFades();
     const root = this.panel.current; if (!root) return;
     const theaterOpen = this.state.theater != null && this.state.theater !== false;
-    root.querySelectorAll('video[data-clip]').forEach((v) => {
-      if (theaterOpen) { if (!v.paused) v.pause(); return; }
-      if (v.paused && v.autoplay && v.dataset.userPaused !== '1') { const r = v.play(); if (r && r.catch) r.catch(() => {}); }
+    const io = this.clipObserver();
+    const clips = root.querySelectorAll('video[data-clip]');
+    clips.forEach((v) => {
+      if (v.dataset.ioBound !== '1') { v.dataset.ioBound = '1'; io.observe(v); }
+      if (theaterOpen && !v.paused) v.pause();
     });
+    /* The observer only reports changes, so closing the theater has to restart
+       whatever is still in view itself. */
+    if (this._theaterWas && !theaterOpen) {
+      const vh = window.innerHeight || 0;
+      clips.forEach((v) => {
+        const r = v.getBoundingClientRect();
+        if (v.autoplay && r.bottom > 0 && r.top < vh) this.playClip(v);
+      });
+    }
+    this._theaterWas = theaterOpen;
   }
 
   componentDidMount() {
+    this._raf = null;
     this.checkFades();
     this._mq = window.matchMedia('(max-width: 860px)');
     this._onMQ = () => this.setState({ mobile: this._mq.matches });
@@ -616,7 +703,7 @@ class Component extends DCLogic {
     if (this.tabRow.current) this._ro.observe(this.tabRow.current);
     requestAnimationFrame(() => { this.measureBar(); this.syncVideos(); });
     document.fonts && document.fonts.ready.then(() => this.measureBar());
-    this.state.sound = this.props.sound !== false;
+    if (this.props.sound === false) this.setState({ sound: false });
     if (this.props.bootSequence === false) { this.setState({ booting: false }); return; }
     const lines = ['INITIALIZING INTERFACE', 'LOADING PROFILE — E. THOMAS', 'READY'];
     let i = 0;
@@ -629,7 +716,7 @@ class Component extends DCLogic {
       }
     }, 300);
   }
-  componentWillUnmount() { if (this._mq) { if (this._mq.removeEventListener) this._mq.removeEventListener('change', this._onMQ); else this._mq.removeListener(this._onMQ); } clearInterval(this._t); clearTimeout(this._end); this._ro && this._ro.disconnect(); window.removeEventListener('pointermove', this.trackCursor); window.removeEventListener('keydown', this.onKey); cancelAnimationFrame(this._raf); }
+  componentWillUnmount() { clearInterval(this._glTimer); this._io && this._io.disconnect(); if (this._mq) { if (this._mq.removeEventListener) this._mq.removeEventListener('change', this._onMQ); else this._mq.removeListener(this._onMQ); } clearInterval(this._t); clearTimeout(this._end); this._ro && this._ro.disconnect(); window.removeEventListener('pointermove', this.trackCursor); window.removeEventListener('keydown', this.onKey); cancelAnimationFrame(this._raf); this._raf = null; }
 
   /* Selection sound — a real sample; hovers keep the synthesized ticks. */
   select() {
@@ -656,11 +743,278 @@ class Component extends DCLogic {
     } catch (e) {}
   }
 
+  setLang(l) {
+    if (l === this.state.lang) return;
+    this.select();
+    try { localStorage.setItem('et-lang', l); } catch (e) {}
+    /* Decode animation: the TARGET string renders from frame one, but each
+       character stays masked by a random glyph until its own reveal threshold
+       passes. Lengths are final immediately, so nothing reflows mid-decode. */
+    clearInterval(this._glTimer);
+    const steps = 6;
+    let step = 0;
+    this.setState({ lang: l, gl: 0 }, () => requestAnimationFrame(() => this.measureBar()));
+    this._glTimer = setInterval(() => {
+      step += 1;
+      if (step >= steps) {
+        clearInterval(this._glTimer); this._glTimer = null;
+        this.setState({ gl: 1 }, () => requestAnimationFrame(() => this.measureBar()));
+      } else this.setState({ gl: step / steps });
+    }, 26);
+  }
+
+  sendFeedback() {
+    const st = this.state, body = (st.fbText || '').trim();
+    if (!body) { this.setState({ fbStatus: 'err' }); return; }
+    const who = (st.fbName || '').trim(), mail = (st.fbEmail || '').trim();
+    const lines = [body, '', '—', who ? 'From: ' + who : 'From: anonymous'];
+    if (mail) lines.push('Reply to: ' + mail);
+    const url = 'mailto:erikthom.dev@proton.me'
+      + '?subject=' + encodeURIComponent('Portfolio feedback' + (who ? ' — ' + who : ''))
+      + '&body=' + encodeURIComponent(lines.join('\n'));
+    window.location.href = url;
+    this.setState({ fbStatus: 'ok' });
+  }
+
+  glitch(s) {
+    const p = this.state.gl;
+    if (p === undefined || p >= 1 || typeof s !== 'string' || !s) return s;
+    const G = '\u00c1\u00c9\u00cd\u00d3\u00d6\u0150\u00da\u00dc\u0170#%&@$*+=<>/\\|01\u2591\u2592';
+    let out = '';
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (c === ' ' || c === '\n' || c === '\u2014') { out += c; continue; }
+      const h = ((i * 2654435761) % 1000) / 1000;
+      const thr = (i / s.length) * 0.72 + h * 0.28;
+      out += p > thr ? c : G[(i * 7 + Math.floor(p * 97) * 13 + Math.floor(h * 1000)) % G.length];
+    }
+    return out;
+  }
+
+  /* Translation is keyed by the English source string, so the English copy in
+     projects()/renderVals stays the single source of truth. Missing keys fall
+     through untranslated rather than rendering an empty slot. */
+  t(s) {
+    if (typeof s !== 'string') return s;
+    let out = s;
+    if (this.state.lang === 'hu') {
+      const d = this._hu || (this._hu = this.dict());
+      if (Object.prototype.hasOwnProperty.call(d, s)) out = d[s];
+    }
+    return this.glitch(out);
+  }
+
+  tProjects(list) {
+    const settled = this.state.gl === undefined || this.state.gl >= 1;
+    if (this.state.lang !== 'hu' && settled) return list;
+    /* Mid-decode every frame differs, but once settled the Hungarian pass is
+       pure and can be reused instead of re-mapping 12 projects per render. */
+    if (settled && this._tpCache && this._tpSrc === list) return this._tpCache;
+    const t = (s) => this.t(s);
+    const out = list.map((p) => ({ ...p,
+      blurb: t(p.blurb), summary: t(p.summary),
+      tags: (p.tags || []).map(t),
+      meta: (p.meta || []).map((m) => ({ k: t(m.k), v: t(m.v) })),
+      built: (p.built || []).map(t),
+      systems: (p.systems || []).map((s) => ({ ...s, title: t(s.title), body: t(s.body) }))
+    }));
+    if (settled) { this._tpSrc = list; this._tpCache = out; }
+    return out;
+  }
+
+  dict() {
+    return {
+      'Game Designer / Gameplay Programmer': 'Játéktervező / Gameplay programozó',
+      'Back to Status': 'Vissza az állapothoz',
+      'Projects': 'Projektek',
+      'INITIALIZING INTERFACE': 'INTERFÉSZ INDÍTÁSA',
+      'LOADING PROFILE — E. THOMAS': 'PROFIL BETÖLTÉSE — E. THOMAS',
+      'READY': 'KÉSZ',
+
+      'Profile': 'Profil',
+      'I design and build complex gameplay systems that feel simple in the hand — polished and fine-tuned until the intended player experience is achieved.':
+        'Összetett gameplay rendszereket tervezek és építek, amelyek kézbe véve mégis egyszerűnek hatnak — addig csiszolom őket, amíg a játékos pontosan azt éli át, amit szántam neki.',
+      'Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.':
+        'Budapesten élek. Tervezés és kód között mozgok: előbb prototípust építek a mechanikából, aztán megírom az alatta lévő rendszereket, a maradék időt pedig a játékérzetre fordítom — időzítések, input bufferek, visszajelzések, az a száz apró igazítás, amitől egy működő funkció szórakoztatóvá válik.',
+      'Highlighted project': 'Kiemelt projekt',
+      'OPEN CASE STUDY →': 'ESETTANULMÁNY →',
+
+      'Based in': 'Lakhely', 'Budapest, HU': 'Budapest',
+      'Timezone': 'Időzóna', 'Focus': 'Fókusz', 'Gameplay systems': 'Gameplay rendszerek',
+      'Open to work': 'Nyitott ajánlatokra',
+      'Systems': 'Rendszerek',
+      'Combat, movement, inventory, progression — any kind found in existing games, and new ones too.':
+        'Harc, mozgás, leltár, fejlődés — bármi, ami a létező játékokban megtalálható, és olyan is, ami még nem.',
+      'Game feel': 'Játékérzet',
+      'From a gamer to gamers — tailored to their needs to create the best experience possible.':
+        'Játékostól játékosoknak — az ő igényeikre szabva, a lehető legjobb élményért.',
+      'Prototyping': 'Prototípusok',
+      'Fast, disposable builds that answer one design question before the real work starts.':
+        'Gyors, eldobható buildek, amelyek egyetlen tervezői kérdést válaszolnak meg, mielőtt elkezdődne az igazi munka.',
+      'Collaboration': 'Együttműködés',
+      'Comfortable owning a feature end to end with designers, artists and audio.':
+        'Otthonosan viszek végig egy funkciót az elejétől a végéig, tervezőkkel, grafikusokkal és hangosokkal együtt.',
+
+      'Gameplay Systems': 'Gameplay rendszerek', 'What I build': 'Amit építek',
+      'Engines & Tools': 'Motorok és eszközök', 'Where I build it': 'Amiben építem',
+      'Languages': 'Nyelvek', 'How I build it': 'Ahogy építem',
+      'Design': 'Tervezés', 'The other half': 'A másik fele',
+      'Combat systems': 'Harcrendszerek', 'Inventory & crafting': 'Leltár és craftolás',
+      'Character controllers': 'Karaktervezérlők', 'AI behaviour trees': 'AI viselkedésfák',
+      'Progression & economy': 'Fejlődés és gazdaság', 'Save systems': 'Mentésrendszerek',
+      'Physics interactions': 'Fizikai interakciók', 'Ability frameworks': 'Képességrendszerek',
+      'Blender (basics)': 'Blender (alapok)', 'Custom editor tooling': 'Egyedi editor eszközök',
+      'Systems design': 'Rendszertervezés', 'Level blockout': 'Pályavázlat',
+      'Rapid prototyping': 'Gyors prototipizálás', 'Playtest facilitation': 'Playtestek levezetése',
+      'Design documentation': 'Tervezői dokumentáció', 'Balance & tuning': 'Balansz és finomhangolás',
+
+      'No projects match that filter': 'Nincs a szűrőnek megfelelő projekt',
+      'Empty slot': 'Üres hely', 'available': 'szabad',
+      'Reserved for the next shipped thing.': 'A következő elkészült munkának fenntartva.',
+      '← BACK TO INVENTORY': '← VISSZA A LELTÁRHOZ',
+      'Open on YouTube': 'Megnyitás YouTube-on', 'Watch on YouTube': 'Megtekintés YouTube-on',
+      'Embedded playback needs the site to be served over http — it works once published.':
+        'A beágyazott lejátszáshoz az oldalt http-n kell kiszolgálni — közzététel után működni fog.',
+      'Gameplay capture': 'Gameplay felvétel',
+      'CASE STUDY': 'ESETTANULMÁNY',
+      'Download for Windows': 'Letöltés Windowsra',
+      'What I built': 'Amit én építettem',
+      'Systems breakdown': 'Rendszerek részletesen',
+      'How it works under the hood': 'Mi történik a motorháztető alatt',
+      'SEE BLUEPRINT': 'BLUEPRINT MEGNYITÁSA',
+      'Blueprint viewer': 'Blueprint néző',
+      'Previous': 'Előző', 'Next': 'Következő', 'Close ✕': 'Bezárás ✕', 'Big screen': 'Nagy képernyő',
+
+      'Recruit': 'Toborzás',
+      'Available for gameplay programming and systems design — contract or full-time.':
+        'Szabad kapacitással vállalok gameplay programozást és rendszertervezést — szerződéses vagy teljes állásban.',
+      'Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.':
+        'Olyan csapatban érzem jól magam, amelyik ki is adja, amit csinál. Küldj egy buildet, egy design dokumentumot vagy egy nyers ötletet, és őszintén megmondom, mit kezdenék vele.',
+      'SEND A MESSAGE →': 'ÜZENET KÜLDÉSE →',
+      'Feedback': 'Visszajelzés',
+      'This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome. Writing it here opens a ready-made draft in your mail app.':
+        'A portfólió folyamatosan csiszolás és átdolgozás alatt áll. Ha valami furcsán hangzik, hibásnak tűnik, vagy egyszerűen jobb lehetne — írd meg. Minden észrevételnek örülök. Amit ide írsz, kész piszkozatként nyílik meg a leveleződben.',
+      'Your name (optional)': 'Neved (nem kötelező)',
+      'Email for a reply (optional)': 'E-mail a válaszhoz (nem kötelező)',
+      'What worked, what didn’t, what you’d change…': 'Mi működött, mi nem, mit változtatnál…',
+      'OPEN A DRAFT →': 'PISZKOZAT MEGNYITÁSA →',
+      'DRAFT OPENED — HIT SEND TO DELIVER IT': 'A PISZKOZAT MEGNYÍLT — KÜLDD EL A LEVELEZŐDBŐL',
+      'WRITE SOMETHING FIRST': 'ÍRJ ELŐBB VALAMIT',
+      'No mail app? Write to': 'Nincs leveleződ? Írj ide',
+      'COPY': 'MÁSOLÁS', 'COPIED': 'MÁSOLVA',
+      'Résumé': 'Önéletrajz', 'Download PDF': 'PDF letöltése',
+
+      'Role': 'Szerep', 'Team': 'Csapat', 'Engine': 'Motor', 'Duration': 'Időtartam', 'Client': 'Megbízó',
+      'Design & Programming': 'Tervezés és programozás', 'Solo development': 'Egyedüli fejlesztés',
+      'Designer / Programmer': 'Tervező / Programozó', '2 person team': '2 fős csapat',
+      'Game Design & Programming': 'Játéktervezés és programozás',
+      'Gameplay Programmer': 'Gameplay programozó', 'Developer': 'Fejlesztő',
+      'Unreal / Blueprints / State Tree': 'Unreal / Blueprints / State Tree',
+      '6 people': '6 fő', '8 people': '8 fő',
+      '2 months': '2 hónap', '3 months': '3 hónap', '4 months': '4 hónap',
+      '6 months': '6 hónap', '10 months': '10 hónap',
+
+      'Coop': 'Co-op', 'Simulator': 'Szimulátor', 'Simulation': 'Szimuláció',
+      'Immersive-sim': 'Immerzív sim', 'Procedural Generation': 'Procedurális generálás',
+      'Puzzle': 'Logikai', 'Gardening': 'Kertészkedés', 'Combat': 'Harc',
+      'Endless Runner': 'Végtelen futó', 'Side scroller': 'Oldalnézetes',
+      'Turn-based strategy': 'Körökre osztott stratégia',
+
+      'A horror project demo featuring an old creepypasta, the Slenderman, and drawing inspiration from the classic horrors Resident Evil and Silent Hill.':
+        'Horror demó egy régi creepypasta, a Slender Man főszereplésével, a klasszikus horrorok — a Resident Evil és a Silent Hill — nyomdokain.',
+      'Slot based classic horror inventory system': 'Slot alapú, klasszikus horror leltárrendszer',
+      'Horror events with basic combat': 'Horror események alapszintű harcrendszerrel',
+      'Linear puzzle based map design including level optimization': 'Lineáris, rejtvényekre épülő pályatervezés, optimalizálással együtt',
+      'Main menu scene and intro cinematic': 'Főmenü jelenet és bevezető átvezető',
+      'Slot based inventory': 'Slot alapú leltár',
+      'The inventory screen is built on a slot based grid in the vein of Resident Evil. Items can be used, examined, combined or discarded. Examining an item opens a 3D preview the player can rotate to inspect. Combining highlights the items that pair into something new, and a separate craft menu lists the recipes already discovered.\n\nThe same screen holds the current objective and every document collected so far — clues about the world and its events that the player may need later. Hovering a document’s title displays its text in the centre of the screen.\n\nA missing poster appears in the bottom left once the player picks it up early in the game. Later it doubles as a visual indicator of the player’s sanity.':
+        'A leltárképernyő slot alapú rácsra épül, a Resident Evil szellemében. A tárgyakat használni, megvizsgálni, kombinálni vagy eldobni lehet. A vizsgálat 3D-s nézetet nyit, amelyben a játékos körbeforgathatja a tárgyat. Kombináláskor kiemelődnek azok a tárgyak, amelyek valami újjá állnak össze, a külön craft menü pedig a már felfedezett recepteket sorolja fel.\n\nUgyanezen a képernyőn található az aktuális cél és minden eddig összegyűjtött dokumentum — nyomok a világról és az eseményeiről, amelyekre a játékosnak később szüksége lehet. Egy dokumentum címe fölé húzva az egeret a szöveg a képernyő közepén jelenik meg.\n\nA bal alsó sarokban egy eltűnt személyt kereső plakát jelenik meg, miután a játékos a játék elején felveszi. Később ez mutatja vizuálisan a játékos mentális állapotát is.',
+      'Scare sequencing': 'Ijesztések vezénylése',
+      'Throughout the game a dark figure with glowing eyes appears and stalks the player as a manifestation of their psyche. Each encounter takes one of three forms:\n— it spawns for a brief moment, then vanishes\n— it stands facing the player and only disappears once the player moves closer\n— it spawns in the distance and teleports periodically closer, and the player has to shoot it to make it disappear\n\nEvery encounter drops the player’s sanity. The drop is visualised by the missing poster in the inventory turning steadily more uncanny, and past a threshold whispers begin to play while the inventory is open — louder the lower the sanity falls.':
+        'A játék során újra és újra feltűnik egy sötét, világító szemű alak, amely a játékos elméjének megtestesüléseként követi őt. Minden találkozás háromféle formát ölthet:\n— egy pillanatra megjelenik, majd eltűnik\n— a játékossal szemben áll, és csak akkor tűnik el, ha a játékos közelebb megy\n— a távolban jelenik meg, és időről időre közelebb teleportál; a játékosnak rá kell lőnie, hogy eltűnjön\n\nMinden találkozás rontja a játékos mentális állapotát. A romlást a leltárban lévő plakát mutatja, amely egyre nyugtalanítóbbá válik, egy küszöb alatt pedig suttogások indulnak el, amíg a leltár nyitva van — annál hangosabban, minél mélyebbre süllyed az elme.',
+      'Weapon system': 'Fegyverrendszer',
+      'Once the player gets hold of a gun and ammo, they can aim and shoot it.\n\nAiming narrows the field of view, lowers look sensitivity and movement speed, fades in an ammo indicator — which marks the round in the chamber in a separate colour when the magazine is full — and reveals a circular crosshair.\n\nShooting spawns a smoke and muzzle flash particle system that throws light around the barrel for a brief moment. A camera shake plays, the control rotation kicks slightly upward, and the crosshair expands and fades out to sell the recoil.\n\nReloading blocks every other action until the animation finishes, then loads a round into the chamber.':
+        'Amint a játékos fegyverhez és lőszerhez jut, célozhat és lőhet vele.\n\nCélzáskor szűkül a látómező, csökken a nézelődés érzékenysége és a mozgási sebesség, beúszik a lőszerkijelző — amely tele tárnál külön színnel jelöli a csőben lévő töltényt —, és megjelenik a kör alakú célkereszt.\n\nLövéskor füst- és torkolattűz-partikulumok indulnak, amelyek egy pillanatra megvilágítják a cső környékét. Megrázkódik a kamera, az irányzék enyhén felfelé rúg, a célkereszt pedig kitágul és elhalványul, hogy érezhető legyen a visszarúgás.\n\nAz újratöltés minden más műveletet blokkol, amíg az animáció le nem fut, majd tölténnyel tölti fel a csövet.',
+      'Level design and events': 'Pályatervezés és események',
+      'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player’s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.':
+        'A világ kontextusfüggő interakciók láncából épül fel — kapuk, autók, kukák, kövek —, mindegyik egy felugró lehetőség, amely aktiválás előtt megnézi a játékos leltárát és a történet állását. Az események magán a pályán ülnek, nem globális szkriptekben, így egy terület átrendezhető vagy kivágható anélkül, hogy a lánc eltörne.',
+
+      'A calming VR world you explore without hands or controllers — built to hold a patient’s attention through medical treatment.':
+        'Nyugtató VR-világ, amelyet kéz és kontroller nélkül lehet bejárni — azért készült, hogy lekösse a páciens figyelmét az orvosi kezelés alatt.',
+      'A school project built for the client VRelax: an interactive VR experience that asks nothing of the player’s hands. Patients undergoing treatments that would otherwise make them anxious are often unable — or unwilling — to hold a controller, so every interaction had to be reachable without one, and the world had to stay gentle enough to be a distraction rather than a demand.':
+        'Iskolai projekt a VRelax megbízásából: interaktív VR-élmény, amely semmit nem kér a játékos kezétől. A szorongató kezelésen áteső páciensek gyakran nem tudnak — vagy nem akarnak — kontrollert fogni, ezért minden interakciónak elérhetőnek kellett lennie anélkül is, a világnak pedig elég szelídnek kellett maradnia ahhoz, hogy elterelje a figyelmet, ne pedig követeljen.',
+      'VR Interaction system': 'VR interakciós rendszer',
+      'Objective driven easy gameplay': 'Célvezérelt, könnyed gameplay',
+      'VR Controller and world': 'VR irányítás és világ',
+      'Built on Unreal’s VR template, the pawn places the player in a series of different worlds and settings across the game.':
+        'Az Unreal VR sablonjára épülő pawn a játék során több különböző világba és helyszínre helyezi a játékost.',
+      'Interactable items': 'Interaktív tárgyak',
+      'A circular crosshair sits at the centre of the player’s HUD so they can always tell what is in the middle of the screen. Objects are interacted with by looking directly at them for a few seconds, and the progress is shown by a circular bar filling around the crosshair.':
+        'A HUD közepén kör alakú célkereszt ül, így a játékos mindig tudja, mi van a képernyő közepén. A tárgyakkal úgy lehet interakcióba lépni, hogy néhány másodpercig egyenesen rájuk néz; az előrehaladást a célkereszt körül töltődő körív mutatja.',
+
+      'Set in a dystopian prison, you have to find a way to break out — alone, or with your fellow inmates.':
+        'Egy disztópikus börtönben kell megtalálnod a kiutat — egyedül vagy a rabtársaiddal együtt.',
+      'Replicated player character/controller': 'Replikált játékoskarakter és -vezérlő',
+      'Various items with different functions and crafting': 'Sokféle tárgy eltérő funkciókkal és craftolással',
+      'Various interactable stations and a dynamic interaction system': 'Többféle interaktív állomás és dinamikus interakciós rendszer',
+      'Minigames / Gimmicks': 'Minijátékok / gimmickek',
+      'Player': 'Játékos',
+      'The player selects their character at the main menu before loading into the game. Each character has unique traits, listed in the selection menu.\n\nDuring play, players can review their character info, items and intel in the character menu.\n\nThe HUD displays:\n— Health\n— Inventory, including whether the equipped item is holstered\n— Item controls and hotkeys\n\nPlayers can walk, sprint, jump and toggle between crouching and standing. The stance is reflected on the HUD when relevant.\n\nFalling from higher floors causes fall damage scaled to the distance fallen. To replenish health, the player has to interact with a medical station.':
+        'A játékos a főmenüben választ karaktert, mielőtt betöltene a játékba. Minden karakternek egyedi tulajdonságai vannak, ezeket a választómenü sorolja fel.\n\nJáték közben a karaktermenüben lehet átnézni a karakter adatait, a tárgyakat és az összegyűjtött információkat.\n\nA HUD a következőket mutatja:\n— Életerő\n— Leltár, benne azzal, hogy a felszerelt tárgy el van-e téve\n— Tárgyvezérlők és gyorsbillentyűk\n\nA játékos sétálhat, futhat, ugorhat, és válthat guggolás és állás között. A testhelyzet ott jelenik meg a HUD-on, ahol számít.\n\nA magasabb emeletekről leesve a zuhanás hosszához mérten sebződik. Az életerőt orvosi állomásnál lehet feltölteni.',
+      'Items': 'Tárgyak',
+      'The prison holds a wide range of items, each serving a different purpose. Collected items appear on the HUD and in the player menu, where a short description explains their uses.\n\nItems can open up new areas, feed into crafting, or be used in combat.':
+        'A börtön tárgyak széles skáláját rejti, mindegyik más célt szolgál. Az összegyűjtött tárgyak megjelennek a HUD-on és a játékosmenüben, ahol rövid leírás magyarázza el a felhasználásukat.\n\nA tárgyak új területeket nyithatnak meg, craftoláshoz használhatók, vagy bevethetők harcban.',
+      'Interactions': 'Interakciók',
+      'There are all sorts of ways to reach new areas — though most of them sit behind a locked door, or a suspiciously not blown-up wall. Some unlocks only need the right item; others ask the player to clear a fingerprint matching minigame or to know the correct four digit code.\n\nSecurity cameras are placed throughout the prison and can be accessed from a terminal.':
+        'Rengeteg módon el lehet jutni új területekre — csakhogy a legtöbbjük zárt ajtó vagy egy gyanúsan még fel nem robbantott fal mögött van. Néhány zárhoz elég a megfelelő tárgy; máshol ujjlenyomat-párosító minijátékot kell teljesíteni, vagy tudni kell a helyes négyjegyű kódot.\n\nA börtön egész területén biztonsági kamerák vannak, amelyeket egy terminálról lehet elérni.',
+      'Journal': 'Napló',
+      'While exploring the prison, the player picks up rumours, finds documents, or notices things on their own. Important clues are added to the Log section of the player menu, so they can be revisited later and used as guidance.':
+        'A börtön felderítése közben a játékos pletykákat hall, dokumentumokat talál, vagy magától vesz észre dolgokat. A fontos nyomok bekerülnek a játékosmenü Napló részébe, így később újra elő lehet venni és iránymutatásként használni őket.',
+      'Inmates': 'Rabtársak',
+      'Inmates are scattered all over the prison. Interacting with them mostly gets whatever is on their mind — only a fraction of it actually matters.\n\nOthers are willing to trade items, or play a round of Twenty and gamble for them.\n\nTwenty is a card game that takes blackjack as its base and bends the rules slightly. The cards are designed to carry the dystopian atmosphere: colours instead of suits, and a 2–10 + A, B, C, D numbering.':
+        'A rabtársak a börtön minden pontján ott vannak. Ha megszólítod őket, többnyire azt kapod, ami épp jár a fejükben — ennek csak töredéke számít igazán.\n\nMások hajlandók tárgyat cserélni, vagy lejátszani egy kör Húszat, és feltenni rá a tárgyaikat.\n\nA Húsz egy kártyajáték, amely a blackjacket veszi alapul, és kicsit elhajlítja a szabályait. A lapok a disztópikus hangulatot viszik tovább: a francia színek helyett színek, és 2–10 + A, B, C, D számozás.',
+      'Multiplayer': 'Többjátékos mód',
+      'Everything in the game is replicated and multiplayer ready. Players can create sessions with a lobby size of up to four. Others see active sessions in a server list and join from there. Once loaded into the server, the host can see how many players have joined and start the game for everyone once they are ready.\n\nWhen someone is downed — health reaching 0 — they are put in solitary. The remaining players can free them by either quiet or loud means.\n\nIf everyone ends up in solitary, the game is over.':
+        'A játékban minden replikált és többjátékosra kész. A játékosok legfeljebb négyfős lobbival hozhatnak létre szobát. A többiek a szerverlistában látják az aktív szobákat, és onnan csatlakoznak. A betöltés után a host látja, hányan léptek be, és amikor mindenki készen áll, elindíthatja a játékot.\n\nHa valaki kiesik — az életereje nullára csökken —, magánzárkába kerül. A többiek csendes vagy hangos úton szabadíthatják ki.\n\nHa mindenki magánzárkába kerül, a játéknak vége.',
+
+      'Run a chaotic bar together with your friends.': 'Vezess egy kaotikus bárt a barátaiddal.',
+      'Dynamic drink system': 'Dinamikus italrendszer',
+      'Tapping and pouring mechanics': 'Csapolási és töltési mechanikák',
+      'Items interaction and management': 'Tárgyinterakció és -kezelés',
+      'Drink system': 'Italrendszer',
+      'Drinks are poured into glasses from either the beer tap or the bottles:\n— To pour a beer, the player places a keg under the tap, sets a glass on the drip tray and pulls the tap’s lever.\n— To pour wine or shots, the player sets glasses on the table and holds the bottle above them while pouring.\n\nWhen different drinks are mixed, the glass changes colour accordingly. The mix is tracked precisely, and guests are dissatisfied unless they are served exactly what they ordered. Drinks also go stale if they are not served shortly after being poured.':
+        'Az italok vagy a csapból, vagy az üvegekből kerülnek a poharakba:\n— Sör csapolásához a játékosnak hordót kell tennie a csap alá, poharat a csepegtetőtálcára, majd meghúzni a csap karját.\n— Bor vagy rövid kitöltéséhez poharakat kell az asztalra tenni, és töltés közben föléjük tartani az üveget.\n\nHa különböző italok keverednek, a pohár színe ennek megfelelően változik. A rendszer pontosan követi az arányokat, és a vendégek elégedetlenek lesznek, ha nem pontosan azt kapják, amit rendeltek. Az italok ráadásul állottá válnak, ha nem szolgálják fel őket röviddel a töltés után.',
+      'Items and restocking': 'Tárgyak és utánpótlás',
+      'Items in the game are mainly the different glasses used to serve the guests. The player can also use trays to carry several items at once.\n\nTo order new items, the player interacts with the ordering terminal, checks what is available for purchase and places an order. Shortly after, the delivery arrives at the drop-off point at the back of the storage area.':
+        'A játékban a tárgyak elsősorban a vendégek kiszolgálásához használt poharak. A játékos tálcát is használhat, hogy egyszerre több tárgyat vigyen.\n\nÚj tárgyakat a rendelőterminálon lehet beszerezni: a játékos megnézi, mi kapható, és leadja a rendelést. Nem sokkal később a szállítmány megérkezik a raktár hátuljában lévő átvételi ponthoz.',
+
+      'A school project experimenting with Unreal’s State Tree system and AI behaviour.':
+        'Iskolai projekt, amely az Unreal State Tree rendszerével és az MI viselkedésével kísérletezik.',
+      'A city street generator built to experiment with procedural asset generation in Unreal.':
+        'Városiutca-generátor, amely az Unreal procedurális asset-generálásával kísérletezik.',
+      'A school project experimenting with procedural asset generation. Users can generate city streets and customise the light colours using existing meshes.':
+        'Iskolai projekt a procedurális asset-generálás kipróbálására. A felhasználó városi utcákat generálhat, és meglévő mesheket felhasználva állíthatja be a fények színét.',
+      'Slenderman': 'Slenderman',
+      'Recreated the Slenderman AI based on the original game': 'A Slenderman MI újraalkotása az eredeti játék alapján',
+      'The well-known creepypasta runs on a State Tree rather than a behaviour tree. A root Actions state holds four tasks — teleport behind the player, block their path, idle, and a kill move — each falling through to a shared Cooldown state before the tree loops back to the root.\n\nSplitting the behaviour this way keeps each action a small, self-contained task, so the stalking pattern can be re-tuned or extended by adding a state instead of rewiring the graph.\n\nThe actor’s blueprint also carries an aggression value that climbs constantly — over time, whenever a page is collected, and while the player is looking at him. Higher aggression scales up the teleport distances and raises the odds that he blocks the player’s path or uses it to close into kill range, so the tension keeps building across a run. The only way to stall him is to stare at him — but hold that stare too long and it brings up a death screen of its own.':
+        'A jól ismert creepypasta nem behaviour tree-n, hanem State Tree-n fut. A gyökér Actions állapota négy taszkot fog össze — teleportálás a játékos mögé, útelzárás, várakozás és egy kill move —, és mindegyik egy közös Cooldown állapotba fut bele, mielőtt a fa visszatérne a gyökérhez.\n\nÍgy minden viselkedés külön, önálló taszk marad, tehát a követés mintája új állapot hozzáadásával hangolható vagy bővíthető, nem a gráf újrahuzalozásával.\n\nAz actor blueprintje emellett egy folyamatosan növekvő agresszióértéket is tárol — nő az idővel, minden összegyűjtött lappal, és miközben a játékos őt nézi. A magasabb agresszió megnöveli a teleportálási távolságokat, és nagyobb eséllyel zárja el a játékos útját vagy kerül így ölési távolságba, tehát a feszültség végig épül a játékmenet alatt. Feltartani egyedül úgy lehet, ha a játékos rábámul — de ha ezt túl sokáig teszi, az is halálképernyőhöz vezet.',
+      'PCG Blueprint': 'PCG blueprint',
+      'A single handler blueprint drives the whole generation. It takes a list of building meshes and scatters them across a bounded area, with the row and column counts, offsets, rotation and scale ranges all exposed as editable parameters.\n\nCustom colours can be supplied as an array, and a variety value decides how far each building drifts from the palette — so a street reads as one coherent district instead of random noise.':
+        'Az egész generálást egyetlen handler blueprint vezérli. Kap egy listát az épületmeshekből, és szétszórja őket egy határolt területen; a sorok és oszlopok száma, az eltolások, valamint a forgatási és méretezési tartományok mind szerkeszthető paraméterként vannak kivezetve.\n\nEgyedi színek tömbként adhatók meg, egy variációs érték pedig eldönti, mennyire tér el az egyes épületek színe a palettától — így az utca egységes városrésznek látszik, nem véletlenszerű zajnak.'
+    };
+  }
+
   projects() {
-    return [
+    /* Static data — built once and cached, since renderVals asks for it on
+       every render and the array never changes at runtime.
+       Display order is driven by the slot label, so reordering the inventory is
+       a one-number edit per project rather than moving blocks around. */
+    if (this._projCache) return this._projCache;
+    const list = [
       { slot: '01', name: 'Faceless', engine: 'Unreal', year: '2026', thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
         video: 'https://www.youtube-nocookie.com/embed/pt9L98uNJyE?rel=0&modestbranding=1&playsinline=1',
         cover: 'assets/sys02-shot-d.png', cold: true,
+        download: 'https://drive.proton.me/urls/F00M0EPDBG#k60GFZpWcBzs',
         videoLink: 'https://youtu.be/pt9L98uNJyE',
         tags: ['2026', 'Unreal', 'Horror'],
         blurb: 'A horror project demo featuring an old creepypasta, the Slenderman, and drawing inspiration from the classic horrors Resident Evil and Silent Hill.',
@@ -672,9 +1026,9 @@ class Component extends DCLogic {
           { title: 'Slot based inventory', body: 'The inventory screen is built on a slot based grid in the vein of Resident Evil. Items can be used, examined, combined or discarded. Examining an item opens a 3D preview the player can rotate to inspect. Combining highlights the items that pair into something new, and a separate craft menu lists the recipes already discovered.\n\nThe same screen holds the current objective and every document collected so far \u2014 clues about the world and its events that the player may need later. Hovering a document\u2019s title displays its text in the centre of the screen.\n\nA missing poster appears in the bottom left once the player picks it up early in the game. Later it doubles as a visual indicator of the player\u2019s sanity.', tags: ['Grid slots', 'Crafting', 'Inspection'], blueprint: 'blueprint-viewer/index.html?src=assets/BPC_SurvivalHorrorInventory.uasset,assets/BP_ItemNew.uasset', images: ['assets/sys01-shot-b.png', 'assets/sys01-shot-a.png', 'assets/sys01-shot-c.png'], clip: 'assets/sys01-inventory.mp4', clips2: 'assets/sys01-crafting.mp4', shots: [] },
           { title: 'Scare sequencing', body: 'Throughout the game a dark figure with glowing eyes appears and stalks the player as a manifestation of their psyche. Each encounter takes one of three forms:\n\u2014 it spawns for a brief moment, then vanishes\n\u2014 it stands facing the player and only disappears once the player moves closer\n\u2014 it spawns in the distance and teleports periodically closer, and the player has to shoot it to make it disappear\n\nEvery encounter drops the player\u2019s sanity. The drop is visualised by the missing poster in the inventory turning steadily more uncanny, and past a threshold whispers begin to play while the inventory is open \u2014 louder the lower the sanity falls.', tags: ['Encounter director', 'Pacing', 'Audio cues'], blueprint: 'blueprint-viewer/index.html?src=assets/BP_Watcher.uasset,assets/BP_Crawler.uasset', images: ['assets/sys02-shot-d.png', 'assets/sys02-shot-f.png', 'assets/sys02-poster-decay.png'], clip: 'assets/sys02-scare.mp4', clips2: 'assets/sys02-stalker.mp4', bright: ['assets/sys02-scare.mp4', 'assets/sys02-stalker.mp4'], shots: [] },
           { title: 'Weapon system', body: 'Once the player gets hold of a gun and ammo, they can aim and shoot it.\n\nAiming narrows the field of view, lowers look sensitivity and movement speed, fades in an ammo indicator \u2014 which marks the round in the chamber in a separate colour when the magazine is full \u2014 and reveals a circular crosshair.\n\nShooting spawns a smoke and muzzle flash particle system that throws light around the barrel for a brief moment. A camera shake plays, the control rotation kicks slightly upward, and the crosshair expands and fades out to sell the recoil.\n\nReloading blocks every other action until the animation finishes, then loads a round into the chamber.', tags: ['FPS', 'Combat'], blueprint: 'blueprint-viewer/index.html?src=assets/BP_HorrorCharacter.uasset,assets/BP_Bullet.uasset', clip: 'assets/sys03-weapons.mp4', shots: [] },
-          { title: 'Level design and events', body: 'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player\u2019s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.', tags: ['Level events', 'Interaction prompts', 'World state'], blueprint: 'blueprint-viewer/index.html?src=assets/ExampleMap.umap,assets/BP_EnvironmentInteractMaster.uasset,assets/BP_EventTrigger.uasset,assets/BP_SearchFindItem.uasset,assets/BP_StoneHidingKey.uasset,assets/BP_LockedCarWithID.uasset,assets/BP_Intercom.uasset,assets/BP_Bag.uasset,assets/BP_FinishGame.uasset', images: ['assets/sys04-interactions.png'], clip: 'assets/sys04-events.mp4', shots: [] }
+          { title: 'Level design and events', body: 'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player\u2019s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.', tags: ['Level events', 'Interaction prompts', 'World state'], blueprint: 'blueprint-viewer/index.html?src=assets/ExampleMap.umap,assets/BP_EnvironmentInteractMaster.uasset,assets/BP_EventTrigger.uasset,assets/BP_SearchFindItem.uasset,assets/BP_StoneHidingKey.uasset,assets/BP_LockedCarWithID.uasset,assets/BP_Intercom.uasset,assets/BP_Bag.uasset,assets/BP_FinishGame.uasset', images: ['assets/sys04-interactions.png', 'assets/faceless-sys04-overview.png', 'assets/faceless-sys04-topdown.png', 'assets/faceless-sys04-roadloop.png', 'assets/faceless-sys04-lamp.png', 'assets/faceless-sys04-desk-lit.png', 'assets/faceless-sys04-desk-unlit.png'], clip: 'assets/sys04-events.mp4', shots: [] }
         ] },
-      { slot: '02', name: 'Sam\u2019s Journey', engine: 'Unreal', year: '2024', tags: ['Unreal', '2024', 'VR'],
+      { slot: '05', name: 'Sam\u2019s Journey', engine: 'Unreal', year: '2024', tags: ['Unreal', '2024', 'VR'],
         thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
         cover: 'assets/sams-journey-cover.jpg',
         video: 'https://www.youtube-nocookie.com/embed/w4zUx0xE9WU?rel=0&modestbranding=1&playsinline=1',
@@ -688,15 +1042,18 @@ class Component extends DCLogic {
             body: 'Built on Unreal\u2019s VR template, the pawn places the player in a series of different worlds and settings across the game.',
             tags: ['VR pawn', 'Locomotion', 'Level script'],
             blueprint: 'blueprint-viewer/index.html?src=assets/VRPawn.uasset,assets/MyFunctionLibrary.uasset,assets/Map_1.umap',
+            images: ['assets/sams-journey-sys01-menu.png'],
             shots: [] },
           { title: 'Interactable items',
             body: 'A circular crosshair sits at the centre of the player\u2019s HUD so they can always tell what is in the middle of the screen. Objects are interacted with by looking directly at them for a few seconds, and the progress is shown by a circular bar filling around the crosshair.',
             tags: ['Grab interface', 'Pickups', 'Doors'],
             blueprint: 'blueprint-viewer/index.html?src=assets/StickActor.uasset,assets/FishingRodActor.uasset,assets/ShovelActor.uasset,assets/doorActor.uasset,assets/doorActor1.uasset,assets/CoconutActor.uasset,assets/AppleActor.uasset,assets/FlowerActor.uasset,assets/BucketActor.uasset,assets/LogActor.uasset',
+            images: ['assets/sams-journey-sys02-tools.png', 'assets/sams-journey-sys02-apples.png'],
             shots: [] }
         ] },
       { slot: '03', name: 'Sim-Break', engine: 'Unreal', year: '2026', tags: ['2026', 'Unreal', 'Coop', 'Immersive-sim'],
         cover: 'assets/sim-break-cover.png',
+        download: 'https://drive.proton.me/urls/6SHMGW6KYG#hHESChRjZT4I',
         video: 'https://www.youtube-nocookie.com/embed/1eHT6BWg4Xc?rel=0&modestbranding=1&playsinline=1',
         videoLink: 'https://youtu.be/1eHT6BWg4Xc',
         blurb: 'Set in a dystopian prison, you have to find a way to break out \u2014 alone, or with your fellow inmates.',
@@ -711,28 +1068,50 @@ class Component extends DCLogic {
           { title: 'Inmates', body: 'Inmates are scattered all over the prison. Interacting with them mostly gets whatever is on their mind \u2014 only a fraction of it actually matters.\n\nOthers are willing to trade items, or play a round of Twenty and gamble for them.\n\nTwenty is a card game that takes blackjack as its base and bends the rules slightly. The cards are designed to carry the dystopian atmosphere: colours instead of suits, and a 2\u201310 + A, B, C, D numbering.', tags: [], blueprint: 'blueprint-viewer/index.html?src=assets/BP_Inmate.uasset,assets/BP_CardTable.uasset', images: ['assets/simbreak-sys05-talk.png', 'assets/simbreak-sys05-trade.png', 'assets/simbreak-sys05-cards.png'], clip: 'assets/simbreak-sys05-clip1.mp4', shots: [] },
           { title: 'Multiplayer', body: 'Everything in the game is replicated and multiplayer ready. Players can create sessions with a lobby size of up to four. Others see active sessions in a server list and join from there. Once loaded into the server, the host can see how many players have joined and start the game for everyone once they are ready.\n\nWhen someone is downed \u2014 health reaching 0 \u2014 they are put in solitary. The remaining players can free them by either quiet or loud means.\n\nIf everyone ends up in solitary, the game is over.', tags: [], blueprint: 'blueprint-viewer/index.html?src=assets/BP_FirstPersonCharacter.uasset,assets/W_MainMenu.uasset,assets/W_CreateServer.uasset,assets/W_ServerBrowser.uasset,assets/W_ServerCard.uasset,assets/BP_SolitaryArea.uasset,assets/BP_SolitaryControl.uasset', images: ['assets/simbreak-sys06-host.png', 'assets/simbreak-sys06-join.png', 'assets/simbreak-sys06-lobby.png', 'assets/simbreak-sys06-caught.png', 'assets/simbreak-sys06-netmode.png'], shots: [] }
         ] },
-      { slot: '04', name: "Bar Fight", engine: 'Unreal', year: '2026', tags: ["2025","2026","Unreal","Coop","Simulator"],
-        blurb: 'Placeholder', summary: 'Placeholder',
-        meta: [], built: [],
+      { slot: '02', name: "Bar Fight", engine: 'Unreal', year: '2026', tags: ["2025","2026","Unreal","Coop","Simulator"],
+        cover: 'assets/bar-fight-cover.png',
+        download: 'https://drive.proton.me/urls/7HXNGZNXQR#6FAgBX2jj6vp',
+        video: 'https://www.youtube-nocookie.com/embed/ZZlBnW_mtgc?rel=0&modestbranding=1&playsinline=1',
+        videoLink: 'https://youtu.be/ZZlBnW_mtgc',
+        blurb: 'Run a chaotic bar together with your friends.', summary: 'Run a chaotic bar together with your friends.',
+        meta: [{k:'Role',v:'Gameplay Programmer'},{k:'Team',v:'8 people'},{k:'Engine',v:'Unreal Engine / Blueprints'},{k:'Duration',v:'10 months'}],
+        built: ['Dynamic drink system', 'Tapping and pouring mechanics', 'Items interaction and management'],
         systems: [
-          { title: 'Player controller', body: 'Placeholder', tags: [], shots: [] },
-          { title: 'Items', body: 'Placeholder', tags: [], shots: [] },
-          { title: 'Pouring and tapping', body: 'Placeholder', tags: [], shots: [] },
-          { title: 'Ordering', body: 'Placeholder', tags: [], shots: [] },
-          { title: 'Table tracking', body: 'Placeholder', tags: [], shots: [] },
-          { title: 'Multiplayer', body: 'Placeholder', tags: [], shots: [] }
+          { title: 'Drink system', body: 'Drinks are poured into glasses from either the beer tap or the bottles:\n\u2014 To pour a beer, the player places a keg under the tap, sets a glass on the drip tray and pulls the tap\u2019s lever.\n\u2014 To pour wine or shots, the player sets glasses on the table and holds the bottle above them while pouring.\n\nWhen different drinks are mixed, the glass changes colour accordingly. The mix is tracked precisely, and guests are dissatisfied unless they are served exactly what they ordered. Drinks also go stale if they are not served shortly after being poured.', tags: [], blueprint: 'blueprint-viewer/index.html?src=assets/BP_BeerTap_Experimental.uasset,assets/BP_BottleMaster.uasset,assets/BPC_Pouring.uasset,assets/BPC_Glass.uasset,assets/BP_PourTarget.uasset,assets/BP_LiquidProjectile.uasset,assets/BP_DrinksGuide.uasset,assets/BarGameFunctions.uasset', clip: 'assets/barfight-sys03-clip1.mp4', clips: ['assets/barfight-sys03-clip2.mp4', 'assets/barfight-sys03-clip3.mp4', 'assets/barfight-sys01-clip4.mp4'], shots: [] },
+          { title: 'Items and restocking', body: 'Items in the game are mainly the different glasses used to serve the guests. The player can also use trays to carry several items at once.\n\nTo order new items, the player interacts with the ordering terminal, checks what is available for purchase and places an order. Shortly after, the delivery arrives at the drop-off point at the back of the storage area.', tags: [], blueprint: 'blueprint-viewer/index.html?src=assets/BP_ItemMaster.uasset,assets/BP_TrayMaster.uasset,assets/BP_OrderingTerminal.uasset', clip: 'assets/barfight-sys02-clip1.mp4', clips: ['assets/barfight-sys02-clip2.mp4'], shots: [] }
         ] },
-      { slot: '05', name: "Procedural City Generator", engine: 'Unreal', year: '2024', tags: ["2024","Unreal","Procedural Generation"],
+      { slot: '06', name: "Procedural City Generator", engine: 'Unreal', year: '2024', tags: ["2024","Unreal","Procedural Generation"],
         video: 'https://www.youtube-nocookie.com/embed/LJVsezpQsPw?rel=0&modestbranding=1&playsinline=1',
         videoLink: 'https://youtu.be/LJVsezpQsPw',
+        cover: 'assets/city-generator-cover.png',
+        blurb: 'A city street generator built to experiment with procedural asset generation in Unreal.',
+        summary: 'A school project experimenting with procedural asset generation. Users can generate city streets and customise the light colours using existing meshes.',
+        meta: [{k:'Role',v:'Developer'},{k:'Team',v:'Solo development'},{k:'Engine',v:'Unreal / Blueprints'},{k:'Duration',v:'2 months'}], built: [],
+        systems: [
+          { title: 'PCG Blueprint', body: 'A single handler blueprint drives the whole generation. It takes a list of building meshes and scatters them across a bounded area, with the row and column counts, offsets, rotation and scale ranges all exposed as editable parameters.\n\nCustom colours can be supplied as an array, and a variety value decides how far each building drifts from the palette \u2014 so a street reads as one coherent district instead of random noise.',
+            tags: ['PCG', 'Instanced meshes', 'Exposed parameters'],
+            blueprint: 'blueprint-viewer/index.html?src=assets/BP_PCG_Handler.uasset',
+            images: ['assets/city-sys01-street.png', 'assets/city-sys01-meshes.png', 'assets/city-sys01-bounds.png', 'assets/city-sys01-colors.png'],
+            shots: [] }
+        ] },
+      { slot: '07', name: "CargoVR", engine: 'Unity', year: '2023', tags: ["2023","Unity","VR","Puzzle"],
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] },
-      { slot: '06', name: "CargoVR", engine: 'Unity', year: '2023', tags: ["2023","Unity","VR","Puzzle"],
-        blurb: 'Placeholder', summary: 'Placeholder',
-        meta: [], built: [] },
-      { slot: '07', name: "Slenderman AI", engine: 'Unreal', year: '2026', tags: ["2026","Unreal","AI"],
-        blurb: 'Placeholder', summary: 'Placeholder',
-        meta: [], built: [] },
+      { slot: '04', name: "Slenderman AI", engine: 'Unreal', year: '2026', tags: ["2026","Unreal","AI"],
+        download: 'https://drive.proton.me/urls/F00M0EPDBG#k60GFZpWcBzs',
+        video: 'https://www.youtube-nocookie.com/embed/5NSeKn_xnmY?rel=0&modestbranding=1&playsinline=1',
+        videoLink: 'https://youtu.be/5NSeKn_xnmY',
+        cover: 'assets/slenderman-ai-cover.png',
+        blurb: 'A school project experimenting with Unreal\u2019s State Tree system and AI behaviour.',
+        summary: 'A school project experimenting with Unreal\u2019s State Tree system and AI behaviour.',
+        meta: [{k:'Role',v:'Developer'},{k:'Team',v:'Solo development'},{k:'Engine',v:'Unreal / Blueprints / State Tree'},{k:'Duration',v:'2 months'}],
+        built: ['Recreated the Slenderman AI based on the original game'],
+        systems: [
+          { title: 'Slenderman', body: 'The well-known creepypasta runs on a State Tree rather than a behaviour tree. A root Actions state holds four tasks \u2014 teleport behind the player, block their path, idle, and a kill move \u2014 each falling through to a shared Cooldown state before the tree loops back to the root.\n\nSplitting the behaviour this way keeps each action a small, self-contained task, so the stalking pattern can be re-tuned or extended by adding a state instead of rewiring the graph.\n\nThe actor\u2019s blueprint also carries an aggression value that climbs constantly \u2014 over time, whenever a page is collected, and while the player is looking at him. Higher aggression scales up the teleport distances and raises the odds that he blocks the player\u2019s path or uses it to close into kill range, so the tension keeps building across a run. The only way to stall him is to stare at him \u2014 but hold that stare too long and it brings up a death screen of its own.',
+            blueprint: 'blueprint-viewer/index.html?src=assets/BP_Slendy.uasset,assets/Task_TeleportAroundPlayer.uasset,assets/STT_BlockPlayerPath.uasset,assets/STT_Idle.uasset,assets/STT_KillMove.uasset,assets/STT_Cooldown.uasset',
+            images: ['assets/slenderman-sys01-statetree.png', 'assets/slenderman-sys01-forest.png'],
+            shots: [] }
+        ] },
       { slot: '08', name: "FPS Pistol Pack", engine: 'Unreal', year: '2024', tags: ["2024","Unreal","FPS"],
         video: 'https://www.youtube-nocookie.com/embed/cZ9cMuSwHW8?rel=0&modestbranding=1&playsinline=1',
         videoLink: 'https://youtu.be/cZ9cMuSwHW8',
@@ -760,6 +1139,8 @@ class Component extends DCLogic {
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] }
     ];
+    this._projCache = list.sort((a, b) => a.slot.localeCompare(b.slot));
+    return this._projCache;
   }
 
   swap(next) {
@@ -789,7 +1170,9 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const st = this.state, projects = this.projects(), uiTab = st.uiTab || st.tab;
+    const st = this.state, uiTab = st.uiTab || st.tab;
+    const hu = st.lang === 'hu', T = (s) => this.t(s), G = (s) => this.glitch(s);
+    const projects = this.tProjects(this.projects());
     const m = !!st.mobile, w = !m && !!st.wide;
     const branch = (hex, soft) => ({
       cLine: 'rgba(' + hex + ',.42)', cFill: 'rgba(' + hex + ',.16)', cGlow: 'rgba(' + hex + ',.16)',
@@ -817,15 +1200,24 @@ class Component extends DCLogic {
     ];
     const skillGroups = tree.map((b) => {
       const mk = node(b.hex, b.soft);
-      return { title: b.title, note: b.note, ...branch(b.hex, b.soft), items: b.list.map(([l]) => mk(l, false)) };
+      return { title: T(b.title), note: T(b.note), ...branch(b.hex, b.soft), items: b.list.map(([l]) => mk(T(l), false)) };
     });
     const skillCount = skillGroups.reduce((n, g) => n + g.items.length, 0) + ' NODES / 4 BRANCHES';
     const plain = (a) => a.map(label => ({ label, hot: false, normal: true }));
-    const defs = [ ['status','Status'], ['skills','Skills'], ['inventory','Inventory'], ['contact','Contact'] ];
+    /* Tabs translate by id, not by label — "Status" the tab and "Status" the
+       vital are different words in Hungarian. */
+    const tabHU = { status:'Állapot', skills:'Képességek', inventory:'Leltár', contact:'Kapcsolat' };
+    const defs = [ ['status','Status'], ['skills','Skills'], ['inventory','Inventory'], ['contact','Contact'] ]
+      .map(([id, l]) => [id, G(hu ? tabHU[id] : l)]);
     const empties = [];
     const selP = (st.tab === 'inventory' && st.sel !== null) ? projects[st.sel] : null;
     const coverSrc = (selP && selP.cover) || null;
-    if (coverSrc) this.ensureHue(coverSrc);
+    /* Keep the previous cover mounted while the layer fades back out. */
+    if (coverSrc) this._lastCover = coverSrc;
+    const backdropSrc = coverSrc || this._lastCover || null;
+    if (coverSrc) this.ensureHue(this.small(coverSrc));
+    /* Accent hue belongs to the OPEN project only — outside a detail view it
+       must fall back to the base pine, not linger on the last cover. */
     const hue = (coverSrc && (st.hues || {})[coverSrc]) || null;
     const H = hue ? hue.h : 145, S = hue ? hue.s : 20, cold = !!coverSrc;
     const hs = (sat, l, a) => 'hsla(' + H + ',' + Math.round(sat) + '%,' + l + '%,' + a + ')';
@@ -839,8 +1231,8 @@ class Component extends DCLogic {
           ...(() => {
             const vids = [s.clip, s.clips2, s.clips3, s.clips4, ...(s.clips || [])].filter(Boolean);
             const boost = (src) => ((s.bright || []).indexOf(src) >= 0 ? 'brightness(1.5) contrast(1.04) saturate(1.06)' : 'none');
-            const list = (s.images || []).map((src, n) => ({ type: 'image', src, label: 'Shot ' + String(n + 1).padStart(2, '0') }))
-              .concat(vids.map((src, n) => ({ type: 'video', src, label: 'Clip ' + String(n + 1).padStart(2, '0') })))
+            const list = (s.images || []).map((src, n) => ({ type: 'image', src, label: G((hu ? 'Kép ' : 'Shot ') + String(n + 1).padStart(2, '0')) }))
+              .concat(vids.map((src, n) => ({ type: 'video', src, label: G((hu ? 'Klip ' : 'Clip ') + String(n + 1).padStart(2, '0')) })))
               .concat((s.shots || []).map((lb) => ({ type: 'still', src: '', label: lb })));
             if (s.firstMedia) {
               const fi = list.findIndex(x => x.src === s.firstMedia);
@@ -889,21 +1281,23 @@ class Component extends DCLogic {
         return { ...p, hasVideo: !!p.video && !offline, videoOffline: !!p.video && offline,
           noVideo: !p.video, heroCover: !p.video && !!p.cover, heroBlank: !p.video && !p.cover,
           hasBuilt: (p.built || []).length > 0, hasMeta: (p.meta || []).length > 0, stills: p.stills || [],
+          hasDownload: !!p.download,
           systems: sys, hasSystems: sys.length > 0,
-          systemCount: sys.length + ' SYSTEMS' };
+          systemCount: G(sys.length + (hu ? ' RENDSZER' : (sys.length === 1 ? ' SYSTEM' : ' SYSTEMS'))) };
     })() : {};
     const th = (selObj.systems && st.theater != null && st.theater !== false) ? selObj.systems[st.theater] : null;
     const fadeOf = (k) => ((st.fade && st.fade[k]) ? 1 : 0);
     const allSlots = projects.map((p, i) => ({
-      ...p, dim: 1, cursor: 'pointer', hasCover: !!p.cover, noCover: !p.cover,
+      ...p, dim: 1, cursor: 'pointer', hasCover: !!p.cover, noCover: !p.cover, hasDownload: !!p.download,
+      thumb: p.thumb || (hu ? 'borítókép hamarosan' : 'cover coming soon'),
       tags: p.tags || [p.engine, p.year],
-      coverBg: p.cover ? 'url("' + p.cover + '")' : 'none',
+      coverBg: p.cover ? 'url("' + this.small(p.cover) + '")' : 'none',
       fadeKey: 'cover' + i, coverOp: fadeOf('cover' + i), onCover: () => this.markFade('cover' + i),
       onHover: () => {},
       onClick: () => { this.select(); this.swap({ sel: i }); }
     })).concat(empties.map(e => ({
-      slot: e.slot, name: 'Empty slot', engine: '—', year: '—', tags: ['—', '—'], thumb: 'available', hasCover: false, noCover: true,
-      blurb: 'Reserved for the next shipped thing.', dim: .42, cursor: 'default',
+      slot: e.slot, name: T('Empty slot'), engine: '—', year: '—', tags: ['—', '—'], thumb: T('available'), hasCover: false, noCover: true, hasDownload: false,
+      blurb: T('Reserved for the next shipped thing.'), dim: .42, cursor: 'default',
       onHover: () => {}, onClick: () => {}
     })));
 
@@ -937,12 +1331,63 @@ class Component extends DCLogic {
     });
 
     return {
-      booting: st.booting, bootLines: st.boot,
+      booting: st.booting, bootLines: (st.boot || []).map(T),
+      lang: st.lang, isEN: st.lang !== 'hu', isHU: st.lang === 'hu',
+      setEN: () => this.setLang('en'), setHU: () => this.setLang('hu'),
+      enBg: st.lang !== 'hu' ? 'rgba(150,200,168,.28)' : 'transparent',
+      enFg: st.lang !== 'hu' ? '#f2f8f4' : 'rgba(197,221,205,.6)',
+      huBg: st.lang === 'hu' ? 'rgba(150,200,168,.28)' : 'transparent',
+      huFg: st.lang === 'hu' ? '#f2f8f4' : 'rgba(197,221,205,.6)',
+      tRole: T('Game Designer / Gameplay Programmer'),
+      tBackStatus: T('Back to Status'),
+      tProfile: T('Profile'),
+      tLead: T('I design and build complex gameplay systems that feel simple in the hand — polished and fine-tuned until the intended player experience is achieved.'),
+      tIntro: T('Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.'),
+      tHighlighted: T('Highlighted project'),
+      tOpenCase: T('OPEN CASE STUDY →'),
+      tNoResults: T('No projects match that filter'),
+      tBackInv: T('← BACK TO INVENTORY'),
+      tOpenYT: T('Open on YouTube'), tWatchYT: T('Watch on YouTube'),
+      tEmbedNote: T('Embedded playback needs the site to be served over http — it works once published.'),
+      tGameplayCapture: T('Gameplay capture'),
+      tCaseStudy: T('CASE STUDY'),
+      tDownloadWin: T('Download for Windows'),
+      tWhatBuilt: T('What I built'),
+      tSysBreakdown: T('Systems breakdown'),
+      tSysHead: T('How it works under the hood'),
+      tSeeBlueprint: T('SEE BLUEPRINT'),
+      tBpViewer: T('Blueprint viewer'),
+      tPrev: T('Previous'), tNext: T('Next'), tClose: T('Close ✕'), tBigScreen: T('Big screen'),
+      tRecruit: T('Recruit'),
+      tContactLead: T('Available for gameplay programming and systems design — contract or full-time.'),
+      tContactBody: T('Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.'),
+      tSendMsg: T('SEND A MESSAGE →'),
+      tFbLabel: T('Feedback'),
+      tFbNote: T('This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome. Writing it here opens a ready-made draft in your mail app.'),
+      tFbName: T('Your name (optional)'),
+      tFbEmail: T('Email for a reply (optional)'),
+      tFbPlaceholder: T('What worked, what didn\u2019t, what you\u2019d change\u2026'),
+      tFbSend: T('OPEN A DRAFT →'),
+      tFbAddrLabel: T('No mail app? Write to'),
+      fbAddr: 'erikthom.dev@proton.me',
+      tFbCopy: T(st.fbCopied ? 'COPIED' : 'COPY'),
+      copyAddr: () => {
+        const a = 'erikthom.dev@proton.me';
+        const done = () => { this.setState({ fbCopied: true }); clearTimeout(this._cpT); this._cpT = setTimeout(() => this.setState({ fbCopied: false }), 1600); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(a).then(done, () => {});
+        else done();
+      },
+      fbCols: m ? '1fr' : '1fr 1fr',
+      fbName: st.fbName || '', fbEmail: st.fbEmail || '', fbText: st.fbText || '',
+      onFbName: (e) => this.setState({ fbName: e.target.value, fbStatus: null }),
+      onFbEmail: (e) => this.setState({ fbEmail: e.target.value, fbStatus: null }),
+      onFbText: (e) => this.setState({ fbText: e.target.value, fbStatus: null }),
+      sendFeedback: () => this.sendFeedback(),
+      fbStatus: st.fbStatus === 'ok' ? T('DRAFT OPENED \u2014 HIT SEND TO DELIVER IT') : (st.fbStatus === 'err' ? T('WRITE SOMETHING FIRST') : ''),
+      fbStatusCol: st.fbStatus === 'err' ? 'rgba(226,150,140,.9)' : 'rgba(150,200,168,.85)',
       tabRowRef: this.tabRow,
       panelRef: this.panel,
-      glowX: (this._glow ? this._glow.x : 0) + 'px',
-      glowY: (this._glow ? this._glow.y : 0) + 'px',
-      glowO: this._glow && this._glow.on ? 1 : 0,
+      glowRef: this.glow,
       barX: st.bar ? st.bar.x + 'px' : '0px',
       barW: st.bar ? st.bar.w + 'px' : '0px',
       barO: st.bar ? 1 : 0,
@@ -951,13 +1396,13 @@ class Component extends DCLogic {
         hasSub: id === 'inventory',
         flash: id === 'inventory' && !st.invSeen,
         subStill: id === 'inventory' && st.invSeen,
-        sub: 'Projects',
+        sub: T('Projects'),
         fg: uiTab === id ? '#f2f8f4' : 'inherit',
         onHover: () => {},
         onClick: () => this.go(id)
       })),
       featured: { ...projects[0], hasCover: !!projects[0].cover, noCover: !projects[0].cover,
-        coverBg: projects[0].cover ? 'url("' + projects[0].cover + '")' : 'none',
+        coverBg: projects[0].cover ? 'url("' + this.small(projects[0].cover) + '")' : 'none',
         coverOp: fadeOf('featured'), onCover: () => this.markFade('featured') },
       portraitOp: fadeOf('portrait'), onPortrait: () => this.markFade('portrait'),
       openFeatured: () => { this.select(); this.setState({ uiTab: 'inventory', invSeen: true }); this.swap({ tab: 'inventory', sel: 0 }); },
@@ -967,11 +1412,18 @@ class Component extends DCLogic {
       bpOn: !!st.bp, bpHref: (st.bp || {}).href || '', bpTitle: (st.bp || {}).title || '',
       closeBlueprint: () => this.setState({ bp: null }),
       skillCount: skillCount,
+      /* Blur peaks mid-decode and returns to none, so the scramble reads as one
+         soft defocus rather than a hard character swap. 'none' outside the
+         transition keeps the shell from becoming a containing block. */
+      glFilter: (st.gl === undefined || st.gl >= 1) ? 'none' : 'blur(' + (1.7 * Math.sin(Math.PI * st.gl)).toFixed(2) + 'px)',
       isGrid: st.tab === 'inventory' && st.sel === null && !st.resizing,
       isDetail: st.tab === 'inventory' && st.sel !== null && !st.resizing,
       shellW: m ? '100%' : ((st.tab === 'inventory' && st.sel !== null) ? 'max(1360px, 92vw)' : '1360px'),
       shellH: m ? '100dvh' : ((st.tab === 'inventory' && st.sel !== null) ? 'max(min(860px, calc(100vh - 56px)), min(92vh, calc(100vh - 24px)))' : 'min(860px, calc(100vh - 56px))'),
-      headH: (st.tab === 'inventory' && st.sel !== null) ? '0px' : (m ? '124px' : '96px'),
+      /* max-height only caps the collapse animation — the real height is
+         content driven, so the larger cap lets the subtitle wrap when the
+         header gets tight without clipping the tab row. */
+      headH: (st.tab === 'inventory' && st.sel !== null) ? '0px' : (m ? '124px' : '124px'),
       padOuter: m ? '0px' : '28px',
       shellR: m ? '0px' : '34px',
       shellCols: '1fr',
@@ -1047,13 +1499,19 @@ class Component extends DCLogic {
       dChip: hs(S + 30, 93, .055),
       dBtnBg: hs(S + 30, 94, .1),
       dBtnBgHi: hs(S + 30, 94, .2),
+      /* Download CTA is the one solid fill in the detail view — it takes the
+         project's own accent at full strength with dark ink on top. */
+      dDlBg: hs(S + 26, 64, .95),
+      dDlBgHi: hs(S + 26, 71, 1),
+      dDlFg: hs(S + 34, 11, 1),
+      dDlShadow: '0 10px 30px ' + hs(S + 20, 50, .3) + ', inset 0 1px 0 rgba(255,255,255,.34)',
       dBtnBd: hs(S + 20, 79, .44),
       dBtnBdHi: hs(S + 20, 79, .72),
       dHead: hs(S - 2, 96, 1),
       dBody: hs(S - 4, 90, .72),
       dMuted: hs(S - 6, 87, .64),
       tintCol: hs(S + 26, 26, .16),
-      coverBackdrop: coverSrc ? 'url("' + coverSrc + '")' : 'none',
+      coverBackdrop: backdropSrc ? 'url("' + this.small(backdropSrc) + '")' : 'none',
       warmOn: cold ? 0 : 1,
       slots, slotCount: projects.length + ' / ' + allSlots.length + ' SLOTS FILLED',
       filterTags,
@@ -1070,13 +1528,13 @@ class Component extends DCLogic {
       viewOpacity: st.blur ? 0 : 1,
       viewScale: st.blur ? 'scale(1.012)' : 'scale(1)',
       footHint: st.tab === 'inventory' ? (st.sel !== null ? 'BACK RETURNS TO THE GRID' : 'SELECT A SLOT TO INSPECT') : 'FOUR TABS — STATUS, SKILLS, INVENTORY, CONTACT',
-      vitals: [ {k:'Based in',v:'Budapest, HU'}, {k:'Timezone',v:'CET / UTC+1'}, {k:'Focus',v:'Gameplay systems'}, {k:'Status',v:'Open to work'} ],
+      vitals: [ {k:T('Based in'),v:T('Budapest, HU')}, {k:T('Timezone'),v:G('CET / UTC+1')}, {k:T('Focus'),v:T('Gameplay systems')}, {k:G(hu ? 'Státusz' : 'Status'),v:T('Open to work')} ],
       focus: [
         { t:'Systems', d:'Combat, movement, inventory, progression \u2014 any kind found in existing games, and new ones too.' },
         { t:'Game feel', d:'From a gamer to gamers \u2014 tailored to their needs to create the best experience possible.' },
         { t:'Prototyping', d:'Fast, disposable builds that answer one design question before the real work starts.' },
         { t:'Collaboration', d:'Comfortable owning a feature end to end with designers, artists and audio.' }
-      ],
+      ].map((f) => ({ t: T(f.t), d: T(f.d) })),
       skillGroups: skillGroups,
       onLinkClick: (e) => {
         const a = e.currentTarget;
@@ -1094,7 +1552,7 @@ class Component extends DCLogic {
         { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer' },
         { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer' },
         { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer' },
-        { k:'Résumé', v:'Download PDF', href:'assets/Erik-Thomas-CV.pdf', download:'Erik-Thomas-CV.pdf', target:'_blank', rel:'noopener noreferrer' }
+        { k:T('Résumé'), v:T('Download PDF'), href:'assets/Erik-Thomas-CV.pdf', download:'Erik-Thomas-CV.pdf', target:'_blank', rel:'noopener noreferrer' }
       ]
     };
   }
