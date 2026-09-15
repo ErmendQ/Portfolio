@@ -355,15 +355,17 @@
             <div>
               <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tRecruit }}</div>
               <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">{{ tContactLead }}</p>
-              <p style="font-size:15px; line-height:1.75; color:rgba(217,230,221,.68); margin:18px 0 0; text-wrap:pretty;">{{ tContactBody }}</p>
-              <a href="mailto:erikthom.dev@proton.me" style="display:inline-block; margin-top:26px; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:15px 24px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;">{{ tSendMsg }}</a>
+              <p style="font-size:15px; line-height:1.75; color:rgba(226,238,231,.84); margin:18px 0 0; text-wrap:pretty;">{{ tContactBody }}<span style="display:block; margin-top:10px;">{{ tEmailMeAt }}</span></p>
+              <div style="margin-top:18px; display:flex; flex-direction:column; align-items:flex-start; gap:11px;">
+                <button type="button" onClick="{{ copyAddr }}" style="appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:14px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.04em; padding:15px 22px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);"><span style="display:grid; justify-items:start; transition:opacity .17s ease; opacity:{{ addrOpacity }};"><span style="grid-area:1 / 1; opacity:{{ addrOn }};">erikthom.dev@proton.me</span><span style="grid-area:1 / 1; white-space:nowrap; opacity:{{ copiedOn }};">{{ tCopied }}</span></span></button>
+              </div>
             </div>
             <div style="display:flex; flex-direction:column; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
               <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
-                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" download="{{ l.download }}" onClick="{{ onLinkClick }}" style="background:rgba(28,44,36,.28); padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
+                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" download="{{ l.download }}" data-copy="{{ l.copy }}" onClick="{{ onLinkClick }}" style="background:rgba(28,44,36,.28); padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
                   <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:rgba(197,221,205,.62); text-transform:uppercase; min-width:76px;">{{ l.k }}</span>
                   <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:14px; color:#dfeae2; flex:1;">{{ l.v }}</span>
-                  <span style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:#7aa88a;">↗</span>
+                  <span style="font-family:'IBM Plex Mono', monospace; font-size:{{ l.markFS }}; letter-spacing:.16em; color:#7aa88a; white-space:nowrap;">{{ l.mark }}</span>
                 </a>
               </sc-for>
             </div>
@@ -378,11 +380,6 @@
               <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:16px;">
                 <button type="button" onClick="{{ sendFeedback }}" style="appearance:none; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:14px 22px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);">{{ tFbSend }}</button>
                 <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:{{ fbStatusCol }};">{{ fbStatus }}</span>
-              </div>
-              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px; padding-top:15px; border-top:1px solid rgba(198,228,208,.12);">
-                <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:rgba(197,221,205,.62); text-transform:uppercase;">{{ tFbAddrLabel }}</span>
-                <a href="mailto:erikthom.dev@proton.me" style="font-family:'Archivo', sans-serif; font-weight:600; font-size:13.5px; color:#dfeae2;">{{ fbAddr }}</a>
-                <button type="button" onClick="{{ copyAddr }}" style="appearance:none; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.16em; padding:6px 12px; border-radius:999px; border:1px solid rgba(198,228,208,.22); background:rgba(18,32,24,.5); color:rgba(219,236,225,.86);" style-hover="background:rgba(140,192,158,.22);">{{ tFbCopy }}</button>
               </div>
             </div>
           </div>
@@ -464,7 +461,7 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;feedbackEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://script.google.com/macros/s/AKfycbw3vCJK9P1eYtsjuDPPlPYaoGmW_BJiM9l6A20hntRS8o6T-E-9uTtMgOGrDBor1sfGKQ/exec&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
 class Component extends DCLogic {
   state = { tab: 'status', sel: null, booting: true, boot: [], sound: true, bar: null, invSeen: false,
     lang: (() => { try { return localStorage.getItem('et-lang') === 'hu' ? 'hu' : 'en'; } catch (e) { return 'en'; } })(),
@@ -763,17 +760,105 @@ class Component extends DCLogic {
     }, 26);
   }
 
+  /* Feedback notes are appended to a local pile (no mail app, no draft). Set a
+     collector URL in the feedbackEndpoint prop and each note is also POSTed there.
+     Read the pile from the console: erikFeedback.all() / .download() / .clear() */
+  FB_KEY = 'et.feedback.pile';
+
+  _fbTools = (() => {
+    const K = 'et.feedback.pile';
+    const all = () => { try { return JSON.parse(localStorage.getItem(K) || '[]'); } catch (e) { return []; } };
+    try {
+      window.erikFeedback = {
+        all,
+        count: () => all().length,
+        download: () => {
+          const b = new Blob([JSON.stringify(all(), null, 2)], { type: 'application/json' });
+          const u = URL.createObjectURL(b), a = document.createElement('a');
+          a.href = u; a.download = 'portfolio-feedback.json';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(u), 4000);
+        },
+        clear: () => { try { localStorage.removeItem(K); } catch (e) {} }
+      };
+    } catch (e) {}
+    return null;
+  })();
+
   sendFeedback() {
     const st = this.state, body = (st.fbText || '').trim();
     if (!body) { this.setState({ fbStatus: 'err' }); return; }
-    const who = (st.fbName || '').trim(), mail = (st.fbEmail || '').trim();
-    const lines = [body, '', '—', who ? 'From: ' + who : 'From: anonymous'];
-    if (mail) lines.push('Reply to: ' + mail);
-    const url = 'mailto:erikthom.dev@proton.me'
-      + '?subject=' + encodeURIComponent('Portfolio feedback' + (who ? ' — ' + who : ''))
-      + '&body=' + encodeURIComponent(lines.join('\n'));
-    window.location.href = url;
-    this.setState({ fbStatus: 'ok' });
+    const entry = {
+      at: new Date().toISOString(),
+      name: (st.fbName || '').trim() || null,
+      email: (st.fbEmail || '').trim() || null,
+      text: body,
+      lang: st.lang || null
+    };
+    try {
+      const pile = JSON.parse(localStorage.getItem(this.FB_KEY) || '[]');
+      pile.push(entry);
+      localStorage.setItem(this.FB_KEY, JSON.stringify(pile.slice(-300)));
+    } catch (e) {}
+    const ep = (this.props && this.props.feedbackEndpoint) || '';
+    if (ep) {
+      const payload = JSON.stringify(entry);
+      /* Formspree answers with CORS headers and wants real JSON; Apps Script / Workers
+         are reached fire-and-forget, where only simple content types are allowed. */
+      const cors = /formspree\.io/.test(ep);
+      try {
+        fetch(ep, cors
+          ? { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: payload }
+          : { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: payload });
+      } catch (e) {}
+    }
+    /* Fields empty out; what they wrote stays visible as the placeholder. */
+    this.setState({
+      fbStatus: 'ok', fbName: '', fbEmail: '', fbText: '',
+      sentName: entry.name || '', sentEmail: entry.email || '', sentText: body
+    });
+    clearTimeout(this._fbT);
+    this._fbT = setTimeout(() => this.setState({ fbStatus: null }), 5000);
+  }
+
+  copyAddr(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const addr = 'erikthom.dev@proton.me';
+    /* Label cross-fades: out, swap to the confirmation, hold, then back. */
+    const done = () => {
+      clearTimeout(this._cpT); clearTimeout(this._cpT2); clearTimeout(this._cpT3);
+      this.setState({ fbFade: true });
+      this._cpT = setTimeout(() => this.setState({ fbCopied: true, fbFade: false }), 170);
+      this._cpT2 = setTimeout(() => this.setState({ fbFade: true }), 2100);
+      this._cpT3 = setTimeout(() => this.setState({ fbCopied: false, fbFade: false }), 2270);
+    };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(addr).then(done, () => this.legacyCopy(addr, done));
+        return;
+      }
+    } catch (er) {}
+    this.legacyCopy(addr, done);
+  }
+
+  legacyCopy(txt, done) {
+    try {
+      const t = document.createElement('textarea');
+      t.value = txt; t.setAttribute('readonly', '');
+      t.style.cssText = 'position:fixed; top:0; left:0; opacity:0;';
+      document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove();
+    } catch (er) {}
+    done();
+  }
+
+  openMailDraft(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const url = 'mailto:erikthom.dev@proton.me?subject=' + encodeURIComponent('Hello Erik');
+    let ok = false;
+    try { ok = !!window.open(url, '_blank'); } catch (er) {}
+    if (!ok) { try { window.top.location.href = url; ok = true; } catch (er) {} }
+    if (!ok) { try { window.location.href = url; ok = true; } catch (er) {} }
+    if (!ok) this.copyAddr();
   }
 
   glitch(s) {
@@ -890,17 +975,18 @@ class Component extends DCLogic {
         'Szabad kapacitással vállalok gameplay programozást és rendszertervezést — szerződéses vagy teljes állásban.',
       'Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.':
         'Olyan csapatban érzem jól magam, amelyik ki is adja, amit csinál. Küldj egy buildet, egy design dokumentumot vagy egy nyers ötletet, és őszintén megmondom, mit kezdenék vele.',
-      'SEND A MESSAGE →': 'ÜZENET KÜLDÉSE →',
+      'You can email me at:': 'E-mailben itt érsz el:',
       'Feedback': 'Visszajelzés',
-      'This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome. Writing it here opens a ready-made draft in your mail app.':
-        'A portfólió folyamatosan csiszolás és átdolgozás alatt áll. Ha valami furcsán hangzik, hibásnak tűnik, vagy egyszerűen jobb lehetne — írd meg. Minden észrevételnek örülök. Amit ide írsz, kész piszkozatként nyílik meg a leveleződben.',
+      'This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome. Nothing here opens a mail app — your note is logged straight to me.':
+        'A portfólió folyamatosan csiszolás és átdolgozás alatt áll. Ha valami furcsán hangzik, hibásnak tűnik, vagy egyszerűen jobb lehetne — írd meg. Minden észrevételnek örülök. Semmilyen levelezőt nem nyit meg: amit ide írsz, egyenesen hozzám kerül.',
       'Your name (optional)': 'Neved (nem kötelező)',
       'Email for a reply (optional)': 'E-mail a válaszhoz (nem kötelező)',
       'What worked, what didn’t, what you’d change…': 'Mi működött, mi nem, mit változtatnál…',
-      'OPEN A DRAFT →': 'PISZKOZAT MEGNYITÁSA →',
-      'DRAFT OPENED — HIT SEND TO DELIVER IT': 'A PISZKOZAT MEGNYÍLT — KÜLDD EL A LEVELEZŐDBŐL',
+      'SEND FEEDBACK →': 'VISSZAJELZÉS KÜLDÉSE →',
+      'THANKS — YOUR NOTE IS LOGGED': 'KÖSZÖNÖM — A VISSZAJELZÉS MENTVE',
       'WRITE SOMETHING FIRST': 'ÍRJ ELŐBB VALAMIT',
-      'No mail app? Write to': 'Nincs leveleződ? Írj ide',
+      'Prefer email? Click to copy': 'Inkább e-mail? Kattints a másoláshoz',
+      'COPIED TO CLIPBOARD': 'A VÁGÓLAPRA MÁSOLVA',
       'COPY': 'MÁSOLÁS', 'COPIED': 'MÁSOLVA',
       'Résumé': 'Önéletrajz', 'Download PDF': 'PDF letöltése',
 
@@ -1361,29 +1447,27 @@ class Component extends DCLogic {
       tRecruit: T('Recruit'),
       tContactLead: T('Available for gameplay programming and systems design — contract or full-time.'),
       tContactBody: T('Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.'),
-      tSendMsg: T('SEND A MESSAGE →'),
+      tEmailMeAt: T('You can email me at:'),
       tFbLabel: T('Feedback'),
-      tFbNote: T('This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome. Writing it here opens a ready-made draft in your mail app.'),
-      tFbName: T('Your name (optional)'),
-      tFbEmail: T('Email for a reply (optional)'),
-      tFbPlaceholder: T('What worked, what didn\u2019t, what you\u2019d change\u2026'),
-      tFbSend: T('OPEN A DRAFT →'),
-      tFbAddrLabel: T('No mail app? Write to'),
-      fbAddr: 'erikthom.dev@proton.me',
-      tFbCopy: T(st.fbCopied ? 'COPIED' : 'COPY'),
-      copyAddr: () => {
-        const a = 'erikthom.dev@proton.me';
-        const done = () => { this.setState({ fbCopied: true }); clearTimeout(this._cpT); this._cpT = setTimeout(() => this.setState({ fbCopied: false }), 1600); };
-        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(a).then(done, () => {});
-        else done();
-      },
+      tFbNote: T('This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome. Nothing here opens a mail app \u2014 your note is logged straight to me.'),
+      tFbName: st.sentName || T('Your name (optional)'),
+      tFbEmail: st.sentEmail || T('Email for a reply (optional)'),
+      tFbPlaceholder: st.sentText || T('What worked, what didn\u2019t, what you\u2019d change\u2026'),
+      tFbSend: T('SEND FEEDBACK →'),
+      /* Both labels sit in one grid cell, so the box is always sized by the wider. */
+      tCopied: T('COPIED TO CLIPBOARD'),
+      addrOn: st.fbCopied ? 0 : 1,
+      copiedOn: st.fbCopied ? 1 : 0,
+      addrOpacity: st.fbFade ? 0 : 1,
+      copyAddr: (e) => this.copyAddr(e),
+      openMailDraft: (e) => this.openMailDraft(e),
       fbCols: m ? '1fr' : '1fr 1fr',
       fbName: st.fbName || '', fbEmail: st.fbEmail || '', fbText: st.fbText || '',
       onFbName: (e) => this.setState({ fbName: e.target.value, fbStatus: null }),
       onFbEmail: (e) => this.setState({ fbEmail: e.target.value, fbStatus: null }),
       onFbText: (e) => this.setState({ fbText: e.target.value, fbStatus: null }),
       sendFeedback: () => this.sendFeedback(),
-      fbStatus: st.fbStatus === 'ok' ? T('DRAFT OPENED \u2014 HIT SEND TO DELIVER IT') : (st.fbStatus === 'err' ? T('WRITE SOMETHING FIRST') : ''),
+      fbStatus: st.fbStatus === 'ok' ? T('THANKS \u2014 YOUR NOTE IS LOGGED') : (st.fbStatus === 'err' ? T('WRITE SOMETHING FIRST') : ''),
       fbStatusCol: st.fbStatus === 'err' ? 'rgba(226,150,140,.9)' : 'rgba(150,200,168,.85)',
       tabRowRef: this.tabRow,
       panelRef: this.panel,
@@ -1538,7 +1622,9 @@ class Component extends DCLogic {
       skillGroups: skillGroups,
       onLinkClick: (e) => {
         const a = e.currentTarget;
-        if (!a || !a.hasAttribute('download')) return;
+        if (!a) return;
+        if (a.getAttribute('data-copy')) { this.copyAddr(e); return; }
+        if (!a.hasAttribute('download')) return;
         e.preventDefault();
         const url = a.getAttribute('href'), name = a.getAttribute('download');
         fetch(url).then(r => { if (!r.ok) throw 0; return r.blob(); }).then(b => {
@@ -1548,11 +1634,10 @@ class Component extends DCLogic {
         }).catch(() => window.open(url, '_blank', 'noopener'));
       },
       links: [
-        { k:'Email', v:'erikthom.dev@proton.me', href:'mailto:erikthom.dev@proton.me' },
-        { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer' },
-        { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer' },
-        { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer' },
-        { k:T('Résumé'), v:T('Download PDF'), href:'assets/Erik-Thomas-CV.pdf', download:'Erik-Thomas-CV.pdf', target:'_blank', rel:'noopener noreferrer' }
+        { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
+        { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
+        { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
+        { k:T('Résumé'), v:T('Download PDF'), href:'assets/Erik-Thomas-CV.pdf', download:'Erik-Thomas-CV.pdf', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' }
       ]
     };
   }
