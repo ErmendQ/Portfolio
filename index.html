@@ -48,7 +48,7 @@
 
   <div style="position:relative; width:100%; max-width:{{ shellW }}; height:{{ shellH }}; border-radius:{{ shellR }}; transition:max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1); border:1px solid rgba(226,244,232,.17); background:linear-gradient(158deg, rgba(236,248,240,.07) 0%, rgba(210,232,218,.035) 46%, rgba(6,14,10,.14) 100%); backdrop-filter:blur(42px) saturate(2.3) brightness(1.04); -webkit-backdrop-filter:blur(42px) saturate(2.3) brightness(1.04); box-shadow:0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.26), 0 0 0 .5px rgba(226,244,232,.16), inset 0 1px 0 rgba(242,254,246,.36), inset 0 -1px 0 rgba(200,226,210,.09), inset 0 -40px 70px -50px rgba(0,0,0,.42); display:grid; grid-template-columns:{{ shellCols }}; overflow:hidden; animation:panelIn .7s cubic-bezier(.2,.7,.25,1) both; filter:{{ glFilter }};" ref="{{ panelRef }}">
     <div style="position:absolute; inset:0; pointer-events:none; z-index:0; background:linear-gradient(158deg, rgba(196,220,255,.06) 0%, rgba(150,180,225,.03) 46%, rgba(6,10,20,.16) 100%); opacity:{{ coldOn }}; transition:opacity .6s ease;"></div>
-    <div style="position:absolute; inset:0; pointer-events:none; z-index:5; border-radius:inherit; background:linear-gradient(180deg, rgba(242,254,246,.13) 0%, rgba(242,254,246,.03) 7%, rgba(242,254,246,0) 20%), radial-gradient(130% 55% at 50% 0%, rgba(226,244,232,.09), transparent 72%); mix-blend-mode:screen;"></div>
+    <div style="position: absolute; inset: 0; pointer-events: none; z-index: 5; border-radius: inherit; background: linear-gradient(180deg, rgba(242,254,246,.13) 0%, rgba(242,254,246,.03) 7%, rgba(242,254,246,0) 20%), radial-gradient(130% 55% at 50% 0%, rgba(226,244,232,.09), transparent 72%); mix-blend-mode: screen; display: none"></div>
     <div ref="{{ glowRef }}" style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:0; transition:opacity .35s ease; mix-blend-mode:screen; filter:blur(7px);"></div>
 
     <div style="position:relative; z-index:1; display:grid; grid-template-rows:auto 1fr auto; min-height:0;">
@@ -236,7 +236,7 @@
                     </a>
                   </sc-if>
                   <sc-if value="{{ sel.heroCover }}">
-                    <img src="{{ sel.cover }}" alt="{{ sel.name }}" loading="lazy" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;" />
+                    <img src="{{ sel.cover }}" alt="{{ sel.name }}" loading="lazy" decoding="async" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;">
                   </sc-if>
                   <sc-if value="{{ sel.heroBlank }}" hint-placeholder-val="{{ true }}">
                     <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.22em; color:{{ dMuted }};">{{ tGameplayCapture }}</span>
@@ -354,32 +354,36 @@
           <div style="padding:{{ contactPad }}; display:grid; grid-template-columns:{{ contactCols }}; gap:{{ contactGap }}; align-items:start;">
             <div>
               <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tRecruit }}</div>
-              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.35; margin:14px 0 0; color:#eef5f0; text-wrap:pretty;">{{ tContactLead }}</p>
-              <p style="font-size:15px; line-height:1.75; color:rgba(226,238,231,.84); margin:18px 0 0; text-wrap:pretty;">{{ tContactBody }}<span style="display:block; margin-top:10px;">{{ tEmailMeAt }}</span></p>
-              <div style="margin-top:18px; display:flex; flex-direction:column; align-items:flex-start; gap:11px;">
-                <button type="button" onClick="{{ copyAddr }}" style="appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:14px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.04em; padding:15px 22px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);"><span style="display:grid; justify-items:start; transition:opacity .17s ease; opacity:{{ addrOpacity }};"><span style="grid-area:1 / 1; opacity:{{ addrOn }};">erikthom.dev@proton.me</span><span style="grid-area:1 / 1; white-space:nowrap; opacity:{{ copiedOn }};">{{ tCopied }}</span></span></button>
+              <p style="font-family:'Archivo', sans-serif; font-weight:500; font-size:{{ leadFS }}; line-height:1.3; margin:10px 0 0; color:#eef5f0; text-wrap:pretty;">{{ tContactLead }}</p>
+              <p style="font-size:14px; line-height:1.55; color:rgba(226,238,231,.84); margin:10px 0 0; text-wrap:pretty;">{{ tContactBody }}<span style="display:block; margin-top:7px;">{{ tEmailMeAt }}</span></p>
+              <div style="margin-top:14px; display:flex; flex-direction:column; align-items:flex-start; gap:11px;">
+                <button type="button" onClick="{{ copyAddr }}" style="appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:14px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.04em; padding:13px 21px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);"><span style="display:grid; justify-items:start; transition:opacity .17s ease; opacity:{{ addrOpacity }};"><span style="grid-area:1 / 1; opacity:{{ addrOn }};">erikthom.dev@proton.me</span><span style="grid-area:1 / 1; white-space:nowrap; opacity:{{ copiedOn }};">{{ tCopied }}</span></span></button>
               </div>
             </div>
             <div style="display:flex; flex-direction:column; gap:1px; background:rgba(198,228,208,.13); border:1px solid rgba(198,228,208,.15); border-radius:18px; overflow:hidden;">
               <sc-for list="{{ links }}" as="l" hint-placeholder-count="5">
-                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" download="{{ l.download }}" data-copy="{{ l.copy }}" onClick="{{ onLinkClick }}" style="background:rgba(28,44,36,.28); padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
-                  <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:rgba(197,221,205,.62); text-transform:uppercase; min-width:76px;">{{ l.k }}</span>
-                  <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:14px; color:#dfeae2; flex:1;">{{ l.v }}</span>
+                <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" download="{{ l.download }}" data-copy="{{ l.copy }}" onClick="{{ onLinkClick }}" style="background:{{ l.bg }}; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
+                  <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:{{ l.kCol }}; text-transform:uppercase; min-width:76px;">{{ l.k }}</span>
+                  <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:14px; color:{{ l.vCol }}; flex:1; min-width:0; overflow-wrap:anywhere;">{{ l.v }}</span>
                   <span style="font-family:'IBM Plex Mono', monospace; font-size:{{ l.markFS }}; letter-spacing:.16em; color:#7aa88a; white-space:nowrap;">{{ l.mark }}</span>
                 </a>
               </sc-for>
             </div>
-            <div style="grid-column:1 / -1; margin-top:6px; border:1px solid rgba(198,228,208,.15); border-radius:18px; background:rgba(28,44,36,.28); padding:22px 22px 20px;">
-              <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tFbLabel }}</div>
-              <p style="font-size:14px; line-height:1.7; color:rgba(217,230,221,.68); margin:12px 0 0; max-width:64ch; text-wrap:pretty;">{{ tFbNote }}</p>
-              <div style="display:grid; grid-template-columns:{{ fbCols }}; gap:12px; margin-top:18px;">
+            <div style="grid-column:1 / -1; box-sizing:border-box; width:100%; border:1px solid rgba(198,228,208,.15); border-radius:18px; background:rgba(28,44,36,.28); padding:16px 20px; display:grid; grid-template-columns:{{ fbShellCols }}; gap:14px 36px; align-items:start;">
+              <div style="min-width:0;">
+                <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.28em; color:#7aa88a; text-transform:uppercase;">{{ tFbLabel }}</div>
+                <p style="font-size:13.5px; line-height:1.6; color:rgba(217,230,221,.68); margin:8px 0 0; max-width:48ch; text-wrap:pretty;">{{ tFbNote }}</p>
+              </div>
+              <div style="min-width:0;">
+              <div style="display:grid; grid-template-columns:{{ fbCols }}; gap:10px;">
                 <input type="text" value="{{ fbName }}" onChange="{{ onFbName }}" placeholder="{{ tFbName }}" style="font-family:'IBM Plex Sans', sans-serif; font-size:14px; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; min-width:0;" style-focus="border-color:rgba(160,206,176,.55);">
                 <input type="email" value="{{ fbEmail }}" onChange="{{ onFbEmail }}" placeholder="{{ tFbEmail }}" style="font-family:'IBM Plex Sans', sans-serif; font-size:14px; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; min-width:0;" style-focus="border-color:rgba(160,206,176,.55);">
               </div>
-              <textarea value="{{ fbText }}" onChange="{{ onFbText }}" placeholder="{{ tFbPlaceholder }}" rows="4" style="display:block; width:100%; box-sizing:border-box; margin-top:12px; font-family:'IBM Plex Sans', sans-serif; font-size:14px; line-height:1.65; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; resize:vertical;" style-focus="border-color:rgba(160,206,176,.55);"></textarea>
-              <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:16px;">
+              <textarea value="{{ fbText }}" onChange="{{ onFbText }}" placeholder="{{ tFbPlaceholder }}" rows="3" style="display:block; width:100%; box-sizing:border-box; margin-top:10px; font-family:'IBM Plex Sans', sans-serif; font-size:14px; line-height:1.65; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; resize:vertical;" style-focus="border-color:rgba(160,206,176,.55);"></textarea>
+              <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:12px;">
                 <button type="button" onClick="{{ sendFeedback }}" style="appearance:none; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:14px 22px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);">{{ tFbSend }}</button>
                 <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:{{ fbStatusCol }};">{{ fbStatus }}</span>
+              </div>
               </div>
             </div>
           </div>
@@ -971,8 +975,8 @@ class Component extends DCLogic {
       'Previous': 'Előző', 'Next': 'Következő', 'Close ✕': 'Bezárás ✕', 'Big screen': 'Nagy képernyő',
 
       'Recruit': 'Toborzás',
-      'Available for gameplay programming and systems design — contract or full-time.':
-        'Szabad kapacitással vállalok gameplay programozást és rendszertervezést — szerződéses vagy teljes állásban.',
+      'Available for gameplay programming, systems design or creative development work — contract or full-time.':
+        'Szabad kapacitással vállalok gameplay programozást, rendszertervezést vagy kreatív fejlesztési munkát — szerződéses vagy teljes állásban.',
       'Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.':
         'Olyan csapatban érzem jól magam, amelyik ki is adja, amit csinál. Küldj egy buildet, egy design dokumentumot vagy egy nyers ötletet, és őszintén megmondom, mit kezdenék vele.',
       'You can email me at:': 'E-mailben itt érsz el:',
@@ -989,6 +993,7 @@ class Component extends DCLogic {
       'COPIED TO CLIPBOARD': 'A VÁGÓLAPRA MÁSOLVA',
       'COPY': 'MÁSOLÁS', 'COPIED': 'MÁSOLVA',
       'Résumé': 'Önéletrajz', 'Download PDF': 'PDF letöltése',
+      'Upload in progress…': 'Feltöltés folyamatban…',
 
       'Role': 'Szerep', 'Team': 'Csapat', 'Engine': 'Motor', 'Duration': 'Időtartam', 'Client': 'Megbízó',
       'Design & Programming': 'Tervezés és programozás', 'Solo development': 'Egyedüli fejlesztés',
@@ -1034,8 +1039,8 @@ class Component extends DCLogic {
       'Once the player gets hold of a gun and ammo, they can aim and shoot it.\n\nAiming narrows the field of view, lowers look sensitivity and movement speed, fades in an ammo indicator — which marks the round in the chamber in a separate colour when the magazine is full — and reveals a circular crosshair.\n\nShooting spawns a smoke and muzzle flash particle system that throws light around the barrel for a brief moment. A camera shake plays, the control rotation kicks slightly upward, and the crosshair expands and fades out to sell the recoil.\n\nReloading blocks every other action until the animation finishes, then loads a round into the chamber.':
         'Amint a játékos fegyverhez és lőszerhez jut, célozhat és lőhet vele.\n\nCélzáskor szűkül a látómező, csökken a nézelődés érzékenysége és a mozgási sebesség, beúszik a lőszerkijelző — amely tele tárnál külön színnel jelöli a csőben lévő töltényt —, és megjelenik a kör alakú célkereszt.\n\nLövéskor füst- és torkolattűz-partikulumok indulnak, amelyek egy pillanatra megvilágítják a cső környékét. Megrázkódik a kamera, az irányzék enyhén felfelé rúg, a célkereszt pedig kitágul és elhalványul, hogy érezhető legyen a visszarúgás.\n\nAz újratöltés minden más műveletet blokkol, amíg az animáció le nem fut, majd tölténnyel tölti fel a csövet.',
       'Level design and events': 'Pályatervezés és események',
-      'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player’s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.':
-        'A világ kontextusfüggő interakciók láncából épül fel — kapuk, autók, kukák, kövek —, mindegyik egy felugró lehetőség, amely aktiválás előtt megnézi a játékos leltárát és a történet állását. Az események magán a pályán ülnek, nem globális szkriptekben, így egy terület átrendezhető vagy kivágható anélkül, hogy a lánc eltörne.',
+      'The main menu is designed to hint at the world and at the main character through the substances, drawings and documents laid out on it.\n\nThe intro scene borrows the logic of endless runner games: it keeps generating the same road prefab and triggers events on a timer.\n\nThe main level is paced to slowly introduce new information, mechanics and scares, keeping the gameplay eventful while still giving the player enough time to play around and take in the environment — and exploration is rewarded.\n\nThe player can also interact with different objects to progress through the level, and has to work out which item or piece of information they need for each one.\n\nThe map is optimized as well: meshes and foliage use culling distances, lights and assets are unloaded as the player progresses, and certain areas behind them get locked.':
+        'A főmenü úgy készült, hogy a rajta látható szerekkel, rajzokkal és dokumentumokkal utaljon a világra és a főszereplőre.\n\nA bevezető jelenet az endless runner játékok logikáját használja: folyamatosan ugyanazt az útszakaszt generálja, és időzítve indítja az eseményeket.\n\nA főpálya tempója úgy van felépítve, hogy lassan vezesse be az új információkat, mechanikákat és ijesztő pillanatokat: eseménydús marad a játékmenet, de a játékosnak marad ideje kipróbálni a dolgokat és megélni a környezetet — a felderítés pedig jutalmat is ad.\n\nA játékos különböző tárgyakkal is interakcióba léphet a pályán való előrehaladáshoz, és ki kell találnia, melyik tárgyra vagy információra van ehhez szüksége.\n\nA pálya optimalizálva is van: a meshek és a foliage culling távolságot használnak, a fények és az assetek kikerülnek a memóriából, ahogy a játékos előrehalad, a mögötte lévő területek pedig lezáródnak.',
 
       'A calming VR world you explore without hands or controllers — built to hold a patient’s attention through medical treatment.':
         'Nyugtató VR-világ, amelyet kéz és kontroller nélkül lehet bejárni — azért készült, hogy lekösse a páciens figyelmét az orvosi kezelés alatt.',
@@ -1124,7 +1129,7 @@ class Component extends DCLogic {
           { title: 'Slot based inventory', body: 'The inventory screen is built on a slot based grid in the vein of Resident Evil. Items can be used, examined, combined or discarded. Examining an item opens a 3D preview the player can rotate to inspect. Combining highlights the items that pair into something new, and a separate craft menu lists the recipes already discovered.\n\nThe same screen holds the current objective and every document collected so far \u2014 clues about the world and its events that the player may need later. Hovering a document\u2019s title displays its text in the centre of the screen.\n\nA missing poster appears in the bottom left once the player picks it up early in the game. Later it doubles as a visual indicator of the player\u2019s sanity.', tags: ['Grid slots', 'Crafting', 'Inspection'], blueprint: 'blueprint-viewer/index.html?src=assets/BPC_SurvivalHorrorInventory.uasset,assets/BP_ItemNew.uasset', images: ['assets/sys01-shot-b.png', 'assets/sys01-shot-a.png', 'assets/sys01-shot-c.png'], clip: 'assets/sys01-inventory.mp4', clips2: 'assets/sys01-crafting.mp4', shots: [] },
           { title: 'Scare sequencing', body: 'Throughout the game a dark figure with glowing eyes appears and stalks the player as a manifestation of their psyche. Each encounter takes one of three forms:\n\u2014 it spawns for a brief moment, then vanishes\n\u2014 it stands facing the player and only disappears once the player moves closer\n\u2014 it spawns in the distance and teleports periodically closer, and the player has to shoot it to make it disappear\n\nEvery encounter drops the player\u2019s sanity. The drop is visualised by the missing poster in the inventory turning steadily more uncanny, and past a threshold whispers begin to play while the inventory is open \u2014 louder the lower the sanity falls.', tags: ['Encounter director', 'Pacing', 'Audio cues'], blueprint: 'blueprint-viewer/index.html?src=assets/BP_Watcher.uasset,assets/BP_Crawler.uasset', images: ['assets/sys02-shot-d.png', 'assets/sys02-shot-f.png', 'assets/sys02-poster-decay.png'], clip: 'assets/sys02-scare.mp4', clips2: 'assets/sys02-stalker.mp4', bright: ['assets/sys02-scare.mp4', 'assets/sys02-stalker.mp4'], shots: [] },
           { title: 'Weapon system', body: 'Once the player gets hold of a gun and ammo, they can aim and shoot it.\n\nAiming narrows the field of view, lowers look sensitivity and movement speed, fades in an ammo indicator \u2014 which marks the round in the chamber in a separate colour when the magazine is full \u2014 and reveals a circular crosshair.\n\nShooting spawns a smoke and muzzle flash particle system that throws light around the barrel for a brief moment. A camera shake plays, the control rotation kicks slightly upward, and the crosshair expands and fades out to sell the recoil.\n\nReloading blocks every other action until the animation finishes, then loads a round into the chamber.', tags: ['FPS', 'Combat'], blueprint: 'blueprint-viewer/index.html?src=assets/BP_HorrorCharacter.uasset,assets/BP_Bullet.uasset', clip: 'assets/sys03-weapons.mp4', shots: [] },
-          { title: 'Level design and events', body: 'The world is authored as a chain of contextual interactions — gates, cars, bins, stones — each one a prompt that reads the player\u2019s inventory and story state before it fires. Events are placed on the level itself rather than scripted globally, so a region can be re-ordered or cut without breaking the chain.', tags: ['Level events', 'Interaction prompts', 'World state'], blueprint: 'blueprint-viewer/index.html?src=assets/ExampleMap.umap,assets/BP_EnvironmentInteractMaster.uasset,assets/BP_EventTrigger.uasset,assets/BP_SearchFindItem.uasset,assets/BP_StoneHidingKey.uasset,assets/BP_LockedCarWithID.uasset,assets/BP_Intercom.uasset,assets/BP_Bag.uasset,assets/BP_FinishGame.uasset', images: ['assets/sys04-interactions.png', 'assets/faceless-sys04-overview.png', 'assets/faceless-sys04-topdown.png', 'assets/faceless-sys04-roadloop.png', 'assets/faceless-sys04-lamp.png', 'assets/faceless-sys04-desk-lit.png', 'assets/faceless-sys04-desk-unlit.png'], clip: 'assets/sys04-events.mp4', shots: [] }
+          { title: 'Level design and events', body: 'The main menu is designed to hint at the world and at the main character through the substances, drawings and documents laid out on it.\n\nThe intro scene borrows the logic of endless runner games: it keeps generating the same road prefab and triggers events on a timer.\n\nThe main level is paced to slowly introduce new information, mechanics and scares, keeping the gameplay eventful while still giving the player enough time to play around and take in the environment — and exploration is rewarded.\n\nThe player can also interact with different objects to progress through the level, and has to work out which item or piece of information they need for each one.\n\nThe map is optimized as well: meshes and foliage use culling distances, lights and assets are unloaded as the player progresses, and certain areas behind them get locked.', tags: ['Level events', 'Interaction prompts', 'World state'], blueprint: 'blueprint-viewer/index.html?src=assets/ExampleMap.umap,assets/BP_EnvironmentInteractMaster.uasset,assets/BP_EventTrigger.uasset,assets/BP_SearchFindItem.uasset,assets/BP_StoneHidingKey.uasset,assets/BP_LockedCarWithID.uasset,assets/BP_Intercom.uasset,assets/BP_Bag.uasset,assets/BP_FinishGame.uasset', images: ['assets/sys04-interactions.png', 'assets/faceless-sys04-overview.png', 'assets/faceless-sys04-topdown.png', 'assets/faceless-sys04-roadloop.png', 'assets/faceless-sys04-lamp.png', 'assets/faceless-sys04-desk-lit.png', 'assets/faceless-sys04-desk-unlit.png'], clip: 'assets/sys04-events.mp4', shots: [] }
         ] },
       { slot: '05', name: 'Sam\u2019s Journey', engine: 'Unreal', year: '2024', tags: ['Unreal', '2024', 'VR'],
         thumb: 'key art 16:10', hero: 'gameplay capture 16:9',
@@ -1387,7 +1392,10 @@ class Component extends DCLogic {
         /* YouTube rejects embeds from a file:// page (null referrer → error 153),
            so offline copies get a click-through poster instead of a dead player. */
         const offline = typeof location !== 'undefined' && location.protocol === 'file:';
+        const pend = !p.cover || !(p.blurb || p.summary);
         return { ...p, hasVideo: !!p.video && !offline, videoOffline: !!p.video && offline,
+          blurb: pend ? T('Upload in progress\u2026') : p.blurb,
+          summary: pend ? T('Upload in progress\u2026') : p.summary,
           noVideo: !p.video, heroCover: !p.video && !!p.cover, heroBlank: !p.video && !p.cover,
           hasBuilt: (p.built || []).length > 0, hasMeta: (p.meta || []).length > 0, stills: p.stills || [],
           hasDownload: !!p.download,
@@ -1397,13 +1405,14 @@ class Component extends DCLogic {
     const th = (selObj.systems && st.theater != null && st.theater !== false) ? selObj.systems[st.theater] : null;
     const fadeOf = (k) => ((st.fade && st.fade[k]) ? 1 : 0);
     const allSlots = projects.map((p, i) => ({
-      ...p, dim: 1, cursor: 'pointer', hasCover: !!p.cover, noCover: !p.cover, hasDownload: !!p.download,
+      ...p, dim: p.cover ? 1 : .55, cursor: p.cover ? 'pointer' : 'default', hasCover: !!p.cover, noCover: !p.cover, hasDownload: !!p.download,
+      blurb: (!p.cover || !(p.blurb || p.summary)) ? T('Upload in progress\u2026') : p.blurb,
       thumb: p.thumb || (hu ? 'borítókép hamarosan' : 'cover coming soon'),
       tags: p.tags || [p.engine, p.year],
       coverBg: p.cover ? 'url("' + this.small(p.cover) + '")' : 'none',
       fadeKey: 'cover' + i, coverOp: fadeOf('cover' + i), onCover: () => this.markFade('cover' + i),
       onHover: () => {},
-      onClick: () => { this.select(); this.swap({ sel: i }); }
+      onClick: p.cover ? (() => { this.select(); this.swap({ sel: i }); }) : (() => {})
     })).concat(empties.map(e => ({
       slot: e.slot, name: T('Empty slot'), engine: '—', year: '—', tags: ['—', '—'], thumb: T('available'), hasCover: false, noCover: true, hasDownload: false,
       blurb: T('Reserved for the next shipped thing.'), dim: .42, cursor: 'default',
@@ -1468,7 +1477,7 @@ class Component extends DCLogic {
       tBpViewer: T('Blueprint viewer'),
       tPrev: T('Previous'), tNext: T('Next'), tClose: T('Close ✕'), tBigScreen: T('Big screen'),
       tRecruit: T('Recruit'),
-      tContactLead: T('Available for gameplay programming and systems design — contract or full-time.'),
+      tContactLead: T('Available for gameplay programming, systems design or creative development work — contract or full-time.'),
       tContactBody: T('Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.'),
       tEmailMeAt: T('You can email me at:'),
       tFbLabel: T('Feedback'),
@@ -1575,9 +1584,10 @@ class Component extends DCLogic {
       sysGap: m ? '18px' : '30px',
       sysPad: m ? '18px 16px' : '24px 26px',
       thumbW: m ? '78px' : '92px',
-      contactPad: m ? '24px 16px 32px' : '44px 40px',
-      contactCols: m ? '1fr' : '1.1fr 1fr',
-      contactGap: m ? '28px' : '56px',
+      contactPad: m ? '20px 16px 28px' : '22px 40px 18px',
+      contactCols: m ? 'minmax(0,1fr)' : 'minmax(0,1.1fr) minmax(0,1fr)',
+      contactGap: m ? '22px' : '18px 40px',
+      fbShellCols: m ? 'minmax(0,1fr)' : 'minmax(0,.85fr) minmax(0,1.15fr)',
       footPad: m ? '10px 15px' : '11px 22px',
       portraitZoom: m ? 0.94 : 1.08,
       portraitPos: m ? '38%' : '26%',
@@ -1660,8 +1670,8 @@ class Component extends DCLogic {
         { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
         { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
         { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
-        { k:T('Résumé'), v:T('Download PDF'), href: hu ? 'assets/Erik-Thomas-CV-HU.pdf' : 'assets/Erik-Thomas-CV-EN.pdf', download: hu ? 'Erik-Thomas-CV-HU.pdf' : 'Erik-Thomas-CV-EN.pdf', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' }
-      ]
+        { k:T('Résumé'), v:T('Download PDF'), href: hu ? 'assets/Erik-Thomas-CV-HU.pdf' : 'assets/Erik-Thomas-CV-EN.pdf', download: hu ? 'Erik-Thomas-CV-HU.pdf' : 'Erik-Thomas-CV-EN.pdf', target:'_blank', rel:'noopener noreferrer', mark:hu ? 'PDF ↓' : 'PDF ↓', markFS:'11px', bg:'rgba(140,192,158,.16)', kCol:'rgba(178,216,190,.82)', vCol:'#f0f8f3' }
+      ].map((l) => ({ bg:'rgba(28,44,36,.28)', kCol:'rgba(197,221,205,.62)', vCol:'#dfeae2', ...l }))
     };
   }
 }
