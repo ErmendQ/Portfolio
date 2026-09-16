@@ -62,8 +62,8 @@
         <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; margin:{{ tabRowM }}; min-height:{{ tabRowH }}; border-top:1px solid {{ tabRowBd }};">
           <span style="position:absolute; bottom:-1px; height:2px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }}; left:0; width:{{ barW }}; transform:translateX({{ barX }}); opacity:{{ barO }}; transition:transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease;"></span>
           <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; background-color:rgba(150,200,168,0); border-radius:12px; transition:background-color .3s ease, color .25s ease;" style-hover="background-color:rgba(150,200,168,.13); color:#e8f3ec;">
-              <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:{{ tabFS }}; letter-spacing:{{ tabLS }}; text-transform:uppercase; white-space:nowrap; color:{{ t.fg }};">{{ t.label }}</span>
+            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; background-color:rgba(150,200,168,0); border-radius:12px; color:{{ t.fg }}; transition:background-color .3s ease, color .25s ease;" style-hover="background-color:rgba(150,200,168,.13); color:#e8f3ec;">
+              <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:{{ tabFS }}; letter-spacing:{{ tabLS }}; text-transform:uppercase; white-space:nowrap; color:inherit;">{{ t.label }}</span>
               <sc-if value="{{ t.flash }}">
                 <span style="position:absolute; inset:0; border-radius:12px; pointer-events:none; background:rgba(150,200,168,.2); animation:tabFlash 2.6s ease-in-out infinite;"></span>
                 <span style="position:absolute; top:calc(50% + 9px); left:0; right:0; text-align:center; font-family:'IBM Plex Mono', monospace; font-size:{{ tabSubFS }}; letter-spacing:.24em; text-transform:uppercase; color:#7aa88a; animation:subFlash 2.6s ease-in-out infinite;">{{ t.sub }}</span>
@@ -1301,7 +1301,7 @@ class Component extends DCLogic {
       { title: 'Gameplay Systems', note: 'What I build', hex: '178,86,79', soft: '234,176,168',
         list: [['Combat systems', 1], ['Inventory & crafting', 1], ['Character controllers', 0], ['AI behaviour trees', 0], ['Progression & economy', 0], ['Save systems', 0], ['Physics interactions', 0], ['Ability frameworks', 0]] },
       { title: 'Engines & Tools', note: 'Where I build it', hex: '186,152,72', soft: '238,214,152',
-        list: [['Unreal Engine', 1], ['Unity', 0], ['GameMaker', 0], ['Perforce', 0], ['Git', 0], ['YouTrack', 0], ['Miro', 0], ['Figma', 0], ['Blender (basics)', 0], ['Custom editor tooling', 0]] },
+        list: [['Unreal Engine', 1], ['Unity', 0], ['GameMaker', 0], ['Perforce', 0], ['Git', 0], ['YouTrack', 0], ['Jira', 0], ['Trello', 0], ['Miro', 0], ['Figma', 0], ['Blender (basics)', 0]] },
       { title: 'Languages', note: 'How I build it', hex: '110,168,130', soft: '196,234,208',
         list: [['Blueprints', 1], ['C#', 0], ['C++', 0], ['Python', 0]] },
       { title: 'Design', note: 'The other half', hex: '92,140,176', soft: '186,214,238',
@@ -1504,7 +1504,7 @@ class Component extends DCLogic {
         flash: id === 'inventory' && !st.invSeen,
         subStill: id === 'inventory' && st.invSeen,
         sub: T('Projects'),
-        fg: uiTab === id ? '#f2f8f4' : 'inherit',
+        fg: uiTab === id ? '#f2f8f4' : 'rgba(197,221,205,.72)',
         onHover: () => {},
         onClick: () => this.go(id)
       })),
