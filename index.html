@@ -62,7 +62,7 @@
         <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; margin:{{ tabRowM }}; min-height:{{ tabRowH }}; border-top:1px solid {{ tabRowBd }};">
           <span style="position:absolute; bottom:-1px; height:2px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }}; left:0; width:{{ barW }}; transform:translateX({{ barX }}); opacity:{{ barO }}; transition:transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease;"></span>
           <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; transition:color .25s ease; color:rgba(220,231,223,.7); background-image:{{ dBloom }}; background-repeat:no-repeat; background-position:center; background-size:0% 0%; transition:background-size .4s cubic-bezier(.22,.9,.24,1), color .25s ease;" style-hover="background-size:190% 190%; color:#e8f3ec;">
+            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; background-color:rgba(150,200,168,0); border-radius:12px; transition:background-color .3s ease, color .25s ease;" style-hover="background-color:rgba(150,200,168,.13); color:#e8f3ec;">
               <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:{{ tabFS }}; letter-spacing:{{ tabLS }}; text-transform:uppercase; white-space:nowrap; color:{{ t.fg }};">{{ t.label }}</span>
               <sc-if value="{{ t.flash }}">
                 <span style="position:absolute; inset:0; border-radius:12px; pointer-events:none; background:rgba(150,200,168,.2); animation:tabFlash 2.6s ease-in-out infinite;"></span>
@@ -298,7 +298,7 @@
                         <div style="font-family:'Archivo', sans-serif; font-weight:700; font-size:{{ sysTitleFS }}; letter-spacing:.01em; color:{{ dHead }};">{{ sy.title }}</div>
                         <p style="font-size:{{ sysBodyFS }}; line-height:1.72; color:{{ dBody }}; margin:0; text-wrap:pretty; white-space:pre-line;">{{ sy.body }}</p>
                         <sc-if value="{{ sy.hasBlueprint }}" hint-placeholder-val="{{ true }}">
-                        <button type="button" onClick="{{ sy.openBlueprint }}" style="margin-top:5px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.18em; display:inline-flex; align-items:center; gap:9px; width:fit-content; padding:11px 17px; border-radius:999px; border:1px solid {{ dBtnBd }}; background:{{ dBtnBg }}; box-shadow:inset 0 1px 0 rgba(226,244,232,.16); color:{{ dHead }}; cursor:pointer; transition:all .2s ease;" style-hover="background:{{ dBtnBgHi }}; border-color:{{ dBtnBdHi }};"><span>{{ tSeeBlueprint }}</span><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; flex:none;"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"></path></svg></button>
+                        <button type="button" onClick="{{ sy.openBlueprint }}" style="margin-top:7px; font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:12.5px; letter-spacing:.17em; display:inline-flex; align-items:center; gap:11px; width:fit-content; padding:14px 22px; border-radius:14px; border:1px solid {{ dBtnBdHi }}; background-color:#20242a; background-image:repeating-linear-gradient(0deg, rgba(226,244,232,.07) 0 1px, transparent 1px 11px), repeating-linear-gradient(90deg, rgba(226,244,232,.07) 0 1px, transparent 1px 11px), repeating-linear-gradient(0deg, rgba(226,244,232,.16) 0 1px, transparent 1px 44px), repeating-linear-gradient(90deg, rgba(226,244,232,.16) 0 1px, transparent 1px 44px); box-shadow:inset 0 1px 0 rgba(226,244,232,.14), 0 6px 18px rgba(4,10,7,.4); color:#eef7f1; cursor:pointer; transition:box-shadow .2s ease, border-color .2s ease, color .2s ease;" style-hover="border-color:{{ dAcc }}; color:#ffffff; box-shadow:inset 0 1px 0 rgba(226,244,232,.2), 0 0 0 1px {{ dBtnBdHi }}, 0 8px 22px rgba(4,10,7,.5);"><span>{{ tSeeBlueprint }}</span><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block; flex:none;"><path d="M14 4h6v6"></path><path d="M20 4 11 13"></path><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"></path></svg></button>
                         </sc-if>
                       </div>
                       <div style="display:flex; flex-direction:column; gap:10px;">
@@ -997,7 +997,19 @@ class Component extends DCLogic {
       'Gameplay Programmer': 'Gameplay programozó', 'Developer': 'Fejlesztő',
       'Unreal / Blueprints / State Tree': 'Unreal / Blueprints / State Tree',
       '6 people': '6 fő', '8 people': '8 fő',
+      '1 month': '1 hónap',
       '2 months': '2 hónap', '3 months': '3 hónap', '4 months': '4 hónap',
+      'A rapid-prototyped project built around the words \u201cdream\u201d and \u201cup\u201d as its core theme.':
+        'Gyors prototípus, amelynek magját a „dream” és „up” szavak adták.',
+      'Side-scroller map design with a parallel world': 'Oldalnézetes pályatervezés párhuzamos világgal',
+      'Parallel worlds': 'Párhuzamos világok',
+      'Progression': 'Fejlődés',
+      'The level exists twice \u2014 the waking map and its dream counterpart \u2014 laid out over the same footprint. Platforms that block the way in one world are the path forward in the other, so progress means reading both layouts at once and switching at the right spot.\n\nSwitching keeps the player\u2019s position and momentum, which turns the swap itself into a platforming move: leap in one world, land in the other.':
+        'A pálya kétszer létezik \u2014 az éber világ és annak álombeli párja \u2014 ugyanarra az alaprajzra építve. Ami az egyik világban elzárja az utat, a másikban éppen az út maga, így a haladáshoz mindkét elrendezést egyszerre kell olvasni, és a megfelelő ponton váltani.\n\nA váltás megőrzi a játékos helyzetét és lendületét, így maga a világváltás is platformer-mozdulattá válik: az egyik világban ugrasz el, a másikban érsz földet.',
+      'Light collectibles are scattered along the route and drive the progression. Each one picked up feeds a counter that unlocks the next stretch of the map, so the player is always pulled a little further out than feels comfortable.\n\nGating the map this way keeps the platforming challenges optional in difficulty but mandatory in volume \u2014 the player chooses which routes to take, not whether to take them.':
+        'A fénygyűjtők végig ott vannak az útvonalon, és ők hajtják a fejlődést. Minden felvett darab egy számlálót töltöget, ami megnyitja a pálya következő szakaszát \u2014 a játékos így mindig egy kicsivel messzebb merészkedik, mint amit kényelmesnek érez.\n\nEz a kapuzás azt jelenti, hogy a platformer-kihívások nehézségben választhatók, mennyiségben viszont nem: a játékos azt döntheti el, melyik utat választja, nem azt, hogy választ-e egyáltalán.',
+      'Progression system': 'Fejlődési rendszer',
+      'Platformer challenges': 'Platformer kihívások',
       '6 months': '6 hónap', '10 months': '10 hónap',
 
       'Coop': 'Co-op', 'Simulator': 'Szimulátor', 'Simulation': 'Szimuláció',
@@ -1180,9 +1192,25 @@ class Component extends DCLogic {
             images: ['assets/city-sys01-street.png', 'assets/city-sys01-meshes.png', 'assets/city-sys01-bounds.png', 'assets/city-sys01-colors.png'],
             shots: [] }
         ] },
-      { slot: '07', name: "CargoVR", engine: 'Unity', year: '2023', tags: ["2023","Unity","VR","Puzzle"],
+      { slot: '08', name: "CargoVR", engine: 'Unity', year: '2023', tags: ["2023","Unity","VR","Puzzle"],
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] },
+      { slot: '07', name: "Dream Up", engine: 'Unreal', year: '2025', tags: ["2025","Unreal","Side scroller","Platformer"],
+        video: 'https://www.youtube-nocookie.com/embed/vpWsCWfbNCE?rel=0&modestbranding=1&playsinline=1',
+        videoLink: 'https://youtu.be/vpWsCWfbNCE',
+        cover: 'assets/dream-up-cover.jpg',
+        blurb: 'A rapid-prototyped project built around the words \u201cdream\u201d and \u201cup\u201d as its core theme.',
+        summary: 'A rapid-prototyped project built around the words \u201cdream\u201d and \u201cup\u201d as its core theme.',
+        meta: [{k:'Role',v:'Developer'},{k:'Team',v:'Solo development'},{k:'Engine',v:'Unreal / Blueprints'},{k:'Duration',v:'1 month'}],
+        built: ['Side-scroller map design with a parallel world', 'Progression system', 'Platformer challenges'],
+        systems: [
+          { title: 'Parallel worlds', body: 'The level exists twice \u2014 the waking map and its dream counterpart \u2014 laid out over the same footprint. Platforms that block the way in one world are the path forward in the other, so progress means reading both layouts at once and switching at the right spot.\n\nSwitching keeps the player\u2019s position and momentum, which turns the swap itself into a platforming move: leap in one world, land in the other.', tags: [],
+            blueprint: 'blueprint-viewer/index.html?src=assets/BP_SideScrollingCharacter.uasset,assets/DreamFunctionLibrary.uasset,assets/BP_NightmarePlatform.uasset,assets/BP_NightmareTurret.uasset',
+            shots: [] },
+          { title: 'Progression', body: 'Light collectibles are scattered along the route and drive the progression. Each one picked up feeds a counter that unlocks the next stretch of the map, so the player is always pulled a little further out than feels comfortable.\n\nGating the map this way keeps the platforming challenges optional in difficulty but mandatory in volume \u2014 the player chooses which routes to take, not whether to take them.', tags: [],
+            blueprint: 'blueprint-viewer/index.html?src=assets/BP_PickUp.uasset,assets/BP_CheckPoint.uasset,assets/W_Skills.uasset',
+            shots: [] }
+        ] },
       { slot: '04', name: "Slenderman AI", engine: 'Unreal', year: '2026', tags: ["2026","Unreal","AI"],
         download: 'https://drive.proton.me/urls/F00M0EPDBG#k60GFZpWcBzs',
         video: 'https://www.youtube-nocookie.com/embed/5NSeKn_xnmY?rel=0&modestbranding=1&playsinline=1',
@@ -1198,27 +1226,22 @@ class Component extends DCLogic {
             images: ['assets/slenderman-sys01-statetree.png', 'assets/slenderman-sys01-forest.png'],
             shots: [] }
         ] },
-      { slot: '08', name: "FPS Pistol Pack", engine: 'Unreal', year: '2024', tags: ["2024","Unreal","FPS"],
+      { slot: '09', name: "FPS Pistol Pack", engine: 'Unreal', year: '2024', tags: ["2024","Unreal","FPS"],
         video: 'https://www.youtube-nocookie.com/embed/cZ9cMuSwHW8?rel=0&modestbranding=1&playsinline=1',
         videoLink: 'https://youtu.be/cZ9cMuSwHW8',
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] },
-      { slot: '09', name: "My Terrarium", engine: 'Unreal', year: '2023', tags: ["2023","Unreal","Gardening"],
+      { slot: '10', name: "My Terrarium", engine: 'Unreal', year: '2023', tags: ["2023","Unreal","Gardening"],
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] },
-      { slot: '10', name: "Untitled FPS", engine: 'Unreal', year: '2023', tags: ["2023","Unreal","FPS","Combat"],
+      { slot: '11', name: "Untitled FPS", engine: 'Unreal', year: '2023', tags: ["2023","Unreal","FPS","Combat"],
         video: 'https://www.youtube-nocookie.com/embed/8FR451sOyys?rel=0&modestbranding=1&playsinline=1',
         videoLink: 'https://youtu.be/8FR451sOyys',
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] },
-      { slot: '11', name: "Haunted", engine: 'Unreal', year: '2022', tags: ["2022","Unreal","Endless Runner","Horror"],
+      { slot: '12', name: "Haunted", engine: 'Unreal', year: '2022', tags: ["2022","Unreal","Endless Runner","Horror"],
         video: 'https://www.youtube-nocookie.com/embed/_C1V8rwlVRA?rel=0&modestbranding=1&playsinline=1',
         videoLink: 'https://youtu.be/_C1V8rwlVRA',
-        blurb: 'Placeholder', summary: 'Placeholder',
-        meta: [], built: [] },
-      { slot: '12', name: "Dream Up", engine: 'Unreal', year: '2025', tags: ["2025","Unreal","Side scroller","Platformer"],
-        video: 'https://www.youtube-nocookie.com/embed/vpWsCWfbNCE?rel=0&modestbranding=1&playsinline=1',
-        videoLink: 'https://youtu.be/vpWsCWfbNCE',
         blurb: 'Placeholder', summary: 'Placeholder',
         meta: [], built: [] },
       { slot: '13', name: "Save the Century", engine: 'Unreal', year: '2026', tags: ["2026","Unreal","Simulation","Turn-based strategy"],
@@ -1637,7 +1660,7 @@ class Component extends DCLogic {
         { k:'itch.io', v:'itch.io/profile/ermendq', href:'https://itch.io/profile/ermendq', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
         { k:'GitHub', v:'github.com/ermendq', href:'https://github.com/ermendq', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
         { k:'LinkedIn', v:'linkedin.com/in/erik-thomas-abb447262', href:'https://www.linkedin.com/in/erik-thomas-abb447262/', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' },
-        { k:T('Résumé'), v:T('Download PDF'), href:'assets/Erik-Thomas-CV.pdf', download:'Erik-Thomas-CV.pdf', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' }
+        { k:T('Résumé'), v:T('Download PDF'), href: hu ? 'assets/Erik-Thomas-CV-HU.pdf' : 'assets/Erik-Thomas-CV-EN.pdf', download: hu ? 'Erik-Thomas-CV-HU.pdf' : 'Erik-Thomas-CV-EN.pdf', target:'_blank', rel:'noopener noreferrer', mark:'↗', markFS:'12px' }
       ]
     };
   }
