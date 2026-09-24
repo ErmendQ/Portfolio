@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Erik Thomas — Gameplay Programmer &amp; Systems Designer</title>
+<meta name="description" content="Portfolio of Erik Thomas, gameplay programmer and systems designer based in Budapest. Unreal Engine, Blueprints, C++ — combat, inventory and character systems.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#09130d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230f2418'/%3E%3Ctext%20x='32'%20y='43'%20font-family='Archivo,Helvetica,sans-serif'%20font-size='30'%20font-weight='700'%20text-anchor='middle'%20fill='%23b9d8c4'%3EET%3C/text%3E%3C/svg%3E">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -17,6 +22,9 @@
   a { color:#b9d8c4; text-decoration:none; }
   a:hover { color:#e8f3ec; }
   ::selection { background:rgba(122,168,138,.35); }
+  :focus-visible { outline:2px solid #9fd0b0; outline-offset:3px; border-radius:10px; }
+  button:focus-visible, [role="button"]:focus-visible { outline:2px solid #9fd0b0; outline-offset:-2px; }
+  input:focus-visible, textarea:focus-visible { outline:2px solid #9fd0b0; outline-offset:1px; }
   @keyframes drift { 0%{transform:scale(1.08) translate3d(0,0,0)} 50%{transform:scale(1.14) translate3d(-1.5%,-1%,0)} 100%{transform:scale(1.08) translate3d(0,0,0)} }
   @keyframes panelIn { from{opacity:0; transform:translateY(14px) scale(.985)} to{opacity:1; transform:none} }
   @keyframes viewIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
@@ -54,15 +62,15 @@
     <div style="position:relative; z-index:1; display:grid; grid-template-rows:auto 1fr auto; min-height:0;">
 
       <div style="position:relative; z-index:6; background:linear-gradient(180deg, rgba(240,250,244,.085) 0%, rgba(240,250,244,.02) 100%); backdrop-filter:blur(30px) saturate(2.1); -webkit-backdrop-filter:blur(30px) saturate(2.1); box-shadow:inset 0 1px 0 rgba(242,254,246,.24), 0 16px 30px -24px rgba(0,0,0,.6); display:flex; align-items:stretch; justify-content:space-between; border-bottom:1px solid rgba(226,244,232,.12); padding:{{ headPad }}; gap:{{ headGap }}; flex-direction:{{ headDir }}; max-height:{{ headH }}; opacity:{{ headO }}; overflow:hidden; pointer-events:{{ headPE }}; border-bottom-color:{{ headBd }}; transition:max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease;">
-        <div onClick="{{ goHome }}" title="{{ tBackStatus }}" style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:0 1 auto; min-width:0; cursor:pointer; transition:opacity .2s ease;" style-hover="opacity:.72;">
-          <div style="font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ nameFS }}; letter-spacing:.16em; line-height:1; white-space:nowrap;">ERIK THOMAS</div>
+        <div onClick="{{ goHome }}" title="{{ tBackStatus }}" style="display:flex; flex-direction:column; justify-content:center; padding:{{ headTitlePad }}; flex:0 1 auto; min-width:0; cursor:pointer; border-radius:10px; transition:opacity .2s ease;" style-hover="opacity:.72;">
+          <h1 style="margin:0; font-family:'Archivo', sans-serif; font-weight:800; font-size:{{ nameFS }}; letter-spacing:.16em; line-height:1; white-space:nowrap;">ERIK THOMAS</h1>
           <div style="font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:{{ dAcc }}; margin-top:8px;">{{ tRole }}</div>
         </div>
 
-        <div ref="{{ tabRowRef }}" style="position:relative; display:flex; align-items:stretch; gap:2px; margin:{{ tabRowM }}; min-height:{{ tabRowH }}; border-top:1px solid {{ tabRowBd }};">
+        <div ref="{{ tabRowRef }}" role="navigation" aria-label="{{ tSections }}" style="position:relative; display:flex; align-items:stretch; gap:2px; margin:{{ tabRowM }}; min-height:{{ tabRowH }}; border-top:1px solid {{ tabRowBd }};">
           <span style="position:absolute; bottom:-1px; height:2px; background:{{ dAcc }}; box-shadow:0 0 10px {{ dGlow }}; left:0; width:{{ barW }}; transform:translateX({{ barX }}); opacity:{{ barO }}; transition:transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease;"></span>
           <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
-            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; background-color:rgba(150,200,168,0); border-radius:12px; color:{{ t.fg }}; transition:background-color .3s ease, color .25s ease;" style-hover="background-color:rgba(150,200,168,.13); color:#e8f3ec;">
+            <button type="button" onClick="{{ t.onClick }}" onMouseEnter="{{ t.onHover }}" aria-current="{{ t.current }}" style="appearance:none; border:0; background:transparent; cursor:pointer; padding:{{ tabPad }}; flex:{{ tabFlex }}; min-width:0; display:flex; flex-direction:column; align-items:{{ tabAlign }}; justify-content:center; gap:7px; position:relative; background-color:rgba(150,200,168,0); border-radius:12px; color:{{ t.fg }}; transition:background-color .3s ease, color .25s ease;" style-hover="background-color:rgba(150,200,168,.13); color:#e8f3ec;">
               <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:{{ tabFS }}; letter-spacing:{{ tabLS }}; text-transform:uppercase; white-space:nowrap; color:inherit;">{{ t.label }}</span>
               <sc-if value="{{ t.flash }}">
                 <span style="position:absolute; inset:0; border-radius:12px; pointer-events:none; background:rgba(150,200,168,.2); animation:tabFlash 2.6s ease-in-out infinite;"></span>
@@ -75,8 +83,8 @@
           </sc-for>
           <div style="display:flex; align-items:center; padding-left:14px; flex:none;">
             <div style="display:flex; align-items:center; gap:2px; padding:3px; border-radius:999px; border:1px solid rgba(198,228,208,.22); background:rgba(18,32,24,.42); box-shadow:inset 0 1px 0 rgba(242,254,246,.16);">
-              <button type="button" onClick="{{ setEN }}" title="English" style="appearance:none; border:0; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; letter-spacing:.16em; padding:6px 10px; border-radius:999px; background:{{ enBg }}; color:{{ enFg }}; transition:background .22s ease, color .22s ease;" style-hover="color:#e8f3ec;">EN</button>
-              <button type="button" onClick="{{ setHU }}" title="Magyar" style="appearance:none; border:0; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; letter-spacing:.16em; padding:6px 10px; border-radius:999px; background:{{ huBg }}; color:{{ huFg }}; transition:background .22s ease, color .22s ease;" style-hover="color:#e8f3ec;">HU</button>
+              <button type="button" onClick="{{ setEN }}" title="English" aria-label="English" aria-pressed="{{ isEN }}" style="appearance:none; border:0; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; letter-spacing:.16em; padding:6px 10px; border-radius:999px; background:{{ enBg }}; color:{{ enFg }}; transition:background .22s ease, color .22s ease;" style-hover="color:#e8f3ec;">EN</button>
+              <button type="button" onClick="{{ setHU }}" title="Magyar" aria-label="Magyar" aria-pressed="{{ isHU }}" style="appearance:none; border:0; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:9.5px; letter-spacing:.16em; padding:6px 10px; border-radius:999px; background:{{ huBg }}; color:{{ huFg }}; transition:background .22s ease, color .22s ease;" style-hover="color:#e8f3ec;">HU</button>
             </div>
           </div>
         </div>
@@ -181,7 +189,7 @@
           <div style="padding:{{ gridPad }};">
             <div style="display:grid; grid-template-columns:{{ gridCols }}; gap:14px;">
               <sc-for list="{{ slots }}" as="p" hint-placeholder-count="6">
-                <button type="button" onClick="{{ p.onClick }}" onMouseEnter="{{ p.onHover }}" style="appearance:none; text-align:left; cursor:{{ p.cursor }}; border:1px solid rgba(198,228,208,.18); background:rgba(30,48,38,.34); box-shadow:inset 0 1px 0 rgba(240,252,244,.16), 0 12px 30px -24px rgba(0,0,0,.8); border-radius:20px; padding:0; overflow:hidden; display:flex; flex-direction:column; transition:transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease; opacity:{{ p.dim }};" style-hover="transform:translateY(-3px); border-color:rgba(160,206,176,.55); background:rgba(48,74,60,.34);">
+                <button type="button" onClick="{{ p.onClick }}" onMouseEnter="{{ p.onHover }}" aria-disabled="{{ p.locked }}" tabIndex="{{ p.tab }}" style="appearance:none; text-align:left; cursor:{{ p.cursor }}; border:1px solid rgba(198,228,208,.18); background:rgba(30,48,38,.34); box-shadow:inset 0 1px 0 rgba(240,252,244,.16), 0 12px 30px -24px rgba(0,0,0,.8); border-radius:20px; padding:0; overflow:hidden; display:flex; flex-direction:column; transition:transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease; opacity:{{ p.dim }};" style-hover="transform:translateY(-3px); border-color:rgba(160,206,176,.55); background:rgba(48,74,60,.34);">
                   <div style="position:relative; aspect-ratio:16/10; background:repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px); border-bottom:1px solid rgba(198,228,208,.14); display:flex; align-items:center; justify-content:center; overflow:hidden;">
                     <sc-if value="{{ p.hasCover }}">
                       <div style="position:absolute; inset:-8%; background:radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); filter:blur(18px); transform:scale(1.05);"></div>
@@ -365,7 +373,7 @@
                 <a href="{{ l.href }}" target="{{ l.target }}" rel="{{ l.rel }}" download="{{ l.download }}" data-copy="{{ l.copy }}" onClick="{{ onLinkClick }}" style="background:{{ l.bg }}; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px; transition:background .2s ease;" style-hover="background:rgba(24,40,32,.7);">
                   <span style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:.2em; color:{{ l.kCol }}; text-transform:uppercase; min-width:76px;">{{ l.k }}</span>
                   <span style="font-family:'Archivo', sans-serif; font-weight:600; font-size:14px; color:{{ l.vCol }}; flex:1; min-width:0; overflow-wrap:anywhere;">{{ l.v }}</span>
-                  <span style="font-family:'IBM Plex Mono', monospace; font-size:{{ l.markFS }}; letter-spacing:.16em; color:#7aa88a; white-space:nowrap;">{{ l.mark }}</span>
+                  <span style="font-family:'IBM Plex Mono', monospace; font-size:{{ l.markFS }}; letter-spacing:.16em; color:#a8cfb7; white-space:nowrap;">{{ l.mark }}</span>
                 </a>
               </sc-for>
             </div>
@@ -376,13 +384,13 @@
               </div>
               <div style="min-width:0; display:flex; flex-direction:column; gap:10px;">
               <div style="display:grid; grid-template-columns:{{ fbCols }}; gap:10px;">
-                <input type="text" value="{{ fbName }}" onChange="{{ onFbName }}" placeholder="{{ tFbName }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #e6efe9; background: rgba(14,26,20,.55); border: 1px solid rgba(198,228,208,.18); border-radius: 12px; padding: 13px 15px; outline: none; min-width: 0" style-focus="border-color:rgba(160,206,176,.55);">
-                <input type="email" value="{{ fbEmail }}" onChange="{{ onFbEmail }}" placeholder="{{ tFbEmail }}" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #e6efe9; background: rgba(14,26,20,.55); border: 1px solid rgba(198,228,208,.18); border-radius: 12px; padding: 13px 15px; outline: none; min-width: 0" style-focus="border-color:rgba(160,206,176,.55);">
+                <input type="text" value="{{ fbName }}" onChange="{{ onFbName }}" placeholder="{{ tFbName }}" aria-label="{{ tFbName }}" autoComplete="name" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #e6efe9; background: rgba(14,26,20,.55); border: 1px solid rgba(198,228,208,.18); border-radius: 12px; padding: 13px 15px; outline: none; min-width: 0" style-focus="border-color:rgba(160,206,176,.55);">
+                <input type="email" value="{{ fbEmail }}" onChange="{{ onFbEmail }}" placeholder="{{ tFbEmail }}" aria-label="{{ tFbEmail }}" autoComplete="email" style="font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; color: #e6efe9; background: rgba(14,26,20,.55); border: 1px solid rgba(198,228,208,.18); border-radius: 12px; padding: 13px 15px; outline: none; min-width: 0" style-focus="border-color:rgba(160,206,176,.55);">
               </div>
-              <textarea value="{{ fbText }}" onChange="{{ onFbText }}" placeholder="{{ tFbPlaceholder }}" rows="3" style="display:block; width:100%; box-sizing:border-box; font-family:'IBM Plex Sans', sans-serif; font-size:14px; line-height:1.65; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; resize:vertical;" style-focus="border-color:rgba(160,206,176,.55);"></textarea>
+              <textarea value="{{ fbText }}" onChange="{{ onFbText }}" placeholder="{{ tFbPlaceholder }}" aria-label="{{ tFbLabel }}" rows="3" style="display:block; width:100%; box-sizing:border-box; font-family:'IBM Plex Sans', sans-serif; font-size:14px; line-height:1.65; color:#e6efe9; background:rgba(14,26,20,.55); border:1px solid rgba(198,228,208,.18); border-radius:12px; padding:13px 15px; outline:none; resize:vertical;" style-focus="border-color:rgba(160,206,176,.55);"></textarea>
               <div style="display:flex; align-items:center; justify-content:flex-start; gap:16px; flex-wrap:wrap; margin-top:2px;">
                 <button type="button" onClick="{{ sendFeedback }}" style="appearance:none; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.2em; padding:13px 26px; border-radius:999px; border:1px solid rgba(160,206,176,.55); background:rgba(140,192,158,.2); box-shadow:inset 0 1px 0 rgba(226,244,232,.2); color:#eaf5ee;" style-hover="background:rgba(140,192,158,.32);">{{ tFbSend }}</button>
-                <span style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:{{ fbStatusCol }};">{{ fbStatus }}</span>
+                <span role="status" aria-live="polite" style="font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.14em; color:{{ fbStatusCol }};">{{ fbStatus }}</span>
               </div>
               </div>
             </div>
@@ -691,6 +699,7 @@ class Component extends DCLogic {
   componentDidMount() {
     this._raf = null;
     this.checkFades();
+    try { document.documentElement.lang = this.state.lang === 'hu' ? 'hu' : 'en'; } catch (e) {}
     this._mq = window.matchMedia('(max-width: 860px)');
     this._onMQ = () => this.setState({ mobile: this._mq.matches });
     if (this._mq.addEventListener) this._mq.addEventListener('change', this._onMQ); else this._mq.addListener(this._onMQ);
@@ -748,6 +757,7 @@ class Component extends DCLogic {
     if (l === this.state.lang) return;
     this.select();
     try { localStorage.setItem('et-lang', l); } catch (e) {}
+    try { document.documentElement.lang = l === 'hu' ? 'hu' : 'en'; } catch (e) {}
     /* Decode animation: the TARGET string renders from frame one, but each
        character stays masked by a random glyph until its own reveal threshold
        passes. Lengths are final immediately, so nothing reflows mid-decode. */
@@ -1412,10 +1422,12 @@ class Component extends DCLogic {
       coverBg: p.cover ? 'url("' + this.small(p.cover) + '")' : 'none',
       fadeKey: 'cover' + i, coverOp: fadeOf('cover' + i), onCover: () => this.markFade('cover' + i),
       onHover: () => {},
+      locked: p.cover ? null : 'true', tab: p.cover ? 0 : -1,
       onClick: p.cover ? (() => { this.select(); this.swap({ sel: i }); }) : (() => {})
     })).concat(empties.map(e => ({
       slot: e.slot, name: T('Empty slot'), engine: '—', year: '—', tags: ['—', '—'], thumb: T('available'), hasCover: false, noCover: true, hasDownload: false,
       blurb: T('Reserved for the next shipped thing.'), dim: .42, cursor: 'default',
+      locked: 'true', tab: -1,
       onHover: () => {}, onClick: () => {}
     })));
 
@@ -1509,6 +1521,7 @@ class Component extends DCLogic {
       barO: st.bar ? 1 : 0,
       tabs: defs.map(([id, label]) => ({
         id, label,
+        current: uiTab === id ? 'page' : null,
         hasSub: id === 'inventory',
         flash: id === 'inventory' && !st.invSeen,
         subStill: id === 'inventory' && st.invSeen,
@@ -1552,6 +1565,8 @@ class Component extends DCLogic {
       tabRowH: m ? '52px' : 'auto',
       tabRowM: m ? '0 -15px' : '0',
       goHome: () => this.go('status'),
+      goHomeKey: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.go('status'); } },
+      tSections: T('Sections'),
       tabRowBd: m ? 'rgba(198,228,208,.12)' : 'transparent',
       tabFlex: m ? '1 1 0' : 'none',
       tabAlign: m ? 'center' : 'flex-start',
@@ -1608,7 +1623,7 @@ class Component extends DCLogic {
       },
       stopBubble: (e) => e.stopPropagation(),
       dAcc: hs(S + 8, 63, 1),
-      dAccDim: hs(S + 6, 66, .62),
+      dAccDim: hs(S + 6, 66, .82),
       dBloom: 'radial-gradient(circle at center, ' + hs(S + 14, 72, .17) + ' 0%, ' + hs(S + 10, 64, .15) + ' 62%, ' + hs(S + 10, 64, .1) + ' 100%)',
       dGlow: hs(S + 8, 62, .85),
       dLine: hs(S + 18, 88, .15),
