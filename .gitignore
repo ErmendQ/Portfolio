@@ -1,0 +1,6 @@
+# Impeccable working files: review captures, decision pages, local overrides.
+.impeccable/review/
+.impeccable/questions/
+.impeccable/mocks/
+.impeccable/build/
+.impeccable/config.local.json

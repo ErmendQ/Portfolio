@@ -1,0 +1,62 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          "C:/Users/Erik/Desktop/Portfolio/index-v2.html"
+        ],
+        "createdAt": "2026-09-24T19:27:24.182Z",
+        "reason": "Claude: clipping is intentional — rounded media frames/cards clip their own image and veil layers; no tooltips or menus live inside them"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "C:/Users/Erik/Desktop/Portfolio/index-v2.html"
+        ],
+        "createdAt": "2026-09-24T19:46:25.364Z",
+        "reason": "Claude: index-v2.html is the faithful rebuild of the original design (user asked for larger UI changes to go in a separate duplicate, index-v3.html); this reproduces the original's type scale, shell resize motion, header bar and locked-slot hatching"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "C:/Users/Erik/Desktop/Portfolio/index-v2.html"
+        ],
+        "createdAt": "2026-09-24T19:46:25.540Z",
+        "reason": "Claude: index-v2.html is the faithful rebuild of the original design (user asked for larger UI changes to go in a separate duplicate, index-v3.html); this reproduces the original's type scale, shell resize motion, header bar and locked-slot hatching"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "C:/Users/Erik/Desktop/Portfolio/index-v2.html"
+        ],
+        "createdAt": "2026-09-24T19:46:25.715Z",
+        "reason": "Claude: index-v2.html is the faithful rebuild of the original design (user asked for larger UI changes to go in a separate duplicate, index-v3.html); this reproduces the original's type scale, shell resize motion, header bar and locked-slot hatching"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "C:/Users/Erik/Desktop/Portfolio/index-v2.html"
+        ],
+        "createdAt": "2026-09-24T19:46:25.901Z",
+        "reason": "Claude: index-v2.html is the faithful rebuild of the original design (user asked for larger UI changes to go in a separate duplicate, index-v3.html); this reproduces the original's type scale, shell resize motion, header bar and locked-slot hatching"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "C:/Users/Erik/Desktop/Portfolio/index-v2.html"
+        ],
+        "createdAt": "2026-09-24T19:46:26.082Z",
+        "reason": "Claude: index-v2.html is the faithful rebuild of the original design (user asked for larger UI changes to go in a separate duplicate, index-v3.html); this reproduces the original's type scale, shell resize motion, header bar and locked-slot hatching"
+      }
+    ]
+  }
+}

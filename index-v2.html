@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Erik Thomas — Gameplay Programmer &amp; Systems Designer</title>
+<meta name="description" content="Portfolio of Erik Thomas, gameplay programmer and systems designer based in Budapest. Unreal Engine, Blueprints, C++ — combat, inventory and character systems.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#09130d">
+<link rel="canonical" href="https://erikthomas.dev/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://erikthomas.dev/">
+<meta property="og:title" content="Erik Thomas — Gameplay Programmer &amp; Systems Designer">
+<meta property="og:description" content="Gameplay systems in Unreal Engine: inventory, combat, AI and multiplayer case studies.">
+<meta property="og:image" content="https://erikthomas.dev/assets/web/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230f2418'/%3E%3Ctext%20x='32'%20y='43'%20font-family='Archivo,Helvetica,sans-serif'%20font-size='30'%20font-weight='700'%20text-anchor='middle'%20fill='%23b9d8c4'%3EET%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400&amp;display=swap">
+<link rel="preload" as="image" href="assets/web/portrait-800.webp" imagesrcset="assets/web/portrait-400.webp 400w, assets/web/portrait-800.webp 800w, assets/web/portrait-1600.webp 1600w" imagesizes="(max-width: 860px) 100vw, 300px" fetchpriority="high">
+<style>
+/* Accent colours follow the open project's cover hue (--h/--s, set from JS);
+   outside a case study they sit on the base pine, 145/20. */
+:root {
+  --h: 145; --s: 20;
+  --acc: hsl(var(--h), calc((var(--s) + 8) * 1%), 63%);
+  --acc-dim: hsla(var(--h), calc((var(--s) + 6) * 1%), 66%, .82);
+  --glow: hsla(var(--h), calc((var(--s) + 8) * 1%), 62%, .85);
+  --line: hsla(var(--h), calc((var(--s) + 18) * 1%), 88%, .15);
+  --card: hsla(var(--h), calc((var(--s) + 30) * 1%), 93%, .05);
+  --btn-bd: hsla(var(--h), calc((var(--s) + 20) * 1%), 79%, .44);
+  --btn-bd-hi: hsla(var(--h), calc((var(--s) + 20) * 1%), 79%, .72);
+  --head: hsl(var(--h), calc((var(--s) - 2) * 1%), 96%);
+  --body: hsla(var(--h), calc((var(--s) - 4) * 1%), 90%, .72);
+  --muted: hsla(var(--h), calc((var(--s) - 6) * 1%), 87%, .64);
+  --dl-bg: hsla(var(--h), calc((var(--s) + 26) * 1%), 64%, .95);
+  --dl-bg-hi: hsl(var(--h), calc((var(--s) + 26) * 1%), 71%);
+  --dl-fg: hsl(var(--h), calc((var(--s) + 34) * 1%), 11%);
+  --dl-shadow: hsla(var(--h), calc((var(--s) + 20) * 1%), 50%, .3);
+  --tint: hsla(var(--h), calc((var(--s) + 26) * 1%), 26%, .16);
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --disp: 'Archivo', system-ui, sans-serif;
+  --sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --stick: 0px;
+}
+html, body { margin: 0; padding: 0; background: #09130d; }
+body { font-family: var(--sans); color: #dbe8de; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+a { color: #b9d8c4; text-decoration: none; }
+button { font: inherit; color: inherit; }
+img, video { display: block; }
+::selection { background: rgba(122,168,138,.35); }
+:focus-visible { outline: 2px solid #9fd0b0; outline-offset: 3px; border-radius: 10px; }
+button:focus-visible { outline-offset: -2px; }
+input:focus-visible, textarea:focus-visible { outline-offset: 1px; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: rgba(178,214,190,.22); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+* { scrollbar-width: thin; scrollbar-color: rgba(178,214,190,.28) transparent; }
+.lbl { font: 9.5px var(--mono); letter-spacing: .28em; color: #7aa88a; text-transform: uppercase; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@keyframes drift { 0%, 100% { transform: scale(1.08) translate3d(0,0,0); } 50% { transform: scale(1.14) translate3d(-1.5%,-1%,0); } }
+@keyframes panelIn { from { opacity: 0; transform: translateY(14px) scale(.985); } }
+@keyframes lineIn { from { opacity: 0; transform: translateY(6px); } }
+@keyframes caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes tabFlash { 0%, 100% { opacity: .12; } 50% { opacity: .55; } }
+@keyframes subFlash { 0%, 100% { opacity: .45; } 50% { opacity: .95; } }
+
+/* Backdrop. The images are pre-blurred by tools/optimize-media.py, so nothing
+   here runs a CSS blur; only the transform drifts, and only on desktop. */
+.bg { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+.bg > div { position: absolute; inset: 0; }
+.bg .img { inset: -6%; background: center / cover no-repeat; }
+.bg .base { background-image: url(assets/web/backdrop-bg.webp); }
+.bg .cover, .bg .cold { opacity: 0; transition: opacity .6s ease; }
+.bg .vig { background: radial-gradient(120% 90% at 50% 40%, rgba(12,32,22,.2) 0%, rgba(5,16,11,.7) 80%); }
+.bg .warm { background: rgba(30,84,58,.14); mix-blend-mode: soft-light; transition: opacity .6s ease; }
+.bg .cold { background: var(--tint); mix-blend-mode: soft-light; }
+.is-cold .bg .cover, .is-cold .bg .cold { opacity: 1; }
+.is-cold .bg .warm { opacity: 0; }
+
+/* Shell */
+.stage { position: relative; height: 100vh; height: 100dvh; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 28px; box-sizing: border-box; }
+.shell {
+  position: relative; width: 100%; max-width: 1360px;
+  height: min(860px, calc(100vh - 56px)); height: min(860px, calc(100dvh - 56px));
+  border-radius: 34px; border: 1px solid rgba(226,244,232,.17); box-sizing: border-box;
+  background: linear-gradient(158deg, rgba(236,248,240,.07) 0%, rgba(210,232,218,.035) 46%, rgba(6,14,10,.14) 100%);
+  -webkit-backdrop-filter: blur(42px) saturate(2.3) brightness(1.04); backdrop-filter: blur(42px) saturate(2.3) brightness(1.04);
+  box-shadow: 0 44px 130px rgba(0,0,0,.5), 0 2px 12px rgba(0,0,0,.26), 0 0 0 .5px rgba(226,244,232,.16), inset 0 1px 0 rgba(242,254,246,.36), inset 0 -1px 0 rgba(200,226,210,.09), inset 0 -40px 70px -50px rgba(0,0,0,.42);
+  display: grid; grid-template-rows: auto minmax(0, 1fr); overflow: hidden;
+  animation: panelIn .7s cubic-bezier(.2,.7,.25,1) backwards;
+  transition: max-width .34s cubic-bezier(.25,.8,.3,1), height .34s cubic-bezier(.25,.8,.3,1);
+}
+.shell::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(158deg, rgba(196,220,255,.06) 0%, rgba(150,180,225,.03) 46%, rgba(6,10,20,.16) 100%); opacity: 0; transition: opacity .6s ease; }
+.is-cold .shell::before { opacity: 1; }
+.is-detail .shell { max-width: max(1360px, 92vw); height: max(min(860px, calc(100vh - 56px)), min(92vh, calc(100vh - 24px))); height: max(min(860px, calc(100dvh - 56px)), min(92dvh, calc(100dvh - 24px))); }
+
+/* Header */
+.head { position: relative; z-index: 6; display: flex; align-items: stretch; justify-content: space-between; gap: 24px; padding: 0 22px; max-height: 124px; overflow: hidden; background: linear-gradient(180deg, rgba(240,250,244,.085) 0%, rgba(240,250,244,.02) 100%); box-shadow: inset 0 1px 0 rgba(242,254,246,.24), 0 16px 30px -24px rgba(0,0,0,.6); border-bottom: 1px solid rgba(198,228,208,.15); transition: max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease, border-color .22s ease; }
+.is-detail .head { max-height: 0; opacity: 0; pointer-events: none; border-bottom-color: transparent; visibility: hidden; transition: max-height .32s cubic-bezier(.25,.8,.3,1), opacity .22s ease, visibility 0s .32s; }
+.brand { display: flex; flex-direction: column; justify-content: center; padding: 18px 0; min-width: 0; border-radius: 10px; color: inherit; transition: opacity .2s ease; }
+.brand h1 { margin: 0; font: 800 23px/1 var(--disp); letter-spacing: .16em; white-space: nowrap; }
+.brand .role { font: 10.5px/1.35 var(--mono); letter-spacing: .28em; text-transform: uppercase; color: var(--acc); margin-top: 8px; }
+.head-r { display: flex; align-items: stretch; }
+.tabs { position: relative; display: flex; align-items: stretch; gap: 2px; }
+.tabs .bar { position: absolute; bottom: -1px; left: 0; width: 0; height: 2px; background: var(--acc); box-shadow: 0 0 10px var(--glow); opacity: 0; transition: transform .42s cubic-bezier(.22,.9,.24,1), width .42s cubic-bezier(.22,.9,.24,1), opacity .25s ease; }
+.tab { position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 0 20px; border-radius: 12px; color: rgba(197,221,205,.72); transition: background-color .3s ease, color .25s ease; }
+.tab .t { font: 600 12.5px var(--disp); letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; }
+.tab[aria-current="page"] { color: #f2f8f4; }
+.tab .sub { position: absolute; top: calc(50% + 9px); left: 0; right: 0; text-align: center; font: 8.5px var(--mono); letter-spacing: .24em; text-transform: uppercase; color: var(--acc-dim); }
+.tab.flash .sub { color: #7aa88a; animation: subFlash 2.6s ease-in-out infinite; }
+.tab.flash::after { content: ''; position: absolute; inset: 0; border-radius: 12px; pointer-events: none; background: rgba(150,200,168,.2); animation: tabFlash 2.6s ease-in-out infinite; }
+.lang { display: flex; align-items: center; padding-left: 14px; flex: none; }
+.lang-pill { display: flex; gap: 2px; padding: 3px; border-radius: 999px; border: 1px solid rgba(198,228,208,.22); background: rgba(18,32,24,.42); box-shadow: inset 0 1px 0 rgba(242,254,246,.16); }
+.lang button { appearance: none; border: 0; cursor: pointer; font: 500 9.5px var(--mono); letter-spacing: .16em; padding: 6px 10px; border-radius: 999px; background: transparent; color: rgba(197,221,205,.6); transition: background .22s ease, color .22s ease; }
+.lang button[aria-pressed="true"] { background: rgba(150,200,168,.28); color: #f2f8f4; }
+
+/* View + swap transition */
+.view { position: relative; min-height: 0; overflow: auto; overscroll-behavior: contain; padding-bottom: 22px; transition: opacity .3s ease, filter .34s cubic-bezier(.3,.7,.3,1), transform .34s cubic-bezier(.3,.7,.3,1); }
+.view.out { opacity: 0; filter: blur(14px); transform: scale(1.012); }
+.view:focus { outline: none; }
+
+/* Status */
+.v-status { padding: 36px 40px; display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 44px; }
+.col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.portrait { position: relative; aspect-ratio: 3/4; border-radius: 22px; border: 1px solid rgba(198,228,208,.2); box-shadow: inset 0 1px 0 rgba(226,244,232,.16); background: radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); display: flex; align-items: flex-end; padding: 14px; overflow: hidden; }
+.portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 26%; transform: scale(1.08); transform-origin: 50% 26%; }
+.portrait::before, .portrait::after { content: ''; position: absolute; width: 14px; height: 14px; z-index: 3; }
+.portrait::before { top: 10px; left: 10px; border-top: 1px solid rgba(122,168,138,.8); border-left: 1px solid rgba(122,168,138,.8); }
+.portrait::after { bottom: 10px; right: 10px; border-bottom: 1px solid rgba(122,168,138,.8); border-right: 1px solid rgba(122,168,138,.8); }
+.portrait .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,26,19,0) 0%, rgba(14,26,19,.04) 50%, rgba(14,26,19,.55) 100%); }
+.portrait .ring { position: absolute; inset: -1px; border-radius: 22px; background: radial-gradient(115% 105% at 50% 42%, rgba(30,48,38,0) 42%, rgba(30,48,38,.34) 74%, rgba(26,44,34,.72) 100%); }
+.portrait .cap { position: relative; font: 10px var(--mono); letter-spacing: .2em; color: rgba(226,244,232,.82); }
+.fade { opacity: 0; transition: opacity .5s ease; }
+.fade.in { opacity: 1; }
+.cells { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(198,228,208,.14); border: 1px solid rgba(198,228,208,.16); border-radius: 18px; overflow: hidden; }
+.cells > div { background: rgba(28,44,36,.30); padding: 12px 13px; min-width: 0; }
+.cells .k { font: 9px var(--mono); letter-spacing: .2em; color: rgba(197,221,205,.62); text-transform: uppercase; }
+.cells .v { font: 600 13px var(--disp); margin-top: 6px; color: #e2ede5; }
+.lead { font: 500 26px/1.4 var(--disp); letter-spacing: -.01em; margin: 14px 0 0; text-wrap: pretty; color: #eaf2ec; }
+.intro { font-size: 15px; line-height: 1.75; color: rgba(217,230,221,.72); margin: 18px 0 0; text-wrap: pretty; }
+.focus { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(198,228,208,.13); border: 1px solid rgba(198,228,208,.15); border-radius: 18px; overflow: hidden; }
+.focus > div { background: rgba(28,44,36,.26); padding: 18px 20px; }
+.focus .k { font: 700 13px var(--disp); letter-spacing: .12em; text-transform: uppercase; color: #b9d8c4; }
+.focus .v { font-size: 13.5px; line-height: 1.6; color: rgba(217,230,221,.66); margin-top: 8px; }
+.feat { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; padding: 16px; border-radius: 20px; border: 1px solid rgba(198,228,208,.18); background: rgba(30,48,38,.26); box-shadow: inset 0 1px 0 rgba(226,244,232,.14); color: inherit; transition: transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease; }
+.feat .thumb { position: relative; flex: 1 1 190px; max-width: 190px; min-width: 150px; aspect-ratio: 16/10; border-radius: 14px; overflow: hidden; border: 1px solid rgba(198,228,208,.16); background: #1b3a29; }
+.feat .thumb img, .card .cov img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+.badge { position: absolute; top: 8px; left: 9px; z-index: 2; padding: 2px 6px; border-radius: 6px; background: rgba(8,16,11,.62); box-shadow: inset 0 1px 0 rgba(242,254,246,.2); font: 9px var(--mono); letter-spacing: .16em; color: rgba(190,222,202,.95); }
+.feat .txt { flex: 1 1 230px; min-width: 0; display: flex; flex-direction: column; gap: 9px; }
+.feat .name { font: 700 17px var(--disp); letter-spacing: .05em; color: #eaf3ec; }
+.feat .blurb { font-size: 13.5px; line-height: 1.55; color: rgba(217,230,221,.66); }
+.feat .row { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 2px; }
+.feat .open { font: 10px var(--mono); letter-spacing: .18em; color: #7aa88a; margin-left: auto; white-space: nowrap; }
+.chip { font: 10px var(--mono); letter-spacing: .1em; padding: 4px 9px; border-radius: 999px; border: 1px solid rgba(198,228,208,.2); background: rgba(122,168,138,.08); color: rgba(197,221,205,.7); }
+
+/* Skills */
+.v-skills { padding: 34px 40px 44px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.branch .top { border: 1px solid rgba(var(--c), .42); background: rgba(var(--c), .16); box-shadow: inset 0 1px 0 rgba(240,250,244,.2), 0 0 22px rgba(var(--c), .16); border-radius: 16px; padding: 13px 14px 12px; }
+.branch .title { font: 700 12.5px var(--disp); letter-spacing: .13em; text-transform: uppercase; color: rgb(var(--soft)); text-wrap: pretty; }
+.branch .note { font: 9px var(--mono); letter-spacing: .15em; color: rgba(197,221,205,.62); margin-top: 6px; text-transform: uppercase; }
+.branch .stem { width: 1px; height: 14px; margin-left: 22px; background: rgba(var(--c), .34); }
+.branch ul { position: relative; list-style: none; margin: 0; padding: 0 0 0 22px; display: flex; flex-direction: column; gap: 7px; }
+.branch ul::before { content: ''; position: absolute; left: 22px; top: 0; bottom: 13px; width: 1px; background: rgba(var(--c), .34); }
+.branch li { position: relative; display: flex; }
+.branch li::before { content: ''; position: absolute; left: -22px; top: 50%; width: 15px; height: 1px; background: rgba(var(--c), .34); }
+.branch li::after { content: ''; position: absolute; left: -9px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 1px; transform: rotate(45deg); background: rgba(var(--c), .55); }
+.branch li span { flex: 1; font: 12.5px var(--mono); letter-spacing: .06em; padding: 12px 13px; border-radius: 11px; border: 1px solid rgba(198,228,208,.16); background: rgba(var(--c), .09); box-shadow: inset 0 1px 0 rgba(226,244,232,.1); color: #cadecf; transition: filter .2s ease, border-color .2s ease; }
+
+/* Inventory grid */
+.v-grid { padding: 32px 40px 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.card { position: relative; border: 1px solid rgba(198,228,208,.18); background: rgba(30,48,38,.34); box-shadow: inset 0 1px 0 rgba(240,252,244,.16), 0 12px 30px -24px rgba(0,0,0,.8); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; color: inherit; transition: transform .28s cubic-bezier(.2,.7,.25,1), border-color .28s ease, background .28s ease; }
+.card.locked { opacity: .55; cursor: default; }
+.card .cov { position: relative; aspect-ratio: 16/10; background: repeating-linear-gradient(135deg, rgba(214,236,222,.05) 0 9px, rgba(214,236,222,0) 9px 18px); border-bottom: 1px solid rgba(198,228,208,.14); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.card .has { background: radial-gradient(120% 100% at 45% 35%, #2c5c41 0%, #1b3a29 55%, #112418 100%); }
+.card .soon { font: 9.5px var(--mono); letter-spacing: .2em; color: rgba(197,221,205,.62); }
+.card .badge { top: 9px; left: 10px; font-size: 9.5px; color: rgba(178,214,190,.95); }
+.card .txt { padding: 14px 15px 16px; display: flex; flex-direction: column; gap: 9px; }
+.card .name { display: flex; align-items: center; gap: 8px; font: 700 15.5px var(--disp); letter-spacing: .06em; color: #e8f1ea; }
+.dl-ico { display: inline-flex; align-items: center; justify-content: center; width: 19px; height: 19px; flex: none; border-radius: 6px; border: 1px solid rgba(160,206,176,.4); background: rgba(140,192,158,.18); color: #bfe0cc; font-size: 11px; line-height: 1; }
+.card .blurb { font-size: 12.5px; line-height: 1.55; color: rgba(217,230,221,.6); }
+.tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 2px; }
+.tags .chip { padding: 4px 8px; }
+
+/* Case study */
+.v-detail { padding: 26px 40px 44px; }
+.backbar { position: sticky; top: 0; z-index: 12; margin: -26px -40px 0; padding: 20px 40px 14px; display: flex; background: linear-gradient(180deg, rgba(8,14,20,.72) 0%, rgba(8,14,20,.46) 62%, rgba(8,14,20,0) 100%); -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6); }
+.back { appearance: none; cursor: pointer; border-radius: 999px; border: 1px solid rgba(255,255,255,.5); background: rgba(255,255,255,.9); box-shadow: 0 4px 18px rgba(0,0,0,.35); color: #101820; font: 500 10px var(--mono); letter-spacing: .2em; padding: 10px 17px; transition: all .2s ease; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 40px; margin-top: 24px; align-items: start; }
+.hero { position: relative; aspect-ratio: 16/9; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); box-shadow: inset 0 1px 0 rgba(226,244,232,.16); background: var(--card); }
+.hero img, .hero iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
+.yt { appearance: none; position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; cursor: pointer; background: #0a0f0d; }
+.yt .play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(226,244,232,.34); background: rgba(9,19,13,.55); box-shadow: inset 0 1px 0 rgba(242,254,246,.24), 0 10px 30px rgba(0,0,0,.4); color: #f2f8f4; font-size: 20px; padding-left: 4px; box-sizing: border-box; transition: transform .2s ease, background .2s ease; }
+.hero .ytlink { position: absolute; right: 12px; bottom: 12px; z-index: 2; font: 9px var(--mono); letter-spacing: .2em; text-transform: uppercase; padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); background: rgba(9,19,13,.62); box-shadow: inset 0 1px 0 rgba(242,254,246,.2); color: rgba(226,244,232,.8); }
+.info { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.kicker { font: 9.5px var(--mono); letter-spacing: .24em; color: var(--acc); }
+.ptitle { font: 800 34px/1.1 var(--disp); letter-spacing: -.01em; margin: 10px 0 0; color: var(--head); }
+.summary { font-size: 14.5px; line-height: 1.65; color: var(--body); margin: 12px 0 0; text-wrap: pretty; }
+.dl { display: inline-flex; align-items: center; gap: 11px; align-self: flex-start; font: 600 10.5px var(--mono); letter-spacing: .2em; text-transform: uppercase; padding: 15px 24px; border-radius: 999px; background: var(--dl-bg); box-shadow: 0 10px 30px var(--dl-shadow), inset 0 1px 0 rgba(255,255,255,.34); color: var(--dl-fg); transition: background .2s ease, transform .2s ease; }
+.dl span:first-child { font-size: 14px; line-height: 1; }
+.meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.meta > div { background: var(--card); padding: 12px 14px; min-width: 0; }
+.meta .k { font: 9px var(--mono); letter-spacing: .2em; color: var(--muted); text-transform: uppercase; }
+.meta .v { font: 600 13px var(--disp); margin-top: 6px; color: var(--head); }
+.built { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+.built li { display: grid; grid-template-columns: 14px 1fr; gap: 11px; font-size: 14px; line-height: 1.6; color: var(--body); }
+.built li::before { content: ''; width: 6px; height: 6px; background: var(--acc); margin-top: 7px; }
+.sec-lbl { font: 9.5px var(--mono); letter-spacing: .24em; color: var(--acc); text-transform: uppercase; }
+.systems { margin-top: 52px; border-top: 1px solid var(--line); padding-top: 34px; }
+.sys-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 20px; }
+.h2 { font: 700 26px var(--disp); letter-spacing: -.01em; margin: 11px 0 0; color: var(--head); }
+.count { font: 10px var(--mono); color: var(--muted); }
+.sys-list { display: flex; flex-direction: column; gap: 18px; margin-top: 26px; }
+.sys { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 30px; align-items: start; border: 1px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: inset 0 1px 0 rgba(240,252,244,.15), 0 14px 34px -28px rgba(0,0,0,.8); padding: 24px 26px; }
+.sys .txt { display: flex; flex-direction: column; align-items: flex-start; gap: 13px; min-width: 0; }
+.sys .idx { font: 9px var(--mono); letter-spacing: .22em; color: var(--acc); }
+.sys h3 { margin: 0; font: 700 18px var(--disp); letter-spacing: .01em; color: var(--head); }
+.sys p { font-size: 13.5px; line-height: 1.72; color: var(--body); margin: 0; text-wrap: pretty; white-space: pre-line; }
+.bp-btn { margin-top: 7px; font: 700 12.5px var(--mono); letter-spacing: .17em; display: inline-flex; align-items: center; gap: 11px; padding: 14px 22px; border-radius: 14px; border: 1px solid var(--btn-bd-hi); background-color: #20242a; background-image: repeating-linear-gradient(0deg, rgba(226,244,232,.07) 0 1px, transparent 1px 11px), repeating-linear-gradient(90deg, rgba(226,244,232,.07) 0 1px, transparent 1px 11px), repeating-linear-gradient(0deg, rgba(226,244,232,.16) 0 1px, transparent 1px 44px), repeating-linear-gradient(90deg, rgba(226,244,232,.16) 0 1px, transparent 1px 44px); box-shadow: inset 0 1px 0 rgba(226,244,232,.14), 0 6px 18px rgba(4,10,7,.4); color: #eef7f1; cursor: pointer; transition: box-shadow .2s ease, border-color .2s ease, color .2s ease; }
+.bp-btn svg { flex: none; }
+
+/* Media viewer (inline and big screen share the markup) */
+.mv { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.mv .stage-box { position: relative; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #0a0f0d; }
+.mv .media { position: absolute; inset: 0; }
+.mv .media > * { width: 100%; height: 100%; object-fit: cover; }
+.mv .veil { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #05080b; opacity: 0; transition: opacity .17s ease; }
+.mv .veil.on { opacity: 1; }
+.ctl { position: absolute; z-index: 3; appearance: none; cursor: pointer; border-radius: 999px; border: 1px solid var(--btn-bd); background: rgba(8,14,20,.62); box-shadow: inset 0 1px 0 rgba(242,254,246,.22), 0 6px 18px -10px rgba(0,0,0,.7); color: var(--head); transition: background .2s ease, border-color .2s ease; }
+.ctl.big { top: 10px; right: 10px; font: 9px var(--mono); letter-spacing: .18em; text-transform: uppercase; padding: 7px 11px; }
+.ctl.prev, .ctl.next { top: 50%; transform: translateY(-50%); width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1; }
+.ctl.prev { left: 10px; } .ctl.next { right: 10px; }
+.mv .counter { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 3; font: 8.5px var(--mono); letter-spacing: .2em; padding: 5px 10px; border-radius: 999px; background: rgba(8,14,20,.62); box-shadow: inset 0 1px 0 rgba(242,254,246,.18); color: var(--body); pointer-events: none; }
+.thumbs { display: flex; gap: 8px; flex-wrap: wrap; }
+.thumbs button { position: relative; width: 92px; aspect-ratio: 16/10; padding: 0; overflow: hidden; border-radius: 10px; border: 1px solid var(--line); background: var(--card); opacity: .55; cursor: pointer; transition: opacity .2s ease, border-color .2s ease; }
+.thumbs button[aria-current="true"] { opacity: 1; border-color: var(--btn-bd-hi); }
+.thumbs img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.thumbs .vid { position: absolute; top: 5px; left: 6px; z-index: 2; font: 7.5px var(--mono); padding: 2px 5px; border-radius: 5px; background: rgba(8,14,20,.68); color: var(--head); }
+
+/* Contact */
+.v-contact { padding: 22px 40px 18px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 18px 40px; align-items: start; }
+.c-lead { font: 500 26px/1.3 var(--disp); margin: 10px 0 0; color: #eef5f0; text-wrap: pretty; }
+.c-body { font-size: 14px; line-height: 1.55; color: rgba(226,238,231,.84); margin: 10px 0 0; text-wrap: pretty; }
+.c-body span { display: block; margin-top: 7px; }
+.pill-btn { appearance: none; cursor: pointer; display: inline-flex; align-items: center; font: 12.5px var(--mono); letter-spacing: .04em; padding: 13px 21px; border-radius: 999px; border: 1px solid rgba(160,206,176,.55); background: rgba(140,192,158,.2); box-shadow: inset 0 1px 0 rgba(226,244,232,.2); color: #eaf5ee; margin-top: 14px; transition: background .2s ease; }
+.swap { display: grid; justify-items: start; transition: opacity .17s ease; }
+.swap > span { grid-area: 1 / 1; white-space: nowrap; transition: opacity .17s ease; }
+.swap .b, .copied .swap .a { opacity: 0; }
+.copied .swap .b { opacity: 1; }
+.swap.fading { opacity: 0; }
+.links { display: flex; flex-direction: column; gap: 1px; background: rgba(198,228,208,.13); border: 1px solid rgba(198,228,208,.15); border-radius: 18px; overflow: hidden; }
+.links a { background: rgba(28,44,36,.28); padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: background .2s ease; }
+.links .k { font: 9.5px var(--mono); letter-spacing: .2em; color: rgba(197,221,205,.62); text-transform: uppercase; min-width: 76px; }
+.links .v { font: 600 14px var(--disp); color: #dfeae2; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.links .m { font: 12px var(--mono); letter-spacing: .16em; color: #a8cfb7; white-space: nowrap; }
+.links .cv { background: rgba(140,192,158,.16); }
+.links .cv .k { color: rgba(178,216,190,.82); }
+.links .cv .v { color: #f0f8f3; }
+.links .cv .m { font-size: 11px; }
+.fb { grid-column: 1 / -1; border: 1px solid rgba(198,228,208,.15); border-radius: 18px; background: rgba(28,44,36,.28); padding: 18px 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+.fb .note { display: flex; flex-direction: column; gap: 7px; padding-bottom: 12px; border-bottom: 1px solid rgba(198,228,208,.12); }
+.fb .note p { font-size: 13.5px; line-height: 1.6; color: rgba(217,230,221,.7); margin: 0; text-wrap: pretty; }
+.fb .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fb input, .fb textarea { font: 14px var(--sans); color: #e6efe9; background: rgba(14,26,20,.55); border: 1px solid rgba(198,228,208,.18); border-radius: 12px; padding: 13px 15px; outline: none; min-width: 0; box-sizing: border-box; width: 100%; transition: border-color .2s ease; }
+.fb textarea { display: block; line-height: 1.65; resize: vertical; min-height: 96px; }
+.fb input:focus, .fb textarea:focus { border-color: rgba(160,206,176,.55); }
+.fb ::placeholder { color: rgba(217,230,221,.45); }
+.fb .send-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 2px; }
+.fb .send { font-size: 11px; letter-spacing: .2em; padding: 13px 26px; margin: 0; }
+.fb .send:disabled { opacity: .6; cursor: wait; }
+.fb .status { font: 10px var(--mono); letter-spacing: .14em; color: rgba(150,200,168,.85); }
+.fb .status.err { color: rgba(226,150,140,.9); }
+.fb .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+/* Boot */
+.boot { position: absolute; inset: 0; z-index: 20; background: rgba(9,16,12,.9); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity .25s ease; }
+.boot[hidden] { display: none; }
+.boot.done { opacity: 0; pointer-events: none; }
+.boot div { font: 11px var(--mono); letter-spacing: .26em; color: #7aa88a; animation: lineIn .3s ease both; }
+.boot i { width: 8px; height: 14px; background: #7aa88a; animation: caret .9s steps(1) infinite; }
+
+/* Overlays */
+dialog.ov { position: fixed; inset: 0; z-index: 100; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; box-sizing: border-box; color: #eef2f9; background: rgba(4,8,12,.92); overscroll-behavior: contain; }
+dialog.ov:not([open]) { display: none; }
+dialog.ov::backdrop { background: transparent; }
+html.ov-open, html.ov-open body { overflow: hidden; }
+.ov-btn { font: 9.5px var(--mono); letter-spacing: .2em; text-transform: uppercase; padding: 9px 15px; border-radius: 999px; border: 1px solid rgba(168,194,232,.45); background: rgba(148,178,222,.15); color: #eef2f9; cursor: pointer; transition: background .2s ease; }
+#theater { padding: 6vh 5vw; align-items: center; justify-content: center; }
+#theater[open] { display: flex; }
+#theater .wrap { width: 100%; max-width: 1500px; display: flex; flex-direction: column; gap: 14px; }
+#theater .stage-box { width: 100%; max-height: 76vh; max-height: 76dvh; margin: 0 auto; border-radius: 18px; border-color: rgba(196,214,240,.2); background: #05080b; }
+#theater .media > * { object-fit: contain; }
+#theater .ctl { width: 42px; height: 42px; font-size: 18px; border-color: rgba(168,194,232,.45); color: #eef2f9; }
+#theater .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+#theater .bar-r { display: flex; align-items: center; gap: 14px; flex: none; }
+#theater .th-count { font: 9px var(--mono); letter-spacing: .2em; color: rgba(198,212,238,.55); }
+#bp { padding: 22px; flex-direction: column; gap: 12px; }
+#bp[open] { display: flex; }
+#bp .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+#bp .ttl { display: flex; align-items: baseline; gap: 14px; min-width: 0; }
+#bp .ttl b { font: 700 13px var(--disp); letter-spacing: .16em; text-transform: uppercase; }
+#bp .ttl span { font: 9px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(198,212,238,.5); }
+#bp iframe { flex: 1; width: 100%; border: 1px solid rgba(196,214,240,.2); border-radius: 16px; background: #05080b; }
+
+/* Pointer-only polish: touch screens get no sticky hover states. */
+@media (hover: hover) and (pointer: fine) {
+  .brand:hover { opacity: .72; }
+  .tab:hover { background-color: rgba(150,200,168,.13); color: #e8f3ec; }
+  .lang button:hover { color: #e8f3ec; }
+  .feat:hover, .card:not(.locked):hover { transform: translateY(-3px); border-color: rgba(160,206,176,.55); background: rgba(48,74,60,.34); }
+  .branch li span:hover { filter: brightness(1.28); border-color: rgba(var(--c), .7); }
+  .back:hover { background: #fff; border-color: #fff; box-shadow: 0 6px 22px rgba(0,0,0,.45); }
+  .yt:hover .play { transform: translate(-50%, -50%) scale(1.06); background: rgba(9,19,13,.75); }
+  .hero .ytlink:hover { background: rgba(9,19,13,.85); color: #f2f8f4; }
+  .dl:hover { background: var(--dl-bg-hi); transform: translateY(-1px); }
+  .bp-btn:hover { border-color: var(--acc); color: #fff; box-shadow: inset 0 1px 0 rgba(226,244,232,.2), 0 0 0 1px var(--btn-bd-hi), 0 8px 22px rgba(4,10,7,.5); }
+  .ctl:hover { background: rgba(8,14,20,.88); border-color: var(--btn-bd-hi); }
+  .thumbs button:hover { opacity: 1; border-color: var(--btn-bd-hi); }
+  .pill-btn:hover { background: rgba(140,192,158,.32); }
+  .links a:hover { background: rgba(24,40,32,.7); }
+  .ov-btn:hover { background: rgba(148,178,222,.3); }
+  /* Small glass on media chips; skipped on phones where it costs a blur pass per frame. */
+  .badge, .ctl, .mv .counter { -webkit-backdrop-filter: blur(16px) saturate(1.6); backdrop-filter: blur(16px) saturate(1.6); background-color: rgba(8,14,20,.46); }
+  dialog.ov { -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); background: rgba(4,8,12,.9); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .bg .img { animation: drift 46s ease-in-out infinite; }
+}
+
+@media (min-width: 1500px) {
+  .ptitle { font-size: 40px; }
+  .summary { font-size: 17px; line-height: 1.68; }
+  .sys h3 { font-size: 21px; }
+  .sys p { font-size: 15.5px; }
+}
+
+/* Short landscape screens (phones on their side): drop the frame, keep the layout. */
+@media (min-width: 861px) and (max-height: 560px) {
+  .stage { padding: 0; }
+  .shell, .is-detail .shell { max-width: none; height: 100vh; height: 100dvh; border-radius: 0; border: 0; }
+  .brand { padding: 10px 0; }
+  .brand h1 { font-size: 19px; }
+  .v-status, .v-skills, .v-grid, .v-contact { padding-top: 22px; }
+}
+
+/* Phones and narrow tablets: the page itself scrolls (native momentum, collapsing
+   address bar, tap-status-bar-to-top), and the header's tab row stays stuck. */
+@media (max-width: 860px) {
+  .stage { height: auto; min-height: 100vh; min-height: 100dvh; overflow: visible; padding: 0; display: block; }
+  .shell, .is-detail .shell { max-width: none; height: auto; min-height: 100vh; min-height: 100dvh; border-radius: 0; border: 0; box-shadow: none; overflow: visible; display: block; animation: none; -webkit-backdrop-filter: none; backdrop-filter: none; background: linear-gradient(158deg, rgba(236,248,240,.06) 0%, rgba(210,232,218,.03) 46%, rgba(6,14,10,.2) 100%); }
+  .head { position: sticky; top: var(--stick); flex-direction: column; gap: 0; padding: 0 15px; max-height: 190px; background: linear-gradient(180deg, rgba(22,40,30,.97) 0%, rgba(14,28,20,.96) 100%); }
+  .is-detail .head { display: none; }
+  .brand { padding: 15px 96px 9px 0; }
+  .brand h1 { font-size: 18px; }
+  .head-r { display: contents; }
+  .tabs { margin: 0 -15px; min-height: 52px; border-top: 1px solid rgba(198,228,208,.12); }
+  .tab { flex: 1 1 0; min-width: 0; align-items: center; padding: 0 2px; }
+  .tab .t { font-size: 10px; letter-spacing: .12em; }
+  .tab .sub { font-size: 7.5px; }
+  .lang { position: absolute; top: 12px; right: 12px; padding: 0; }
+  .lang button { padding: 8px 12px; }
+  .view { overflow: visible; padding-bottom: 12px; }
+  .view.out { filter: none; transform: none; }
+  .v-status { padding: 20px 16px 30px; grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .portrait { aspect-ratio: 16/10; }
+  .portrait img { object-position: 50% 38%; transform: scale(.94); transform-origin: 50% 38%; }
+  .lead, .c-lead { font-size: 21px; }
+  .focus { grid-template-columns: 1fr; }
+  .v-skills { padding: 20px 16px 30px; grid-template-columns: minmax(0, 1fr); }
+  .v-grid { padding: 18px 16px 30px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+  .v-detail { padding: 16px 16px 34px; }
+  .backbar { margin: -16px -16px 0; padding: 12px 16px 10px; -webkit-backdrop-filter: none; backdrop-filter: none; background: linear-gradient(180deg, rgba(8,14,20,.92) 0%, rgba(8,14,20,.7) 70%, rgba(8,14,20,0) 100%); }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .ptitle { font-size: 26px; }
+  .summary { font-size: 14px; }
+  .h2 { font-size: 21px; }
+  .sys { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 18px 16px; }
+  .thumbs button { width: 78px; }
+  .v-contact { padding: 20px 16px 28px; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .fb .two { grid-template-columns: 1fr; }
+  /* 16px keeps iOS Safari from zooming the page when a field is focused. */
+  .fb input, .fb textarea { font-size: 16px; }
+  .boot { position: fixed; }
+  #theater { padding: 12px; }
+  #bp { padding: 10px; }
+}
+/* Large phones on their side and small tablets: enough width for two columns. */
+@media (min-width: 600px) and (max-width: 860px) {
+  .v-status { grid-template-columns: 240px minmax(0, 1fr); gap: 28px; }
+  .portrait { aspect-ratio: 3/4; }
+  .portrait img { object-position: 50% 26%; transform: scale(1.08); transform-origin: 50% 26%; }
+  .v-skills { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+  .sys { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .v-contact { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .fb .two { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 380px) {
+  .tab .t { font-size: 9.5px; letter-spacing: .07em; }
+  .tab .sub { letter-spacing: .14em; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="img base"></div>
+  <div class="img cover" id="bgCover"></div>
+  <div class="vig"></div>
+  <div class="warm"></div>
+  <div class="cold"></div>
+</div>
+
+<div class="stage">
+  <div class="shell" id="shell">
+    <header class="head" id="head">
+      <a class="brand" href="#status" data-sfx id="brand">
+        <h1>ERIK THOMAS</h1>
+        <span class="role" data-t="Game Designer / Gameplay Programmer">Game Designer / Gameplay Programmer</span>
+      </a>
+      <div class="head-r">
+        <nav class="tabs" id="tabs" aria-label="Sections" data-t-label="Sections">
+          <span class="bar" id="bar"></span>
+        </nav>
+        <div class="lang" role="group" aria-label="Language" data-t-label="Language">
+          <div class="lang-pill">
+            <button type="button" data-act="lang" data-lang="en" aria-pressed="true" title="English">EN</button>
+            <button type="button" data-act="lang" data-lang="hu" aria-pressed="false" title="Magyar">HU</button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="view" id="view" tabindex="-1"></main>
+    <div class="boot" id="boot" hidden><i></i></div>
+  </div>
+</div>
+
+<dialog class="ov" id="theater" aria-label="Big screen">
+  <div class="wrap">
+    <div class="mv" id="thMv"></div>
+  </div>
+</dialog>
+
+<dialog class="ov" id="bp">
+  <div class="bar">
+    <div class="ttl"><b id="bpTitle"></b><span data-t="Blueprint viewer">Blueprint viewer</span></div>
+    <button type="button" class="ov-btn" data-act="close" data-t="Close ✕">Close ✕</button>
+  </div>
+</dialog>
+
+<noscript>
+  <div style="position:relative; padding:40px 24px; max-width:640px; margin:0 auto; line-height:1.6;">
+    <h1 style="font-family:Archivo,sans-serif; letter-spacing:.16em;">ERIK THOMAS</h1>
+    <p>Game designer / gameplay programmer in Budapest. This portfolio needs JavaScript for its case studies.</p>
+    <p>Email: erikthom.dev@proton.me · <a href="https://itch.io/profile/ermendq">itch.io</a> · <a href="https://github.com/ermendq">GitHub</a> · <a href="https://www.linkedin.com/in/erik-thomas-abb447262/">LinkedIn</a> · <a href="assets/Erik-Thomas-CV-EN.pdf">CV (PDF)</a></p>
+  </div>
+</noscript>
+
+<script src="site/data.js"></script>
+<script>
+(() => {
+'use strict';
+const S = window.SITE;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const slug = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const store = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } };
+
+const html = document.documentElement, shell = $('#shell'), view = $('#view'), head = $('#head');
+const mqPhone = matchMedia('(max-width: 860px)');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const scroller = () => (mqPhone.matches ? document.scrollingElement : view);
+
+/* Media: data holds bare names from assets/; the page reads the web copies. */
+const stem = (f) => f.replace(/\.[^.]+$/, '');
+const isVid = (f) => /\.mp4$/i.test(f);
+const pic = (f, w) => 'assets/web/' + stem(f) + '-' + w + '.webp';
+const set = (f, ws) => ws.map((w) => pic(f, w) + ' ' + w + 'w').join(', ');
+const clip = (f, hd) => 'assets/web/' + stem(f) + (hd ? '-1080.mp4' : '-720.mp4');
+
+const projects = S.projects.slice().sort((a, b) => a.slot.localeCompare(b.slot));
+projects.forEach((p) => { p.id = slug(p.name); });
+const byId = (id) => projects.find((p) => p.id === id);
+
+const st = {
+  lang: store('et-lang') === 'hu' ? 'hu' : 'en',
+  route: { tab: null, id: null },
+  mi: {}, invSeen: false, fromGrid: false,
+  draft: { name: '', email: '', text: '' }, sent: null,
+  scroll: {}, hue: {}, th: null
+};
+
+const t = (s) => (st.lang === 'hu' && Object.prototype.hasOwnProperty.call(S.hu, s) ? S.hu[s] : s);
+const tt = (s) => esc(t(s));
+
+/* ---------- sound ---------- */
+let sfx = null;
+function select() {
+  try {
+    if (!sfx) { sfx = new Audio('assets/ui-select.wav'); sfx.preload = 'auto'; }
+    sfx.currentTime = 0;
+    const p = sfx.play(); if (p && p.catch) p.catch(() => {});
+  } catch (e) {}
+}
+
+/* ---------- views ---------- */
+function vStatus() {
+  const f = projects[0];
+  return '<div class="v-status">' +
+    '<div class="col">' +
+      '<div class="portrait">' +
+        '<img class="fade" src="assets/web/portrait-800.webp" srcset="' + set('portrait.jpg', [400, 800, 1600]) + '" sizes="(max-width: 860px) 100vw, 300px" alt="Erik Thomas" width="800" height="1200" fetchpriority="high" decoding="async">' +
+        '<div class="shade"></div><div class="ring"></div><div class="cap">ERIK THOMAS</div>' +
+      '</div>' +
+      '<div class="cells">' + S.vitals.map(([k, v]) => '<div><div class="k">' + tt(k) + '</div><div class="v">' + tt(v) + '</div></div>').join('') + '</div>' +
+    '</div>' +
+    '<div class="col" style="gap:30px">' +
+      '<div><div class="lbl">' + tt('Profile') + '</div>' +
+        '<p class="lead">' + tt('I design and build complex gameplay systems that feel simple in the hand — polished and fine-tuned until the intended player experience is achieved.') + '</p>' +
+        '<p class="intro">' + tt('Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.') + '</p></div>' +
+      '<div class="focus">' + S.focus.map(([k, v]) => '<div><div class="k">' + tt(k) + '</div><div class="v">' + tt(v) + '</div></div>').join('') + '</div>' +
+      '<div><div class="lbl">' + tt('Highlighted project') + '</div>' +
+        '<a class="feat" href="#inventory/' + f.id + '" data-sfx>' +
+          '<div class="thumb"><img class="fade" src="' + pic(f.cover, 400) + '" alt="" decoding="async"><span class="badge">' + f.slot + '</span></div>' +
+          '<div class="txt"><div class="name">' + esc(f.name) + '</div><div class="blurb">' + tt(f.blurb) + '</div>' +
+            '<div class="row"><span class="chip">' + esc(f.engine) + '</span><span class="chip">' + esc(f.year) + '</span><span class="open">' + tt('OPEN CASE STUDY →') + '</span></div></div>' +
+        '</a></div>' +
+    '</div></div>';
+}
+
+function vSkills() {
+  return '<div class="v-skills">' + S.skills.map((b) =>
+    '<section class="branch" style="--c:' + b.rgb + '; --soft:' + b.soft + '">' +
+      '<div class="top"><h2 class="title" style="margin:0">' + tt(b.title) + '</h2><div class="note">' + tt(b.note) + '</div></div>' +
+      '<div class="stem"></div>' +
+      '<ul>' + b.items.map((s) => '<li><span>' + tt(s) + '</span></li>').join('') + '</ul>' +
+    '</section>').join('') + '</div>';
+}
+
+function vGrid() {
+  return '<div class="v-grid">' + projects.map((p, i) => {
+    const open = !!p.cover;
+    const inner =
+      '<div class="cov' + (open ? ' has' : '') + '">' +
+        (open ? '<img class="fade" src="' + pic(p.cover, 800) + '" srcset="' + set(p.cover, [400, 800]) + '" sizes="(max-width: 860px) 100vw, 420px" alt="" ' + (i > 5 ? 'loading="lazy" ' : '') + 'decoding="async">'
+              : '<span class="soon">' + esc(st.lang === 'hu' ? 'borítókép hamarosan' : 'cover coming soon') + '</span>') +
+        '<span class="badge">' + p.slot + '</span>' +
+      '</div>' +
+      '<div class="txt">' +
+        '<div class="name">' + esc(p.name) + (p.download ? '<span class="dl-ico" title="' + tt('Download for Windows') + '" aria-label="' + tt('Download for Windows') + '">⤓</span>' : '') + '</div>' +
+        '<div class="blurb">' + (open && p.blurb ? tt(p.blurb) : tt('Upload in progress…')) + '</div>' +
+        '<div class="tags">' + (p.tags || []).map((g) => '<span class="chip">' + tt(g) + '</span>').join('') + '</div>' +
+      '</div>';
+    return open ? '<a class="card" href="#inventory/' + p.id + '" data-sfx>' + inner + '</a>'
+                : '<div class="card locked" aria-disabled="true">' + inner + '</div>';
+  }).join('') + '</div>';
+}
+
+function mediaList(sys) {
+  let img = 0, vid = 0;
+  return (sys.media || []).map((f) => (isVid(f)
+    ? { f, video: true, label: (st.lang === 'hu' ? 'Klip ' : 'Clip ') + String(++vid).padStart(2, '0') }
+    : { f, video: false, label: (st.lang === 'hu' ? 'Kép ' : 'Shot ') + String(++img).padStart(2, '0') }));
+}
+
+function mediaEl(m, big) {
+  if (m.video) {
+    const src = clip(m.f, big && innerWidth >= 1000);
+    return big
+      ? '<video src="' + src + '" poster="' + pic(m.f, 1600) + '" controls playsinline loop preload="auto"></video>'
+      : '<video data-src="' + src + '" poster="' + pic(m.f, 800) + '" muted loop playsinline preload="none" data-act="toggle" aria-label="' + esc(m.label) + '"></video>';
+  }
+  return big
+    ? '<img src="' + pic(m.f, 1600) + '" alt="' + esc(m.label) + '" decoding="async">'
+    : '<img src="' + pic(m.f, 800) + '" srcset="' + set(m.f, [800, 1600]) + '" sizes="(max-width: 860px) 100vw, 45vw" alt="' + esc(m.label) + '" loading="lazy" decoding="async">';
+}
+
+function viewer(i, sys, big) {
+  const list = mediaList(sys), n = st.mi[i] || 0, many = list.length > 1;
+  const stage =
+    '<div class="stage-box">' +
+      '<div class="media">' + mediaEl(list[n], big) + '</div>' +
+      (big ? '' : '<button type="button" class="ctl big" data-act="theater" data-sys="' + i + '">⤡ ' + tt('Big screen') + '</button>') +
+      '<div class="veil"></div>' +
+      (many ? '<button type="button" class="ctl prev" data-act="step" data-d="-1" data-sys="' + i + '" aria-label="' + tt('Previous') + '">‹</button>' +
+              '<button type="button" class="ctl next" data-act="step" data-d="1" data-sys="' + i + '" aria-label="' + tt('Next') + '">›</button>' +
+              (big ? '' : '<span class="counter">' + (n + 1) + ' / ' + list.length + '</span>') : '') +
+    '</div>';
+  const thumbs = many || big
+    ? '<div class="thumbs">' + (many ? list.map((m, k) =>
+        '<button type="button" data-act="pick" data-n="' + k + '" data-sys="' + i + '" aria-current="' + (k === n) + '" aria-label="' + esc(m.label) + '" title="' + esc(m.label) + '">' +
+          '<img src="' + pic(m.f, 400) + '" alt="" loading="lazy" decoding="async">' + (m.video ? '<span class="vid">▶</span>' : '') +
+        '</button>').join('') : '') + '</div>'
+    : '';
+  if (!big) return stage + thumbs;
+  return stage + '<div class="bar">' + thumbs + '<div class="bar-r"><span class="th-count">' + (n + 1) + ' / ' + list.length + '</span>' +
+    '<button type="button" class="ov-btn" data-act="close">' + tt('Close ✕') + '</button></div></div>';
+}
+
+function vDetail(p) {
+  const sys = p.systems || [];
+  const offline = location.protocol === 'file:';
+  const hero = p.youtube
+    ? '<button type="button" class="yt" data-act="yt" aria-label="' + tt('Play video') + ': ' + esc(p.name) + '">' +
+        '<img src="' + pic(p.cover, 1600) + '" srcset="' + set(p.cover, [800, 1600]) + '" sizes="(max-width: 860px) 100vw, 55vw" alt="" decoding="async">' +
+        '<span class="play" aria-hidden="true">▶</span></button>' +
+      '<a class="ytlink" href="https://youtu.be/' + p.youtube + '" target="_blank" rel="noopener">' + tt(offline ? 'Watch on YouTube' : 'Open on YouTube') + '</a>'
+    : '<img src="' + pic(p.cover, 1600) + '" alt="' + esc(p.name) + '" decoding="async">';
+  const count = st.lang === 'hu' ? sys.length + ' RENDSZER' : sys.length + (sys.length === 1 ? ' SYSTEM' : ' SYSTEMS');
+  return '<div class="v-detail">' +
+    '<div class="backbar"><button type="button" class="back" data-act="back" data-sfx>' + tt('← BACK TO INVENTORY') + '</button></div>' +
+    '<div class="hero-grid">' +
+      '<div class="hero">' + hero + '</div>' +
+      '<div class="info">' +
+        '<div><div class="kicker">' + p.slot + ' — ' + tt('CASE STUDY') + '</div>' +
+          '<h2 class="ptitle">' + esc(p.name) + '</h2>' +
+          '<p class="summary">' + tt(p.summary || p.blurb) + '</p></div>' +
+        (p.download ? '<a class="dl" href="' + esc(p.download) + '" target="_blank" rel="noopener"><span aria-hidden="true">⤓</span><span>' + tt('Download for Windows') + '</span></a>' : '') +
+        (p.meta ? '<div class="meta">' + p.meta.map(([k, v]) => '<div><div class="k">' + tt(k) + '</div><div class="v">' + tt(v) + '</div></div>').join('') + '</div>' : '') +
+        (p.built ? '<div><div class="sec-lbl">' + tt('What I built') + '</div><ul class="built">' + p.built.map((b) => '<li>' + tt(b) + '</li>').join('') + '</ul></div>' : '') +
+      '</div>' +
+    '</div>' +
+    (sys.length ? '<section class="systems">' +
+      '<div class="sys-head"><div><div class="sec-lbl">' + tt('Systems breakdown') + '</div><h2 class="h2">' + tt('How it works under the hood') + '</h2></div><div class="count">' + count + '</div></div>' +
+      '<div class="sys-list">' + sys.map((s, i) =>
+        '<article class="sys">' +
+          '<div class="txt"><div class="idx">SYS ' + String(i + 1).padStart(2, '0') + '</div><h3>' + tt(s.title) + '</h3><p>' + tt(s.body) + '</p>' +
+            (s.blueprint ? '<button type="button" class="bp-btn" data-act="bp" data-sys="' + i + '"><span>' + tt('SEE BLUEPRINT') + '</span>' +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg></button>' : '') +
+          '</div>' +
+          (s.media && s.media.length ? '<div class="mv" data-sys="' + i + '">' + viewer(i, s, false) + '</div>' : '<div></div>') +
+        '</article>').join('') + '</div>' +
+    '</section>' : '') +
+  '</div>';
+}
+
+function vContact() {
+  const d = st.draft, sent = st.sent || {}, cv = st.lang === 'hu' ? S.cv.hu : S.cv.en;
+  return '<div class="v-contact">' +
+    '<div>' +
+      '<div class="lbl">' + tt('Recruit') + '</div>' +
+      '<p class="c-lead">' + tt('Available for gameplay programming, systems design or creative development work — contract or full-time.') + '</p>' +
+      '<p class="c-body">' + tt('Happiest on a team that ships. Send a build, a design doc, or a rough idea and I\'ll tell you honestly what I\'d do with it.') + '<span>' + tt('You can email me at:') + '</span></p>' +
+      '<button type="button" class="pill-btn" data-act="copy"><span class="swap"><span class="a">' + esc(S.email) + '</span><span class="b">' + tt('COPIED TO CLIPBOARD') + '</span></span></button>' +
+    '</div>' +
+    '<div class="links">' +
+      S.links.map(([k, v, href]) => '<a href="' + href + '" target="_blank" rel="noopener noreferrer"><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + '</span><span class="m" aria-hidden="true">↗</span></a>').join('') +
+      '<a class="cv" href="' + cv + '" download><span class="k">' + tt('Résumé') + '</span><span class="v">' + tt('Download PDF') + '</span><span class="m" aria-hidden="true">PDF ↓</span></a>' +
+    '</div>' +
+    '<form class="fb" id="fb" novalidate>' +
+      '<div class="note"><div class="lbl">' + tt('Feedback') + '</div><p>' + tt('This portfolio is still being polished and iterated on constantly. If something reads oddly, looks broken, or could simply be better — tell me. Every note is welcome.') + '</p></div>' +
+      '<div class="two">' +
+        '<input type="text" name="name" value="' + esc(d.name) + '" placeholder="' + esc(sent.name || t('Your name (optional)')) + '" aria-label="' + tt('Your name (optional)') + '" autocomplete="name" maxlength="120">' +
+        '<input type="email" name="email" value="' + esc(d.email) + '" placeholder="' + esc(sent.email || t('Email for a reply (optional)')) + '" aria-label="' + tt('Email for a reply (optional)') + '" autocomplete="email" maxlength="160">' +
+      '</div>' +
+      '<textarea name="text" rows="3" placeholder="' + esc(sent.text || t('What worked, what didn’t, what you’d change…')) + '" aria-label="' + tt('Feedback') + '" maxlength="4000">' + esc(d.text) + '</textarea>' +
+      '<input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+      '<div class="send-row"><button type="submit" class="pill-btn send">' + tt('SEND FEEDBACK →') + '</button><span class="status" role="status" aria-live="polite"></span></div>' +
+    '</form>' +
+  '</div>';
+}
+
+/* ---------- header ---------- */
+const tabsEl = $('#tabs'), bar = $('#bar');
+tabsEl.insertAdjacentHTML('beforeend', S.tabs.map(([id]) =>
+  '<a class="tab" href="#' + id + '" data-tab="' + id + '" data-sfx><span class="t"></span>' + (id === 'inventory' ? '<span class="sub"></span>' : '') + '</a>').join(''));
+
+function paintHeader() {
+  const cur = st.route.tab;
+  $$('.tab', tabsEl).forEach((a) => {
+    const id = a.dataset.tab, def = S.tabs.find((x) => x[0] === id);
+    a.querySelector('.t').textContent = st.lang === 'hu' ? def[2] : def[1];
+    if (id === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    const sub = a.querySelector('.sub');
+    if (sub) { sub.textContent = t('Projects'); a.classList.toggle('flash', !st.invSeen); }
+  });
+  $$('[data-t]').forEach((el) => { el.textContent = t(el.dataset.t); });
+  $$('[data-t-label]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.tLabel)));
+  $$('.lang button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === st.lang)));
+  placeBar();
+}
+
+function placeBar() {
+  const a = $('.tab[aria-current="page"]', tabsEl);
+  if (!a) return;
+  bar.style.width = a.offsetWidth + 'px';
+  bar.style.transform = 'translateX(' + a.offsetLeft + 'px)';
+  bar.style.opacity = '1';
+}
+
+/* On phones the whole header is sticky but pinned above the fold by the brand's
+   height, so the name scrolls away and only the tab row stays. */
+function pinHeader() {
+  html.style.setProperty('--stick', mqPhone.matches ? -$('#brand').offsetHeight + 'px' : '0px');
+}
+
+/* ---------- accent + backdrop ---------- */
+function accent(p) {
+  const on = !!(p && p.cover);
+  html.classList.toggle('is-cold', on);
+  if (!on) { html.style.setProperty('--h', 145); html.style.setProperty('--s', 20); return; }
+  $('#bgCover').style.backgroundImage = 'url("' + pic(p.cover, 'bg') + '")';
+  const apply = (v) => { if (st.route.id === p.id) { html.style.setProperty('--h', v.h); html.style.setProperty('--s', v.s); } };
+  if (st.hue[p.cover]) return apply(st.hue[p.cover]);
+  const im = new Image();
+  im.onload = () => {
+    let v = { h: 145, s: 20 };
+    try {
+      const n = 24, c = document.createElement('canvas'); c.width = c.height = n;
+      const ctx = c.getContext('2d'); ctx.drawImage(im, 0, 0, n, n);
+      const d = ctx.getImageData(0, 0, n, n).data;
+      let x = 0, y = 0, sw = 0, ss = 0, sc = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i] / 255, g = d[i + 1] / 255, b = d[i + 2] / 255;
+        const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2;
+        if (mx === mn || l < .06 || l > .97) continue;
+        const dl = mx - mn, sat = l > .5 ? dl / (2 - mx - mn) : dl / (mx + mn);
+        let h = mx === r ? (g - b) / dl + (g < b ? 6 : 0) : mx === g ? (b - r) / dl + 2 : (r - g) / dl + 4;
+        h *= 60;
+        const w = sat * (1 - Math.abs(l - .5) * 1.2);
+        x += Math.cos(h * Math.PI / 180) * w; y += Math.sin(h * Math.PI / 180) * w;
+        sw += w; ss += sat; sc++;
+      }
+      if (sc && sw) {
+        let h = Math.atan2(y, x) * 180 / Math.PI; if (h < 0) h += 360;
+        v = { h: Math.round(h), s: Math.max(14, Math.min(34, Math.round((ss / sc) * 100 * .8))) };
+      }
+    } catch (e) {}
+    st.hue[p.cover] = v; apply(v);
+  };
+  im.src = pic(p.cover, 400);
+}
+
+/* ---------- video playback ---------- */
+const theaterOpen = () => $('#theater').open;
+const openDlg = () => $('dialog.ov[open]');
+const play = (v) => { const r = v.play(); if (r && r.catch) r.catch(() => {}); };
+/* A case study holds a clip per system; only the ones on screen load and run. */
+const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+  const v = en.target;
+  if (!en.isIntersecting) { if (!v.paused) v.pause(); return; }
+  if (!v.getAttribute('src')) v.src = v.dataset.src;
+  if (!openDlg() && !v.dataset.paused) play(v);
+}), { threshold: 0.2 });
+const watch = (root) => $$('video[data-src]', root).forEach((v) => io.observe(v));
+function resumeVisible() {
+  const vh = innerHeight;
+  $$('video[data-src]', view).forEach((v) => {
+    const r = v.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < vh && !v.dataset.paused && v.getAttribute('src')) play(v);
+  });
+}
+
+/* ---------- media switching ---------- */
+function showMedia(i, n) {
+  const p = byId(st.route.id); if (!p) return;
+  const sys = p.systems[i], list = mediaList(sys);
+  n = ((n % list.length) + list.length) % list.length;
+  if (n === (st.mi[i] || 0)) return;
+  st.mi[i] = n;
+  const boxes = [$('.mv[data-sys="' + i + '"]', view)];
+  if (st.th === i) boxes.push($('#thMv'));
+  boxes.forEach((box) => {
+    if (!box) return;
+    const big = box.id === 'thMv', veil = $('.veil', box), media = $('.media', box);
+    $$('.thumbs button', box).forEach((b, k) => b.setAttribute('aria-current', String(k === n)));
+    $$('.counter, .th-count', box).forEach((c) => { c.textContent = (n + 1) + ' / ' + list.length; });
+    veil.classList.add('on');
+    clearTimeout(box._swap); clearTimeout(box._lift);
+    box._swap = setTimeout(() => {
+      const old = $('video', media); if (old) { io.unobserve(old); old.removeAttribute('src'); old.load(); }
+      media.innerHTML = mediaEl(list[n], big);
+      const el = media.firstElementChild;
+      const lift = () => { clearTimeout(box._lift); veil.classList.remove('on'); };
+      box._lift = setTimeout(lift, 1400);
+      if (el.tagName === 'VIDEO') {
+        el.addEventListener('loadeddata', lift, { once: true });
+        el.addEventListener('error', lift, { once: true });
+        if (big) playLoud(el); else io.observe(el);
+      } else if (el.complete) lift();
+      else { el.addEventListener('load', lift, { once: true }); el.addEventListener('error', lift, { once: true }); }
+    }, 170);
+  });
+}
+
+/* Big screen starts with sound when the browser allows it, muted otherwise. */
+function playLoud(v) {
+  const r = v.play();
+  if (r && r.catch) r.catch(() => { v.muted = true; play(v); });
+}
+
+/* ---------- overlays (history-aware, so the phone's back gesture closes them) ---------- */
+function openOverlay(d) {
+  $$('video', view).forEach((v) => { if (!v.paused) v.pause(); });
+  if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+  html.classList.add('ov-open');
+  history.pushState({ ov: 1 }, '');
+}
+function closeOverlay(fromPop) {
+  const d = openDlg(); if (!d) return;
+  if (!fromPop && history.state && history.state.ov) { history.back(); return; }
+  if (d.close) d.close(); else d.removeAttribute('open');
+  html.classList.remove('ov-open');
+  if (d.id === 'theater') { const v = $('video', d); if (v) { v.pause(); v.removeAttribute('src'); v.load(); } $('#thMv').innerHTML = ''; st.th = null; }
+  if (d.id === 'bp') { const f = $('#bpFrame'); if (f) f.remove(); }
+  resumeVisible();
+}
+addEventListener('popstate', () => { if (openDlg()) closeOverlay(true); });
+$$('dialog.ov').forEach((d) => {
+  d.addEventListener('cancel', (e) => { e.preventDefault(); closeOverlay(); });
+  if (d.id === 'theater') d.addEventListener('click', (e) => { if (e.target === d) closeOverlay(); });
+});
+
+function openTheater(i) {
+  const p = byId(st.route.id); if (!p) return;
+  st.th = i;
+  const box = $('#thMv');
+  box.innerHTML = viewer(i, p.systems[i], true);
+  openOverlay($('#theater'));
+  const v = $('video', box); if (v) playLoud(v);
+}
+function openBlueprint(i) {
+  const s = byId(st.route.id).systems[i];
+  $('#bpTitle').textContent = t(s.title);
+  /* A fresh iframe per open: changing an existing iframe's src adds session-history
+     entries, which would make the phone's back gesture step the hidden viewer. */
+  const f = document.createElement('iframe');
+  f.id = 'bpFrame'; f.title = t(s.title);
+  f.src = 'blueprint-viewer/index.html?src=' + s.blueprint.map((x) => 'assets/' + x).join(',');
+  $('#bp').appendChild(f);
+  openOverlay($('#bp'));
+}
+
+/* ---------- routing ---------- */
+function parse() {
+  const [tab, id] = decodeURIComponent(location.hash.replace(/^#\/?/, '')).split('/');
+  const ok = S.tabs.some((x) => x[0] === tab) ? tab : 'status';
+  const p = ok === 'inventory' && id ? byId(id) : null;
+  return { tab: ok, id: p && p.cover ? p.id : null };
+}
+const keyOf = (r) => r.tab + (r.id ? '/' + r.id : '');
+
+function renderView() {
+  const r = st.route, p = r.id ? byId(r.id) : null;
+  $$('video', view).forEach((v) => { io.unobserve(v); v.removeAttribute('src'); v.load(); });
+  view.innerHTML = p ? vDetail(p) : r.tab === 'skills' ? vSkills() : r.tab === 'inventory' ? vGrid() : r.tab === 'contact' ? vContact() : vStatus();
+  $$('img.fade', view).forEach((im) => { if (im.complete && im.naturalWidth) im.classList.add('in'); });
+  watch(view);
+}
+
+let swapT = 0;
+function navigate(next, first) {
+  const cur = st.route;
+  if (cur.tab === next.tab && cur.id === next.id) return;
+  if (openDlg()) closeOverlay(true);
+  st.scroll[keyOf(cur)] = scroller().scrollTop;
+  st.fromGrid = !!next.id && cur.tab === 'inventory' && !cur.id;
+  if (next.id !== cur.id) st.mi = {};
+  st.route = next;
+  if (next.tab === 'inventory') st.invSeen = true;
+  paintHeader();
+  const detail = !!next.id, sizeChange = detail !== !!cur.id;
+  const done = () => {
+    html.classList.toggle('is-detail', detail);
+    accent(detail ? byId(next.id) : null);
+    renderView();
+    const back = !next.id && next.tab === 'inventory' && cur.id;
+    scroller().scrollTop = back ? (st.scroll[keyOf(next)] || 0) : 0;
+    placeBar(); pinHeader();
+  };
+  if (first || reduced) { done(); return; }
+  clearTimeout(swapT);
+  view.classList.add('out');
+  swapT = setTimeout(() => {
+    done();
+    /* The shell animates its size into and out of a case study; content waits
+       for it so the grid isn't re-laid out every frame of the resize. */
+    const wait = sizeChange && !mqPhone.matches ? 340 : 0;
+    swapT = setTimeout(() => { view.classList.remove('out'); if (!first) view.focus({ preventScroll: true }); }, wait);
+  }, 190);
+}
+addEventListener('hashchange', () => navigate(parse()));
+
+/* ---------- language ---------- */
+const GLYPHS = 'ÁÉÍÓÖŐÚÜŰ#%&@$*+=<>/\\|01░▒';
+function glitch(s, p) {
+  let out = '';
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === ' ' || c === '\n' || c === '—') { out += c; continue; }
+    const h = ((i * 2654435761) % 1000) / 1000;
+    const thr = (i / s.length) * 0.72 + h * 0.28;
+    out += p > thr ? c : GLYPHS[(i * 7 + Math.floor(p * 97) * 13 + Math.floor(h * 1000)) % GLYPHS.length];
+  }
+  return out;
+}
+/* The target text is in place from the first frame; each character stays masked
+   by a glyph until its own threshold passes, so lengths never change mid-decode. */
+let decodeT = 0;
+function decode() {
+  if (reduced) return;
+  const nodes = [], w = document.createTreeWalker(shell, NodeFilter.SHOW_TEXT, { acceptNode: (n) => (n.data.trim() ? 1 : 3) });
+  for (let n = w.nextNode(); n; n = w.nextNode()) nodes.push([n, n.data]);
+  let step = 0;
+  const frame = () => {
+    const p = step / 6;
+    nodes.forEach(([n, s]) => { n.data = p >= 1 ? s : glitch(s, p); });
+    shell.style.filter = p >= 1 ? '' : 'blur(' + (1.7 * Math.sin(Math.PI * p)).toFixed(2) + 'px)';
+    if (p >= 1) { clearInterval(decodeT); placeBar(); }
+    step++;
+  };
+  clearInterval(decodeT); frame();
+  decodeT = setInterval(frame, 26);
+}
+function setLang(l) {
+  if (l === st.lang) return;
+  st.lang = l; store('et-lang', l); html.lang = l;
+  const y = scroller().scrollTop;
+  paintHeader(); renderView(); scroller().scrollTop = y; pinHeader();
+  decode();
+}
+
+/* ---------- contact ---------- */
+function copyEmail(btn) {
+  const sw = $('.swap', btn);
+  const done = () => {
+    clearTimeout(btn._t1); clearTimeout(btn._t2); clearTimeout(btn._t3);
+    sw.classList.add('fading');
+    btn._t1 = setTimeout(() => { btn.classList.add('copied'); sw.classList.remove('fading'); }, 170);
+    btn._t2 = setTimeout(() => sw.classList.add('fading'), 2100);
+    btn._t3 = setTimeout(() => { btn.classList.remove('copied'); sw.classList.remove('fading'); }, 2270);
+  };
+  const legacy = () => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = S.email; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    } catch (e) {}
+    done();
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(S.email).then(done, legacy);
+  else legacy();
+}
+
+let fbT = 0;
+function fbStatus(form, msg, err) {
+  const el = $('.status', form);
+  el.textContent = msg ? t(msg) : ''; el.classList.toggle('err', !!err);
+  clearTimeout(fbT);
+  if (msg && !err && msg !== 'SENDING…') fbT = setTimeout(() => { el.textContent = ''; }, 5000);
+}
+async function sendFeedback(form) {
+  const d = st.draft, text = d.text.trim(), btn = $('.send', form), F = (k) => form.elements.namedItem(k);
+  if (!text) { fbStatus(form, 'WRITE SOMETHING FIRST', true); return; }
+  const entry = { at: new Date().toISOString(), name: d.name.trim() || null, email: d.email.trim() || null, text, lang: st.lang };
+  btn.disabled = true; fbStatus(form, 'SENDING…');
+  try {
+    /* Apps Script answers without CORS headers, so this is fire-and-forget:
+       a resolved fetch means it left the browser; only a network error rejects. */
+    if (!F('website').value) {
+      await fetch(S.feedbackEndpoint, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(entry) });
+    }
+    st.sent = entry; st.draft = { name: '', email: '', text: '' };
+    ['name', 'email', 'text'].forEach((k) => { F(k).value = ''; });
+    F('name').placeholder = entry.name || t('Your name (optional)');
+    F('email').placeholder = entry.email || t('Email for a reply (optional)');
+    F('text').placeholder = text;
+    fbStatus(form, 'THANKS — YOUR NOTE IS LOGGED');
+  } catch (e) {
+    fbStatus(form, 'COULDN’T SEND — PLEASE EMAIL ME INSTEAD', true);
+  } finally { btn.disabled = false; }
+}
+view.addEventListener('input', (e) => {
+  const f = e.target;
+  if (f.form && f.form.id === 'fb' && f.name in st.draft) { st.draft[f.name] = f.value; fbStatus(f.form, ''); }
+});
+view.addEventListener('submit', (e) => { if (e.target.id === 'fb') { e.preventDefault(); sendFeedback(e.target); } });
+
+/* ---------- events ---------- */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-sfx]')) select();
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const i = +el.dataset.sys;
+  switch (el.dataset.act) {
+    case 'lang': select(); setLang(el.dataset.lang); break;
+    case 'back': if (st.fromGrid) history.back(); else location.hash = '#inventory'; break;
+    case 'step': showMedia(i, (st.mi[i] || 0) + +el.dataset.d); break;
+    case 'pick': showMedia(i, +el.dataset.n); break;
+    case 'theater': openTheater(i); break;
+    case 'bp': openBlueprint(i); break;
+    case 'close': closeOverlay(); break;
+    case 'copy': copyEmail(el); break;
+    case 'toggle':
+      if (el.paused) { delete el.dataset.paused; play(el); } else { el.dataset.paused = '1'; el.pause(); }
+      break;
+    case 'yt': {
+      const p = byId(st.route.id);
+      if (location.protocol === 'file:') { open('https://youtu.be/' + p.youtube, '_blank', 'noopener'); break; }
+      el.outerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + p.youtube + '?rel=0&modestbranding=1&playsinline=1&autoplay=1" title="' + tt('Gameplay capture') + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+      break;
+    }
+  }
+});
+
+document.addEventListener('load', (e) => { const im = e.target; if (im.classList && im.classList.contains('fade')) im.classList.add('in'); }, true);
+
+addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tg = e.target;
+  if (tg && (tg.isContentEditable || /^(input|textarea|select)$/i.test(tg.tagName))) return;
+  if (theaterOpen() && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { showMedia(st.th, (st.mi[st.th] || 0) + (e.key === 'ArrowLeft' ? -1 : 1)); return; }
+  if (openDlg()) return;
+  if (e.key === 'Escape' && st.route.id) { $('.back', view).click(); return; }
+  const k = e.key && e.key.toLowerCase();
+  if (k !== 'e' && k !== 'q') return;
+  const ids = S.tabs.map((x) => x[0]), i = ids.indexOf(st.route.tab);
+  select();
+  location.hash = '#' + ids[(i + (k === 'e' ? 1 : ids.length - 1)) % ids.length];
+});
+
+const onLayout = () => { placeBar(); pinHeader(); };
+new ResizeObserver(onLayout).observe(head);
+if (mqPhone.addEventListener) mqPhone.addEventListener('change', onLayout); else mqPhone.addListener(onLayout);
+if (document.fonts) document.fonts.ready.then(onLayout);
+
+/* ---------- boot ---------- */
+html.lang = st.lang;
+navigate(parse(), true);
+(() => {
+  let seen = false;
+  try { seen = sessionStorage.getItem('et-boot') === '1'; sessionStorage.setItem('et-boot', '1'); } catch (e) {}
+  if (seen || reduced) return;
+  const boot = $('#boot'), caret = $('i', boot);
+  boot.hidden = false;
+  let i = 0;
+  const tick = setInterval(() => {
+    caret.insertAdjacentHTML('beforebegin', '<div>' + tt(S.boot[i]) + '</div>');
+    if (++i < S.boot.length) return;
+    clearInterval(tick);
+    setTimeout(() => { boot.classList.add('done'); setTimeout(() => { boot.hidden = true; }, 260); }, 520);
+  }, 300);
+})();
+})();
+</script>
+</body>
+</html>
