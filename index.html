@@ -473,7 +473,7 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;showBarFight&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Inventory&quot;},&quot;feedbackEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://script.google.com/macros/s/AKfycbw3vCJK9P1eYtsjuDPPlPYaoGmW_BJiM9l6A20hntRS8o6T-E-9uTtMgOGrDBor1sfGKQ/exec&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;sound&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;bootSequence&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behaviour&quot;},&quot;showBarFight&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Inventory&quot;},&quot;feedbackEndpoint&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://script.google.com/macros/s/AKfycbw3vCJK9P1eYtsjuDPPlPYaoGmW_BJiM9l6A20hntRS8o6T-E-9uTtMgOGrDBor1sfGKQ/exec&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behaviour&quot;}}">
 class Component extends DCLogic {
   state = { tab: 'status', sel: null, booting: true, boot: [], sound: true, bar: null, invSeen: false,
     lang: (() => { try { return localStorage.getItem('et-lang') === 'hu' ? 'hu' : 'en'; } catch (e) { return 'en'; } })(),
@@ -1297,7 +1297,7 @@ class Component extends DCLogic {
     const st = this.state, uiTab = st.uiTab || st.tab;
     const hu = st.lang === 'hu', T = (s) => this.t(s), G = (s) => this.glitch(s);
     const allP = this.tProjects(this.projects());
-    const projects = this.props.showBarFight === false ? allP.filter(p => p.name !== 'Bar Fight' && p.name !== this.t('Bar Fight')).map((p, i) => ({ ...p, slot: String(i + 1).padStart(2, '0') })) : allP;
+    const projects = !(this.props.showBarFight ?? false) ? allP.filter(p => p.name !== 'Bar Fight' && p.name !== this.t('Bar Fight')).map((p, i) => ({ ...p, slot: String(i + 1).padStart(2, '0') })) : allP;
     const m = !!st.mobile, w = !m && !!st.wide;
     const branch = (hex, soft) => ({
       cLine: 'rgba(' + hex + ',.42)', cFill: 'rgba(' + hex + ',.16)', cGlow: 'rgba(' + hex + ',.16)',
