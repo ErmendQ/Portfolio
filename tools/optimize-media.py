@@ -12,6 +12,7 @@ For every video NAME.mp4 (MP4 or an OBS .mkv renamed to .mp4):
 For every image NAME.png / NAME.jpg:
     NAME-{400,800,1600}.webp  (never upscaled past the source width)
     NAME-bg.webp              pre-blurred backdrop, so the page needs no CSS blur
+backdrop.jpg also becomes the sharp page wallpaper: wall-*.webp (see WALL below).
 """
 import shutil, subprocess, sys
 from io import BytesIO
@@ -66,11 +67,53 @@ def backdrop(flat, name, src, blur_px, sat, hue_deg=0):
     ImageEnhance.Brightness(im).enhance(0.62).save(out, 'WEBP', quality=72, method=6)
 
 
+def grade(im, sat, hue_deg, bright):
+    im = ImageEnhance.Color(im).enhance(sat)
+    if hue_deg:
+        h, s, v = im.convert('HSV').split()
+        h = h.point(lambda x: (x + round(hue_deg * 256 / 360)) % 256)
+        im = Image.merge('HSV', (h, s, v)).convert('RGB')
+    return ImageEnhance.Brightness(im).enhance(bright)
+
+
+# The page wallpaper is shown sharp, so it gets its own crops per screen shape:
+# name -> (aspect w/h or None for the full frame, horizontal anchor 0..1, widths).
+WALL = {
+    'wall': (16 / 9, 0.5, (1280, 1920, 2560)),
+    'wall-wide': (None, 0.5, (1720, 2560, 3440)),
+    'wall-tall': (9 / 16, 0.3, (540, 810)),
+}
+
+
+def wallpaper(flat, src):
+    """Sharp, lightly graded crops of backdrop.jpg. Each also gets NAME-frost.webp,
+    a small pre-blurred twin that stands in for backdrop blur on phones."""
+    for name, (aspect, anchor, widths) in WALL.items():
+        outs = [OUT / f'{name}-{w}.webp' for w in widths]
+        frost = OUT / f'{name}-frost.webp'
+        if all(fresh(o, src) for o in outs + [frost]):
+            continue
+        im = flat
+        if aspect:
+            cw = round(flat.height * aspect)
+            x0 = round((flat.width - cw) * anchor)
+            im = flat.crop((x0, 0, x0 + cw, flat.height))
+        im = grade(im, 1.1, -8, 0.96)
+        for w, out in zip(widths, outs):
+            tw = min(w, im.width)
+            im.resize((tw, round(im.height * tw / im.width)), Image.LANCZOS).save(out, 'WEBP', quality=82, method=6)
+        fw = 405 if im.width < im.height else 640
+        small = im.resize((fw, round(im.height * fw / im.width)), Image.LANCZOS)
+        small = small.filter(ImageFilter.GaussianBlur(fw * 0.032))
+        grade(small, 1.35, 0, 0.7).save(frost, 'WEBP', quality=70, method=6)
+
+
 def image(src):
     name = src.stem
     flat = webp_set(Image.open(src), name, src)
     if name == 'backdrop':
         backdrop(flat, name, src, 9, 1.22, -8)
+        wallpaper(flat, src)
     else:
         backdrop(flat, name, src, 11, 1.15)
 

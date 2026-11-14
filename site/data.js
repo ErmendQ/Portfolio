@@ -1,4 +1,4 @@
-/* Portfolio content, shared by index-v2.html and index-v3.html.
+/* Portfolio content for index.html and i.html (rendered by site/app.js).
 
    Copy is written once, in English. Hungarian lives in SITE.hu, keyed by the
    English string; a missing key just shows the English text.
@@ -7,7 +7,8 @@
    tools/optimize-media.py builds into assets/web/, so after adding a file:
        py tools/optimize-media.py
    Projects without a cover show as locked "upload in progress" slots.
-   Display order follows `slot`. */
+   Display order follows `slot`; the page renumbers what it shows.
+   `unlisted: true` hides a project on index.html; i.html shows everything. */
 window.SITE = {
   email: 'erikthom.dev@proton.me',
   feedbackEndpoint: 'https://script.google.com/macros/s/AKfycbw3vCJK9P1eYtsjuDPPlPYaoGmW_BJiM9l6A20hntRS8o6T-E-9uTtMgOGrDBor1sfGKQ/exec',
@@ -108,6 +109,7 @@ window.SITE = {
     },
     {
       slot: '02',
+      unlisted: true,
       name: 'Bar Fight',
       engine: 'Unreal',
       year: '2026',
@@ -656,6 +658,10 @@ window.SITE = {
     'Play video': 'Videó lejátszása',
     'SENDING…': 'KÜLDÉS…',
     'COULDN’T SEND — PLEASE EMAIL ME INSTEAD': 'NEM SIKERÜLT ELKÜLDENI — ÍRJ INKÁBB E-MAILT',
+    'cover coming soon': 'borítókép hamarosan',
+    'Next project': 'Következő projekt',
+    Sound: 'Hang',
+    'Skip to content': 'Ugrás a tartalomra',
 
     /* index-v3.html */
     'Quests': 'Küldetések',

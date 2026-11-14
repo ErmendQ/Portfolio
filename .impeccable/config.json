@@ -56,6 +56,60 @@
         ],
         "createdAt": "2026-09-24T19:46:26.082Z",
         "reason": "Claude: index-v2.html is the faithful rebuild of the original design (user asked for larger UI changes to go in a separate duplicate, index-v3.html); this reproduces the original's type scale, shell resize motion, header bar and locked-slot hatching"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-13T21:21:48.725Z",
+        "reason": "Claude: false positive, the header bar spans the top of the glass shell by design and carries its own padding"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-13T21:21:48.740Z",
+        "reason": "Claude: the caps role line under the name is the incumbent brand lockup (character-menu identity in PRODUCT.md), one short label and not body copy"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-11-13T21:21:48.756Z",
+        "reason": "Claude: incumbent identity, hatching marks locked inventory slots and the grid on the See Blueprint button depicts blueprint paper"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "i.html"
+        ],
+        "createdAt": "2026-11-13T21:21:48.769Z",
+        "reason": "Claude: false positive, the header bar spans the top of the glass shell by design and carries its own padding"
+      },
+      {
+        "rule": "all-caps-body",
+        "value": "*",
+        "files": [
+          "i.html"
+        ],
+        "createdAt": "2026-11-13T21:21:48.779Z",
+        "reason": "Claude: the caps role line under the name is the incumbent brand lockup (character-menu identity in PRODUCT.md), one short label and not body copy"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          "i.html"
+        ],
+        "createdAt": "2026-11-13T21:21:48.792Z",
+        "reason": "Claude: incumbent identity, hatching marks locked inventory slots and the grid on the See Blueprint button depicts blueprint paper"
       }
     ]
   }
