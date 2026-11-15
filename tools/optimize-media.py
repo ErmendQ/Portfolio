@@ -76,19 +76,21 @@ def grade(im, sat, hue_deg, bright):
     return ImageEnhance.Brightness(im).enhance(bright)
 
 
-# The page wallpaper is shown sharp, so it gets its own crops per screen shape:
-# name -> (aspect w/h or None for the full frame, horizontal anchor 0..1, widths).
+# The page wallpaper gets its own crops per screen shape:
+# name -> (aspect w/h or None for the full frame, horizontal anchor 0..1, widths, soften).
+# soften is the wallpaper's slight blur, baked in here as a fraction of the image
+# width (about 3px on screen) so the page never has to filter a full-screen layer.
 WALL = {
-    'wall': (16 / 9, 0.5, (1280, 1920, 2560)),
-    'wall-wide': (None, 0.5, (1720, 2560, 3440)),
-    'wall-tall': (9 / 16, 0.3, (540, 810)),
+    'wall': (16 / 9, 0.5, (1280, 1920, 2560), 0.0019),
+    'wall-wide': (None, 0.5, (1720, 2560, 3440), 0.0014),
+    'wall-tall': (9 / 16, 0.3, (540, 810), 0.0063),
 }
 
 
 def wallpaper(flat, src):
-    """Sharp, lightly graded crops of backdrop.jpg. Each also gets NAME-frost.webp,
-    a small pre-blurred twin that stands in for backdrop blur on phones."""
-    for name, (aspect, anchor, widths) in WALL.items():
+    """Lightly graded, slightly softened crops of backdrop.jpg. Each also gets
+    NAME-frost.webp, a small heavily blurred twin that stands in for backdrop blur on phones."""
+    for name, (aspect, anchor, widths, soften) in WALL.items():
         outs = [OUT / f'{name}-{w}.webp' for w in widths]
         frost = OUT / f'{name}-frost.webp'
         if all(fresh(o, src) for o in outs + [frost]):
@@ -101,7 +103,8 @@ def wallpaper(flat, src):
         im = grade(im, 1.1, -8, 0.96)
         for w, out in zip(widths, outs):
             tw = min(w, im.width)
-            im.resize((tw, round(im.height * tw / im.width)), Image.LANCZOS).save(out, 'WEBP', quality=82, method=6)
+            sized = im.resize((tw, round(im.height * tw / im.width)), Image.LANCZOS)
+            sized.filter(ImageFilter.GaussianBlur(tw * soften)).save(out, 'WEBP', quality=82, method=6)
         fw = 405 if im.width < im.height else 640
         small = im.resize((fw, round(im.height * fw / im.width)), Image.LANCZOS)
         small = small.filter(ImageFilter.GaussianBlur(fw * 0.032))

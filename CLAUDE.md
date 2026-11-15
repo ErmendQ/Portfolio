@@ -18,6 +18,15 @@ Static files on GitHub Pages (erikthomas.dev), no build step, no dependencies.
   has no Range support, so clips would not seek.
 - Routes are hashes (`#inventory/<project>`). A project opens as `<dialog class="page">`
   layered over the menu; the menu underneath is never re-rendered.
+- A tap changes the screen first and the address second: links are handled in `go()`
+  (`pushState` + `route()`), and closing runs its animation before `history.back()`.
+  Never make a tap wait for `hashchange`/`popstate`; on phones that round trip is slow.
+- Phones use the desktop model edge to edge: fixed header and dock, each tab its own
+  scroller, the document never scrolls. Do not go back to document scrolling: a page
+  that is still gliding swallows the first tap on the dock, and the tab blur-in would
+  run on a page-tall layer (that is what made transitions stutter on iOS).
+- Whatever animates is at most one screen in size (transform, opacity, or a blur on
+  that bounded layer). The wallpaper's slight blur is baked in by `optimize-media.py`.
 - Glass budget: only the menu shell, the phone dock and the floating page buttons run a
   real `backdrop-filter`. Everything on top of glass is a translucent plate, and phones
   use the pre-blurred `wall-*-frost.webp` twin instead of a live blur. Keep it that way.

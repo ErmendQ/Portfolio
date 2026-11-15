@@ -3,14 +3,18 @@
 
    Routes are hashes: #status, #skills, #inventory, #contact and #inventory/<project>.
    A project opens as a page layered over the menu; the menu underneath is left
-   exactly as it was, so closing the page costs nothing. */
+   exactly as it was, so closing the page costs nothing.
+
+   A tap is answered in the same frame: the screen changes first and the address
+   follows. Nothing here waits on the browser's own navigation or history, because
+   on a phone those round trips are slow enough to feel like a missed tap. */
 (() => {
 'use strict';
 const S = window.SITE;
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const slug = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ'’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const slug = (s) => s.toLowerCase().normalize('NFD').replace(/\p{M}|['’]/gu, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const store = (k, v) => { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } };
 
 const html = document.documentElement;
@@ -18,6 +22,8 @@ const shell = $('#shell'), view = $('#view'), page = $('#page'), sheet = $('#she
 const mqPhone = matchMedia('(max-width: 860px)');
 const mqStill = matchMedia('(prefers-reduced-motion: reduce)');
 const still = () => mqStill.matches;
+/* iOS drags a picture of the previous screen in with its edge swipe (true on iOS only). */
+const swipeNav = !!(window.CSS && CSS.supports && CSS.supports('-webkit-touch-callout', 'none'));
 const EASE = 'cubic-bezier(.16, 1, .3, 1)';
 const TABS = S.tabs.map((x) => x[0]);
 
@@ -60,13 +66,29 @@ const hu = () => st.lang === 'hu';
 const t = (s) => (hu() && Object.prototype.hasOwnProperty.call(S.hu, s) ? S.hu[s] : s);
 const tt = (s) => esc(t(s));
 
-/* ---------- sound ---------- */
-let sfx = null;
+/* ---------- sound ----------
+   Web Audio, not an <audio> element: it plays the moment it is asked to, mixes with
+   whatever the visitor is listening to instead of pausing it, and an iPhone keeps it
+   quiet when its ringer switch is off. The sample is fetched while idle (see the end). */
+let ac = null, click = null, clickData = null;
+function chirp() {
+  if (ac.state !== 'running') { const r = ac.resume(); if (r && r.catch) r.catch(() => {}); }
+  if (!click) return;
+  const src = ac.createBufferSource();
+  src.buffer = click; src.connect(ac.destination); src.start();
+}
 function select() {
   try {
-    if (!sfx) { sfx = new Audio('assets/ui-select.wav'); sfx.preload = 'auto'; }
-    sfx.currentTime = 0;
-    const p = sfx.play(); if (p && p.catch) p.catch(() => {});
+    if (ac) { chirp(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext, data = clickData;
+    if (!AC || !data) return;
+    /* First use. Starting the audio engine costs a few frames, so it happens just
+       after the tap has been answered on screen; a timer set inside a tap still
+       carries the tap's permission to make sound. */
+    clickData = null;
+    setTimeout(() => {
+      try { ac = new AC(); chirp(); ac.decodeAudioData(data, (buf) => { click = buf; chirp(); }, () => {}); } catch (e) {}
+    }, 60);
   } catch (e) {}
 }
 
@@ -329,7 +351,7 @@ function showMedia(i, n) {
 /* ---------- the page itself ---------- */
 let origin = null;      /* the card a project was opened from; the page grows out of it */
 let seq = 0;            /* guards a transition against one that started after it */
-let leaving = false;
+let closing = false;    /* the page is on its way out */
 const titleIO = new IntersectionObserver((e) => sheet.classList.toggle('scrolled', !e[0].isIntersecting), { root: pgScroll, rootMargin: '-70px 0px 0px 0px' });
 pgScroll.addEventListener('scroll', () => sheet.classList.toggle('moved', pgScroll.scrollTop > 8), { passive: true });
 
@@ -355,24 +377,29 @@ function originPoint() {
   return '50% 42%';
 }
 
+/* How the sheet arrives, as [keyframes, ms, easing]; it leaves the same way in reverse.
+   On a phone it slides up whole: a move large enough to read even if a frame is lost
+   at the start, and transform only, so the compositor can carry it on its own. */
+function motion() {
+  if (still()) return [[{ opacity: 0 }, { opacity: 1 }], 160, 'ease-out'];
+  if (mqPhone.matches) return [[{ transform: 'translateY(100%)' }, { transform: 'none' }], 460, 'cubic-bezier(.32, .72, 0, 1)'];
+  sheet.style.transformOrigin = originPoint();
+  return [[{ opacity: 0, transform: 'scale(.86)' }, { opacity: 1, transform: 'none' }], 460, EASE];
+}
+
 function openPage(p, animate) {
   const mine = ++seq;
-  leaving = false;
+  closing = false;
   sheet.getAnimations().concat(scrim.getAnimations()).forEach((a) => a.cancel());
   fillPage(p);
   html.classList.add('page-open');
   html.classList.remove('page-settled');
   if (!page.open) page.showModal();
   const settle = () => { if (mine === seq) html.classList.add('page-settled'); };
-  if (!animate || still()) { settle(); return; }
-  const phone = mqPhone.matches;
-  sheet.style.transformOrigin = phone ? '50% 100%' : originPoint();
-  scrim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
-  sheet.animate(
-    phone ? [{ opacity: 0, transform: 'translateY(7%)' }, { opacity: 1, transform: 'none' }]
-          : [{ opacity: 0, transform: 'scale(.86)' }, { opacity: 1, transform: 'none' }],
-    { duration: 460, easing: EASE }
-  ).finished.then(settle, () => {});
+  if (!animate) { settle(); return; }
+  const [kf, ms, ease] = motion();
+  scrim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: Math.min(ms, 260), easing: 'ease-out' });
+  sheet.animate(kf, { duration: ms, easing: ease }).finished.then(settle, () => {});
 }
 
 /* Moving between projects while the page is open: the sheet stays, its content changes. */
@@ -387,67 +414,60 @@ function swapPage(p) {
   }, () => {});
 }
 
-function closePage() {
-  if (!page.open) return;
+function closePage(animate) {
+  if (!page.open || closing) return;
+  closing = true;
   const mine = ++seq;
-  html.classList.remove('page-settled');       /* the menu is back before the page leaves */
-  if (still()) { page.close(); return; }
-  const phone = mqPhone.matches;
-  sheet.style.transformOrigin = phone ? '50% 100%' : originPoint();
-  scrim.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 230, easing: 'ease-in', fill: 'forwards' });
-  sheet.animate(
-    phone ? [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(6%)' }]
-          : [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.92)' }],
-    { duration: 230, easing: 'cubic-bezier(.4, 0, 1, 1)', fill: 'forwards' }
-  ).finished.then(() => { if (mine === seq) page.close(); }, () => {});
-  html.classList.remove('page-open');
+  html.classList.remove('page-open', 'page-settled');       /* the menu is back before the page leaves */
+  const done = () => { if (mine === seq) page.close(); };
+  if (!animate) { done(); return; }
+  const [kf, ms, ease] = motion(), opt = { duration: ms * .6, easing: mqPhone.matches ? ease : 'ease-out', fill: 'forwards' };
+  scrim.animate([{ opacity: 1 }, { opacity: 0 }], opt);
+  sheet.animate(kf.slice().reverse(), opt).finished.then(done, () => {});
 }
 
 /* Everything that must happen however the page went away (button, Esc, back gesture). */
 page.addEventListener('close', () => {
+  if (page.open) return;              /* opened again before this event arrived */
   html.classList.remove('page-open', 'page-settled');
   $$('video', pgScroll).forEach(unload);
   pgScroll.innerHTML = '';            /* also stops a playing YouTube embed */
   sheet.getAnimations().concat(scrim.getAnimations()).forEach((a) => a.cancel());
   titleIO.disconnect();
-  st.id = null; st.mi = {}; leaving = false;
-  if (parse().id) { history.replaceState(null, '', '#inventory'); route(); }
+  st.id = null; st.mi = {}; closing = false;
+  /* Closed by the browser itself (Android's back button dismisses dialogs): the address still names it. */
+  if (parse().id && !backs) history.replaceState(null, '', '#inventory');
 });
 page.addEventListener('cancel', (e) => { e.preventDefault(); leave(); });
 
-/* Ask to close: step back if the grid is the previous entry, so the phone's back
-   gesture and the close button end up in the same place. */
+/* The close button, the back pill, Esc and a click outside. The page leaves at once
+   and the address catches up: stepping back through history takes a few hundred
+   milliseconds on a phone, and that must not be what the tap waits for. Stepping
+   back (rather than rewriting the entry) keeps the phone's own back gesture and
+   these buttons ending in the same place. */
 function leave() {
-  if (leaving) return;
-  leaving = true;
-  if (st.fromGrid) history.back();
-  else { history.replaceState(null, '', '#inventory'); route(); }
+  if (!page.open || closing) return;
+  closePage(true);
+  if (st.fromGrid) stepBack(); else history.replaceState(null, '', '#inventory');
+  document.title = baseTitle;
 }
 
 /* ---------- overlays above the page: big screen and blueprint viewer ----------
    Each pushes a history entry, so the phone's back gesture closes it. */
-let stepping = false;   /* a history.back() for an overlay is already on its way */
-const stepBack = () => { if (!stepping) { stepping = true; history.back(); } };
 function openOverlay(d) {
   const p = byId(st.id);
   $$('video', pgScroll).forEach((v) => { if (!v.paused) v.pause(); });
   if (p && st.hue[p.cover]) tint(d, st.hue[p.cover]);
   d.showModal();
-  html.classList.add('ov-open');
   history.pushState({ ov: 1 }, '');
 }
-function closeOverlay(fromPop) {
-  const d = openOv(); if (!d) return;
-  if (!fromPop && history.state && history.state.ov) { stepBack(); return; }
-  d.close();
-}
+const closeOverlay = () => { const d = openOv(); if (d) d.close(); };
 $$('dialog.ov').forEach((d) => {
-  d.addEventListener('cancel', (e) => { e.preventDefault(); closeOverlay(); });
+  d.addEventListener('cancel', (e) => { e.preventDefault(); d.close(); });
   d.addEventListener('close', () => {
-    html.classList.remove('ov-open');
     if (d.id === 'theater') { $$('video', d).forEach(unload); $('#thMv').innerHTML = ''; st.th = null; }
     else { const f = $('#bpFrame'); if (f) f.remove(); }
-    /* Closed without going through history (a second Esc): drop the entry we pushed. */
+    /* It has left the screen already; now drop the history entry it pushed. */
     if (history.state && history.state.ov) stepBack();
     resumeVisible();
   });
@@ -499,22 +519,30 @@ function placeBar(glide) {
   });
 }
 
-function paintChrome(glide) {
+/* Which tab is current. Runs on every switch, so it touches nothing else. */
+function markTab(glide) {
+  navs.forEach((nav) => $$('.tab', nav).forEach((a) => {
+    if (a.dataset.tab === st.tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    a.classList.toggle('flash', a.dataset.tab === 'inventory' && !st.invSeen);
+  }));
+  placeBar(glide);
+}
+
+/* Everything in the chrome that is worded: runs at the start and on a language change. */
+function paintChrome() {
   navs.forEach((nav) => {
     nav.setAttribute('aria-label', t('Sections'));
     $$('.tab', nav).forEach((a) => {
       const def = S.tabs.find((x) => x[0] === a.dataset.tab);
       $('.t', a).textContent = hu() ? def[2] : def[1];
-      if (a.dataset.tab === st.tab) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
-      const sub = $('.sub', a);
-      if (sub) { sub.textContent = t('Projects'); a.classList.toggle('flash', !st.invSeen); }
+      const sub = $('.sub', a); if (sub) sub.textContent = t('Projects');
     });
   });
   $$('[data-t]').forEach((el) => { el.textContent = t(el.dataset.t); });
   $$('[data-t-label]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.tLabel)));
   $$('.seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === st.lang)));
   $('#pgBack').innerHTML = icon('back') + '<span>' + esc(t('← BACK TO INVENTORY').replace(/^←\s*/, '')) + '</span>';
-  placeBar(glide);
+  markTab();
 }
 
 const panels = {};
@@ -530,50 +558,75 @@ function panel(tab) {
   return el;
 }
 
-/* quiet: the tab changes underneath something else (first paint, or a project
-   page opening over it), so nothing should move or take focus. */
+/* quiet: the tab changes underneath something else (first paint, a project page
+   opening over it, a swipe back), so nothing should move or take focus. */
 function showTab(tab, quiet) {
-  const prev = st.tab, el = panel(tab);
+  const el = panel(tab);
   st.tab = tab;
   if (tab === 'inventory') st.invSeen = true;
   Object.keys(panels).forEach((k) => panels[k].classList.toggle('off', k !== tab));
-  paintChrome(!quiet);
-  if (prev && mqPhone.matches) scrollTo(0, 0);
+  markTab(!quiet);
   if (quiet) return;
   /* A keyboard user who just activated a tab lands in its content. */
   if (document.activeElement && document.activeElement.closest('.tabs')) el.focus({ preventScroll: true });
-  if (still()) return;
-  /* The new tab comes into focus. */
-  el.animate([{ opacity: 0, filter: 'blur(14px)', transform: 'scale(1.012)' }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.3, .7, .3, 1)' });
+  /* The new tab comes into focus. A panel is never larger than the screen, so the blur stays cheap. */
+  el.animate(still() ? [{ opacity: 0 }, { opacity: 1 }]
+    : [{ opacity: 0, filter: 'blur(14px)', transform: 'scale(1.012)' }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }],
+    { duration: still() ? 160 : 380, easing: 'cubic-bezier(.3, .7, .3, 1)' });
 }
 
-function parse() {
-  let h = location.hash.replace(/^#\/?/, '');
+function parse(hash) {
+  let h = (hash === undefined ? location.hash : hash).replace(/^#\/?/, '');
   try { h = decodeURIComponent(h); } catch (e) {}
   const [tab, id] = h.split('/');
   const ok = TABS.indexOf(tab) >= 0 ? tab : 'status';
   return { tab: ok, id: ok === 'inventory' && id && byId(id) ? id : null };
 }
 
+/* Make the screen match the address. instant: without animating (see the popstate handler). */
 const baseTitle = document.title;
-function route(first) {
+function route(first, instant) {
   const r = parse(), p = r.id ? byId(r.id) : null;
   /* A project that doesn't exist here (typo, or unlisted on this page): tidy the address. */
   if (!p && location.hash.indexOf('/') > 0) history.replaceState(null, '', '#' + r.tab);
-  if (openOv()) closeOverlay(true);
+  const d = openOv();
+  if (d && !(history.state && history.state.ov)) d.close();
   if (r.tab !== st.tab) {
     /* Opening a project from another tab: the inventory is simply there underneath. */
     st.fromGrid = false;
-    showTab(r.tab, first || !!p);
+    showTab(r.tab, first || instant || !!p);
   }
-  if (p && p.id !== st.id) { if (page.open && !leaving) swapPage(p); else openPage(p, !first); }
-  else if (!p && page.open) closePage();
+  if (p && (p.id !== st.id || closing)) { if (page.open && !closing) swapPage(p); else openPage(p, !first && !instant); }
+  else if (!p && page.open) closePage(!instant);
   document.title = p ? p.name + ' — Erik Thomas' : baseTitle;
 }
-addEventListener('hashchange', () => route());
+
+/* Our own history.back() calls that have not landed yet. A tap that arrives in the
+   meantime waits for them, so the address and the screen cannot get out of step. */
+let backs = 0, backT = 0, queued = null;
+function stepBack() {
+  backs++;
+  clearTimeout(backT); backT = setTimeout(() => { backs = 0; flush(); }, 1500);
+  history.back();
+}
+function flush() { if (!backs && queued) { const q = queued; queued = null; go(q[0], q[1]); } }
+
+/* Go somewhere inside the site: the address and the screen change in one step. */
+function go(hash, replace) {
+  if (backs) { queued = [hash, replace]; return; }
+  const a = parse(), b = parse(hash);
+  if (a.tab !== b.tab || a.id !== b.id) history[replace ? 'replaceState' : 'pushState'](null, '', hash);
+  route();
+}
+
+/* Back, forward, or an address typed by hand. */
 addEventListener('popstate', () => {
-  stepping = false;
-  if (openOv() && !(history.state && history.state.ov)) closeOverlay(true);
+  const ours = backs > 0;
+  if (ours && !--backs) clearTimeout(backT);
+  /* An edge swipe on iOS has already slid the destination into view, so the screen
+     only has to match it; animating again would play the change twice. */
+  route(false, !ours && swipeNav);
+  flush();
 });
 
 /* ---------- language ---------- */
@@ -672,19 +725,21 @@ view.addEventListener('input', (e) => {
   if (f.form && f.form.id === 'fb' && f.name in st.draft) { st.draft[f.name] = f.value; fbStatus(f.form, ''); }
 });
 view.addEventListener('submit', (e) => { if (e.target.id === 'fb') { e.preventDefault(); sendFeedback(e.target); } });
+/* iOS slides the whole screen up for the keyboard and can leave it there afterwards. */
+view.addEventListener('focusout', () => setTimeout(() => { const a = document.activeElement; if (!a || !a.form) scrollTo(0, 0); }, 60));
 
 /* ---------- events ---------- */
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-sfx]')) select();
   const opener = e.target.closest('[data-open]');
   if (opener) { origin = opener; st.fromGrid = st.tab === 'inventory' && !st.id; }
-  const el = e.target.closest('[data-act]'); if (!el) return;
-  const i = +el.dataset.sys;
-  switch (el.dataset.act) {
+  const el = e.target.closest('[data-act]'), i = el ? +el.dataset.sys : 0;
+  switch (el && el.dataset.act) {
     case 'lang': select(); setLang(el.dataset.lang); break;
     case 'leave': select(); leave(); break;
     /* Next project: replace the entry, so Back still leads out of the page. */
-    case 'swap': e.preventDefault(); history.replaceState(null, '', el.getAttribute('href')); route(); break;
+    case 'swap': e.preventDefault(); go(el.getAttribute('href'), true); break;
+    case 'skip': e.preventDefault(); panels[st.tab].focus(); break;
     case 'step': showMedia(i, (st.mi[i] || 0) + +el.dataset.d); break;
     case 'pick': showMedia(i, +el.dataset.n); break;
     case 'theater': openTheater(i); break;
@@ -705,6 +760,14 @@ document.addEventListener('click', (e) => {
       break;
     }
   }
+  /* Links within the site are answered here, not by letting the browser navigate to
+     the hash and waiting for it to report back. */
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  e.preventDefault();
+  /* Tapping the tab you are on takes it back to the top. */
+  if (a.dataset.tab === st.tab && !page.open) panels[st.tab].scrollTo({ top: 0, behavior: still() ? 'auto' : 'smooth' });
+  go(a.getAttribute('href'));
 });
 
 document.addEventListener('load', (e) => { const im = e.target; if (im.classList && im.classList.contains('fade')) ready(im); }, true);
@@ -743,7 +806,7 @@ addEventListener('keydown', (e) => {
   const k = e.key && e.key.toLowerCase();
   if (k !== 'e' && k !== 'q') return;
   select();
-  location.hash = '#' + TABS[(TABS.indexOf(st.tab) + (k === 'e' ? 1 : TABS.length - 1)) % TABS.length];
+  go('#' + TABS[(TABS.indexOf(st.tab) + (k === 'e' ? 1 : TABS.length - 1)) % TABS.length]);
 });
 
 /* ---------- rim light: the glass edge catches light near the cursor ---------- */
@@ -770,11 +833,17 @@ new ResizeObserver(relayout).observe($('#head'));
 new ResizeObserver(relayout).observe($('#dock'));
 if (document.fonts) document.fonts.ready.then(relayout);
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+document.addEventListener('touchstart', () => {}, { passive: true });   /* iOS applies :active only when a touch listener exists */
 html.lang = st.lang;
+paintChrome();
 route(true);
 
-/* The inventory is the next click for most visitors: build it while idle so its covers are ready. */
-(window.requestIdleCallback || ((f) => setTimeout(f, 600)))(() => { if (!(navigator.connection && navigator.connection.saveData)) panel('inventory'); });
+/* While idle: fetch the click sound and build the other tabs, so the first visit to
+   each is as quick as every later one and the inventory's covers are already loaded. */
+(window.requestIdleCallback || ((f) => setTimeout(f, 500)))(() => {
+  fetch('assets/ui-select.wav').then((r) => r.arrayBuffer()).then((b) => { clickData = b; }).catch(() => {});
+  if (!(navigator.connection && navigator.connection.saveData)) TABS.forEach(panel);
+});
 
 (() => {
   let seen = false;
