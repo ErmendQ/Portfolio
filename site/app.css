@@ -154,7 +154,6 @@ html:not(.js) .stage, html:not(.js) .dock { display: none; }
 .swap.fading { opacity: 0; }
 
 .chip { font: 11px var(--mono); letter-spacing: .08em; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--hair); background: rgba(190, 225, 203, .07); color: var(--ink-3); }
-.badge { position: absolute; top: 9px; left: 10px; z-index: 2; padding: 3px 7px; border-radius: 7px; background: var(--dark); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16); font: 11px var(--mono); letter-spacing: .12em; color: #cfe6d8; }
 .fade { opacity: 0; transition: opacity .45s ease; }
 .fade.in { opacity: 1; }
 .cells { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--hair); border: 1px solid var(--hair); border-radius: 18px; overflow: hidden; }
@@ -204,6 +203,7 @@ html:not(.js) .stage, html:not(.js) .dock { display: none; }
 .v-grid { padding: 32px 40px 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .card { position: relative; border: 1px solid var(--hair); background: rgba(14, 26, 20, .58); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 16px 34px -26px rgba(0, 0, 0, .9); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; color: inherit; transition: transform .22s var(--ease), border-color .2s ease, background-color .2s ease; }
 .card.locked { opacity: .55; }
+.card.locked.wip { opacity: 1; }
 .card .cov { position: relative; aspect-ratio: 16/10; background: repeating-linear-gradient(135deg, rgba(214, 236, 222, .05) 0 9px, rgba(214, 236, 222, 0) 9px 18px); border-bottom: 1px solid var(--hair); display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .card .has { background: #16271d; }
 .card .cov img { transition: opacity .45s ease, transform .6s var(--ease); }
@@ -211,6 +211,10 @@ html:not(.js) .stage, html:not(.js) .dock { display: none; }
 .card .txt { padding: 14px 15px 16px; display: flex; flex-direction: column; gap: 9px; }
 .card .name { display: flex; align-items: center; gap: 8px; font: 700 15.5px var(--disp); letter-spacing: .06em; color: #ecf4ee; }
 .dl-ico { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex: none; border-radius: 6px; border: 1px solid rgba(160, 206, 176, .44); background: rgba(140, 192, 158, .18); color: #c6e4d2; }
+.plat { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 24px; flex: none; border-radius: 999px; border: 1px solid var(--hair); background: rgba(190, 225, 203, .07); color: #cfe6d8; }
+.plat svg { width: 13px; height: 13px; fill: currentColor; }
+.plat + .chip { margin-left: 4px; }
+.card .wip { margin-top: -5px; font: 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--label); }
 .dl-ico .i { width: 12px; height: 12px; stroke-width: 2.2; }
 .card .blurb { font-size: 13px; line-height: 1.55; color: var(--ink-2); }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 2px; }
@@ -272,8 +276,8 @@ dialog.page::backdrop { background: transparent; }
 /* Floating glass controls; the page scrolls underneath them. */
 .fab { position: absolute; z-index: 6; top: 16px; appearance: none; display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .16); background: rgba(10, 17, 15, .46); -webkit-backdrop-filter: blur(18px) saturate(1.7); backdrop-filter: blur(18px) saturate(1.7); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .34), inset 0 -1px 0 rgba(255, 255, 255, .06), 0 14px 30px -14px rgba(0, 0, 0, .8); color: var(--head); font: 500 11px var(--mono); letter-spacing: .16em; text-transform: uppercase; cursor: pointer; transition: background-color .18s ease, border-color .18s ease, transform .18s var(--ease); }
 .fab:active { transform: scale(.95); }
-.fab.back { left: 16px; }
-.fab.close { right: 16px; width: 46px; padding: 0; justify-content: center; }
+.fab.close { right: 16px; width: 54px; height: 54px; padding: 0; justify-content: center; }
+.fab.close .i { width: 20px; height: 20px; stroke-width: 2; }
 .fab.crumb { left: 50%; transform: translate(-50%, -8px); max-width: 40%; opacity: 0; pointer-events: none; cursor: default; color: var(--body); transition: opacity .25s ease, transform .35s var(--ease); }
 .fab.crumb b { font-weight: 500; color: var(--head); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sheet.scrolled .fab.crumb { opacity: 1; transform: translate(-50%, 0); }
@@ -291,7 +295,7 @@ dialog.page::backdrop { background: transparent; }
 .info { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
 .kicker, .sec-lbl, .sys .idx { font: 11px var(--mono); letter-spacing: .2em; color: var(--acc); text-transform: uppercase; }
 .ptitle { font: 800 36px/1.1 var(--disp); letter-spacing: -.01em; margin-top: 10px; color: var(--head); text-wrap: balance; }
-.summary { font-size: 15px; line-height: 1.68; color: var(--body); margin-top: 12px; text-wrap: pretty; }
+.summary { font-size: 15px; line-height: 1.68; color: var(--body); margin-top: 12px; text-wrap: pretty; white-space: pre-line; }
 .dl { display: inline-flex; align-items: center; gap: 11px; align-self: flex-start; font: 600 11px var(--mono); letter-spacing: .18em; text-transform: uppercase; padding: 15px 24px; border-radius: 999px; background: var(--dl-bg); box-shadow: 0 14px 28px -14px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .4); color: var(--dl-fg); transition: background-color .2s ease, transform .2s var(--ease); }
 .dl:active { transform: scale(.97); }
 .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
@@ -470,7 +474,6 @@ dialog.ov::backdrop { background: transparent; }
   .sheet { max-width: none; border-radius: 0; box-shadow: none; }
   .sheet::before, .sheet > .rim { display: none; }
   .fab { top: calc(10px + env(safe-area-inset-top)); }
-  .fab.back { left: 10px; padding: 0 15px; }
   .fab.close { right: 10px; }
   .fab.crumb, .fab kbd { display: none; }
   .pg { padding: calc(72px + env(safe-area-inset-top)) 16px calc(34px + env(safe-area-inset-bottom)); }
@@ -506,7 +509,6 @@ dialog.ov::backdrop { background: transparent; }
   .brand .role { letter-spacing: .02em; }
   .dock .tab .t { letter-spacing: .02em; }
   .dock .tab .sub { letter-spacing: .04em; }
-  .fab.back { letter-spacing: .1em; }
 }
 
 @media (prefers-reduced-transparency: reduce) {

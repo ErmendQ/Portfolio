@@ -8,7 +8,9 @@
        py tools/optimize-media.py
    Projects without a cover show as locked "upload in progress" slots.
    Display order follows `slot`; the page renumbers what it shows.
-   `unlisted: true` hides a project on index.html; i.html shows everything. */
+   `unlisted: true` hides a project on index.html; i.html shows everything.
+   `platforms` lists where it runs: 'windows' (the default), 'mac', 'steamdeck', 'android'.
+   `wip: true` adds a "Work in progress" line under the name. */
 window.SITE = {
   email: 'erikthom.dev@proton.me',
   feedbackEndpoint: 'https://script.google.com/macros/s/AKfycbw3vCJK9P1eYtsjuDPPlPYaoGmW_BJiM9l6A20hntRS8o6T-E-9uTtMgOGrDBor1sfGKQ/exec',
@@ -39,6 +41,17 @@ window.SITE = {
   ],
   cv: { en: 'assets/Erik-Thomas-CV-EN.pdf', hu: 'assets/Erik-Thomas-CV-HU.pdf' },
   projects: [
+    {
+      slot: '00',
+      name: 'Space Bar Game',
+      wip: true,
+      cover: 'space-bar-cover.png',
+      engine: 'Unreal',
+      year: '2026',
+      tags: ['2026', 'Unreal', 'Coop', 'Management', 'Building'],
+      platforms: ['windows', 'mac', 'steamdeck'],
+      blurb: 'A goofy, chaotic bartending experience in space with a friend — my graduation project.'
+    },
     {
       slot: '01',
       name: 'Faceless',
@@ -289,21 +302,23 @@ window.SITE = {
     },
     {
       slot: '04',
-      name: 'Slenderman AI',
+      name: 'Faceless Mobile',
+      platforms: ['android'],
       engine: 'Unreal',
       year: '2026',
-      tags: ['2026', 'Unreal', 'AI'],
+      tags: ['2026', 'Unreal', 'AI', 'Mobile'],
       cover: 'slenderman-ai-cover.png',
-      youtube: '5NSeKn_xnmY',
-      download: 'https://drive.proton.me/urls/F00M0EPDBG#k60GFZpWcBzs',
-      blurb: 'A school project experimenting with Unreal’s State Tree system and AI behaviour.',
+      youtube: 'i9sJMSE5F-k',
+      download: 'https://drive.proton.me/urls/0JR4HTNTKW#WCfjKBNkIPCO',
+      blurb: 'A fan-made mobile rework of the original game, combining two school projects focused on AI and mobile development.',
+      summary: 'The fan rework combines experimenting with Unreal’s State Tree system and AI behaviour with practising UI/UX design and development for mobile devices.\n\nThe gameplay stays the same: collect the pages and avoid the Slenderman, referred to here as Faceless.',
       meta: [
         ['Role', 'Developer'],
         ['Team', 'Solo development'],
         ['Engine', 'Unreal / Blueprints / State Tree'],
-        ['Duration', '2 months']
+        ['Duration', '4 months']
       ],
-      built: ['Recreated the Slenderman AI based on the original game'],
+      built: ['Recreated the Slenderman AI based on the original game', 'Optimized the game’s controls and UI/UX for mobile devices'],
       systems: [
         {
           title: 'Slenderman',
@@ -317,6 +332,12 @@ window.SITE = {
             'STT_Cooldown.uasset'
           ],
           media: ['slenderman-sys01-statetree.png', 'slenderman-sys01-forest.png']
+        },
+        {
+          title: 'Mobile UI/UX',
+          body: 'The game has been optimized for touchscreen controls: buttons and a virtual joystick were added to the player HUD, alongside haptic feedback that plays at key moments.\n\nThe main menu and the settings menu were also reworked with mobile UI/UX in mind, letting the player change the graphics, toggle vibration and more.',
+          blueprint: ['BP_MD2_Character.uasset', 'WBP_MD2_HUD.uasset', 'WBP_Settings.uasset'],
+          media: ['faceless-mobile-sys02-clip1.mp4', 'faceless-mobile-sys02-hud.png']
         }
       ]
     },
@@ -530,6 +551,13 @@ window.SITE = {
     'Gameplay capture': 'Gameplay felvétel',
     'CASE STUDY': 'ESETTANULMÁNY',
     'Download for Windows': 'Letöltés Windowsra',
+    'Download for Android': 'Letöltés Androidra',
+    'Mobile UI/UX': 'Mobil UI/UX',
+    'The game has been optimized for touchscreen controls: buttons and a virtual joystick were added to the player HUD, alongside haptic feedback that plays at key moments.\n\nThe main menu and the settings menu were also reworked with mobile UI/UX in mind, letting the player change the graphics, toggle vibration and more.': 'A játék irányítását érintőképernyőre optimalizáltam: a játékos HUD-ja gombokat és virtuális joysticket kapott, kulcspillanatokban pedig haptikus visszajelzés is érkezik.\n\nA főmenüt és a beállítások menüt szintén a mobilos UI/UX szem előtt tartásával dolgoztam át: itt állítható többek között a grafika, és ki-be kapcsolható a rezgés.',
+    Mobile: 'Mobil',
+    'A fan-made mobile rework of the original game, combining two school projects focused on AI and mobile development.': 'Az eredeti játék rajongói mobilos újragondolása, amely két iskolai projektet ötvöz: egy MI-re és egy mobilfejlesztésre fókuszálót.',
+    'The fan rework combines experimenting with Unreal’s State Tree system and AI behaviour with practising UI/UX design and development for mobile devices.\n\nThe gameplay stays the same: collect the pages and avoid the Slenderman, referred to here as Faceless.': 'A rajongói újragondolás az Unreal State Tree rendszerével és az MI viselkedésével való kísérletezést ötvözi a mobilos UI/UX-tervezés és -fejlesztés gyakorlásával.\n\nA játékmenet változatlan: gyűjtsd össze a lapokat, és kerüld el a Slendermant, akit itt Faceless néven ismersz.',
+    'Optimized the game’s controls and UI/UX for mobile devices': 'A játék irányításának és UI/UX-ének optimalizálása mobil eszközökre',
     'What I built': 'Amit én építettem',
     'Systems breakdown': 'Rendszerek részletesen',
     'How it works under the hood': 'Mi történik a motorháztető alatt',
@@ -660,6 +688,14 @@ window.SITE = {
     'COULDN’T SEND — PLEASE EMAIL ME INSTEAD': 'NEM SIKERÜLT ELKÜLDENI — ÍRJ INKÁBB E-MAILT',
     'cover coming soon': 'borítókép hamarosan',
     'Next project': 'Következő projekt',
+    Windows: 'Windows',
+    Android: 'Android',
+    Mac: 'Mac',
+    'Steam Deck': 'Steam Deck',
+    'Work in progress': 'Fejlesztés alatt',
+    Management: 'Menedzsment',
+    Building: 'Építés',
+    'A goofy, chaotic bartending experience in space with a friend — my graduation project.': 'Bolondos és kaotikus csaposélmény a barátoddal az űrben — ez a diplomamunkám.',
     Sound: 'Hang',
     'Skip to content': 'Ugrás a tartalomra',
 

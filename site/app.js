@@ -41,11 +41,21 @@ const ICONS = {
   ext: '<path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
   left: '<path d="m15 5-7 7 7 7"/>',
   right: '<path d="m9 5 7 7-7 7"/>',
-  back: '<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>',
   arrow: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
   expand: '<path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>'
 };
+/* Platform marks: filled logos, drawn here so they stay crisp and match the palette. */
+const PLATFORMS = {
+  windows: ['Windows', '<path d="M3 5.1 10.2 4v7.3H3zM11.2 3.9 21 2.5v8.8h-9.8zM3 12.3h7.2v7.3L3 18.5zM11.2 12.3H21v8.9l-9.8-1.4z"/>'],
+  mac: ['Mac', '<path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM13.8 4.9c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3-1.5z"/>'],
+  steamdeck: ['Steam Deck', '<path d="M12 2.5a9.5 9.5 0 0 0 0 19v-3a6.5 6.5 0 0 1 0-13z"/><circle cx="12" cy="12" r="4.4"/>'],
+  android: ['Android', '<path d="M16.6 4.2 18 1.8a.4.4 0 0 0-.7-.4l-1.4 2.5A8.6 8.6 0 0 0 12 3a8.6 8.6 0 0 0-3.9.9L6.7 1.4a.4.4 0 1 0-.7.4l1.4 2.4A7.9 7.9 0 0 0 3 10.6h18a7.9 7.9 0 0 0-4.4-6.4zM8.2 8.2a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm7.6 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM3 11.8V19a1.6 1.6 0 0 0 1.6 1.6h1.1v2a1.4 1.4 0 0 0 2.8 0v-2h1.6v2a1.4 1.4 0 0 0 2.8 0v-2h-.1 1.6v2a1.4 1.4 0 0 0 2.8 0v-2h1.1A1.6 1.6 0 0 0 21 19v-7.2z"/>']
+};
+const platforms = (p) => (p.platforms || ['windows']).map((k) => {
+  const [label, path] = PLATFORMS[k] || PLATFORMS.windows;
+  return '<span class="plat" title="' + tt(label) + '" aria-label="' + tt(label) + '" role="img"><svg viewBox="0 0 24 24" aria-hidden="true">' + path + '</svg></span>';
+}).join('');
 const icon = (n, cls) => '<svg class="i' + (cls ? ' ' + cls : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[n] + '</svg>';
 
 /* i.html carries data-all and also shows the projects marked `unlisted`.
@@ -54,7 +64,7 @@ const projects = S.projects
   .filter((p) => !p.unlisted || html.hasAttribute('data-all'))
   .sort((a, b) => a.slot.localeCompare(b.slot))
   .map((p, i) => Object.assign({}, p, { slot: String(i + 1).padStart(2, '0'), id: slug(p.name) }));
-const cases = projects.filter((p) => p.cover);          /* the ones with a case study */
+const cases = projects.filter((p) => p.cover && !p.wip);   /* the ones with a case study; a work in progress shows its cover but doesn't open */
 const byId = (id) => cases.find((p) => p.id === id);
 
 const st = {
@@ -66,38 +76,13 @@ const hu = () => st.lang === 'hu';
 const t = (s) => (hu() && Object.prototype.hasOwnProperty.call(S.hu, s) ? S.hu[s] : s);
 const tt = (s) => esc(t(s));
 
-/* ---------- sound ----------
-   Web Audio, not an <audio> element: it plays the moment it is asked to, mixes with
-   whatever the visitor is listening to instead of pausing it, and an iPhone keeps it
-   quiet when its ringer switch is off. The sample is fetched while idle (see the end). */
-let ac = null, click = null, clickData = null;
-function chirp() {
-  if (ac.state !== 'running') { const r = ac.resume(); if (r && r.catch) r.catch(() => {}); }
-  if (!click) return;
-  const src = ac.createBufferSource();
-  src.buffer = click; src.connect(ac.destination); src.start();
-}
-function select() {
-  try {
-    if (ac) { chirp(); return; }
-    const AC = window.AudioContext || window.webkitAudioContext, data = clickData;
-    if (!AC || !data) return;
-    /* First use. Starting the audio engine costs a few frames, so it happens just
-       after the tap has been answered on screen; a timer set inside a tap still
-       carries the tap's permission to make sound. */
-    clickData = null;
-    setTimeout(() => {
-      try { ac = new AC(); chirp(); ac.decodeAudioData(data, (buf) => { click = buf; chirp(); }, () => {}); } catch (e) {}
-    }, 60);
-  } catch (e) {}
-}
-
 /* ---------- menu views ---------- */
 const cvHref = () => (hu() ? S.cv.hu : S.cv.en);
 /* On a phone the address opens the mail app; everywhere it is also copied, so a
    desktop without a mail client still gets something useful out of the click. */
 const mailBtn = () => '<a class="btn solid mail" href="mailto:' + S.email + '" data-act="mail">' + icon('mail') +
   '<span class="swap"><span class="a">' + esc(S.email) + '</span><span class="b">' + tt('COPIED TO CLIPBOARD') + '</span></span></a>';
+const dlLabel = (p) => ((p.platforms || [])[0] === 'android' ? 'Download for Android' : 'Download for Windows');
 const cells = (rows) => rows.map(([k, v]) => '<div><div class="k">' + tt(k) + '</div><div class="v">' + tt(v) + '</div></div>').join('');
 
 function vStatus() {
@@ -117,8 +102,8 @@ function vStatus() {
         '<p class="intro">' + tt('Based in Budapest. I work across design and code: prototyping the mechanic, writing the systems that hold it up, then spending the long tail on feel — timings, input buffers, feedback, the hundred small corrections that turn a working feature into an entertaining one.') + '</p></div>' +
       '<div class="focus">' + cells(S.focus) + '</div>' +
       '<div><div class="lbl">' + tt('Highlighted project') + '</div>' +
-        '<a class="feat" href="#inventory/' + f.id + '" data-sfx data-open="' + f.id + '">' +
-          '<div class="thumb"><img class="fade" src="' + pic(f.cover, 400) + '" alt="" decoding="async"><span class="badge">' + f.slot + '</span></div>' +
+        '<a class="feat" href="#inventory/' + f.id + '" data-open="' + f.id + '">' +
+          '<div class="thumb"><img class="fade" src="' + pic(f.cover, 400) + '" alt="" decoding="async"></div>' +
           '<div class="txt"><div class="name">' + esc(f.name) + '</div><div class="blurb">' + tt(f.blurb) + '</div>' +
             '<div class="row"><span class="chip">' + esc(f.engine) + '</span><span class="chip">' + esc(f.year) + '</span>' +
             '<span class="open">' + esc(t('OPEN CASE STUDY →').replace(/\s*→$/, '')) + icon('arrow') + '</span></div></div>' +
@@ -142,15 +127,15 @@ function vInventory() {
       '<div class="cov' + (on ? ' has' : '') + '">' +
         (on ? '<img class="fade" src="' + pic(p.cover, 800) + '" srcset="' + set(p.cover, [400, 800]) + '" sizes="(max-width: 860px) 100vw, 420px" alt="" ' + (i > 5 ? 'loading="lazy" ' : '') + 'decoding="async">'
             : '<span class="soon">' + tt('cover coming soon') + '</span>') +
-        '<span class="badge">' + p.slot + '</span>' +
       '</div>' +
       '<div class="txt">' +
-        '<div class="name">' + esc(p.name) + (p.download ? '<span class="dl-ico" title="' + tt('Download for Windows') + '">' + icon('down') + '</span>' : '') + '</div>' +
-        '<div class="blurb">' + (on && p.blurb ? tt(p.blurb) : tt('Upload in progress…')) + '</div>' +
-        '<div class="tags">' + (p.tags || []).map((g) => '<span class="chip">' + tt(g) + '</span>').join('') + '</div>' +
+        '<div class="name">' + esc(p.name) + (p.download ? '<span class="dl-ico" title="' + tt(dlLabel(p)) + '">' + icon('down') + '</span>' : '') + '</div>' +
+        (p.wip ? '<div class="wip">' + tt('Work in progress') + '</div>' : '') +
+        '<div class="blurb">' + (p.blurb ? tt(p.blurb) : tt('Upload in progress…')) + '</div>' +
+        '<div class="tags">' + platforms(p) + (p.tags || []).map((g) => '<span class="chip">' + tt(g) + '</span>').join('') + '</div>' +
       '</div>';
-    return on ? '<a class="card" href="#inventory/' + p.id + '" data-sfx data-open="' + p.id + '">' + inner + '</a>'
-              : '<div class="card locked" aria-disabled="true">' + inner + '</div>';
+    return cases.includes(p) ? '<a class="card" href="#inventory/' + p.id + '" data-open="' + p.id + '">' + inner + '</a>'
+              : '<div class="card locked' + (on ? ' wip' : '') + '" aria-disabled="true">' + inner + '</div>';
   }).join('') + '</div>';
 }
 
@@ -235,10 +220,10 @@ function vPage(p) {
     '<div class="hero-grid">' +
       '<div class="hero" style="background-image:url(' + pic(p.cover, 800) + ')">' + hero + '</div>' +
       '<div class="info">' +
-        '<div><div class="kicker">' + p.slot + ' — ' + tt('CASE STUDY') + '</div>' +
+        '<div><div class="kicker">' + tt('CASE STUDY') + '</div>' +
           '<h2 class="ptitle" id="pgTitle">' + esc(p.name) + '</h2>' +
           '<p class="summary">' + tt(p.summary || p.blurb) + '</p></div>' +
-        (p.download ? '<a class="dl" href="' + esc(p.download) + '" target="_blank" rel="noopener">' + icon('down') + '<span>' + tt('Download for Windows') + '</span></a>' : '') +
+        (p.download ? '<a class="dl" href="' + esc(p.download) + '" target="_blank" rel="noopener">' + icon('down') + '<span>' + tt(dlLabel(p)) + '</span></a>' : '') +
         (p.meta ? '<div class="meta">' + cells(p.meta) + '</div>' : '') +
         (p.built && p.built.length ? '<div><div class="sec-lbl">' + tt('What I built') + '</div><ul class="built">' + p.built.map((b) => '<li>' + tt(b) + '</li>').join('') + '</ul></div>' : '') +
       '</div>' +
@@ -247,13 +232,13 @@ function vPage(p) {
       '<div class="sys-head"><div><div class="sec-lbl">' + tt('Systems breakdown') + '</div><h2 class="h2">' + tt('How it works under the hood') + '</h2></div><div class="count">' + count + '</div></div>' +
       '<div class="sys-list">' + sys.map((s, i) =>
         '<article class="sys">' +
-          '<div class="txt"><div class="idx">SYS ' + String(i + 1).padStart(2, '0') + '</div><h3>' + tt(s.title) + '</h3><p>' + tt(s.body) + '</p>' +
+          '<div class="txt"><div class="idx">SYS ' + String(i + 1).padStart(2, '0') + '</div><h3>' + tt(s.title) + '</h3>' + (s.body ? '<p>' + tt(s.body) + '</p>' : '') +
             (s.blueprint ? '<button type="button" class="bp-btn" data-act="bp" data-sys="' + i + '"><span>' + tt('SEE BLUEPRINT') + '</span>' + icon('ext') + '</button>' : '') +
           '</div>' +
           (s.media && s.media.length ? '<div class="mv" data-sys="' + i + '">' + viewer(i, s, false) + '</div>' : '<div></div>') +
         '</article>').join('') + '</div>' +
     '</section>' : '') +
-    (nx !== p ? '<a class="next" href="#inventory/' + nx.id + '" data-act="swap" data-sfx>' +
+    (nx !== p ? '<a class="next" href="#inventory/' + nx.id + '" data-act="swap">' +
       '<span class="thumb"><img src="' + pic(nx.cover, 400) + '" alt="" loading="lazy" decoding="async"></span>' +
       '<span><span class="sec-lbl">' + tt('Next project') + '</span><span class="name">' + esc(nx.name) + '</span></span>' + icon('arrow') + '</a>' : '') +
   '</article>';
@@ -361,7 +346,7 @@ function fillPage(p) {
   pgScroll.innerHTML = vPage(p);
   pgScroll.scrollTop = 0;
   $('#sheetTint').style.backgroundImage = 'url(' + pic(p.cover, 'bg') + ')';
-  $('#crumb').innerHTML = p.slot + ' — <b>' + esc(p.name) + '</b>';
+  $('#crumb').innerHTML = '<b>' + esc(p.name) + '</b>';
   hueOf(p, (v) => { if (st.id === p.id) tint(page, v); });
   sheet.classList.remove('scrolled', 'moved');
   titleIO.disconnect(); titleIO.observe($('#pgTitle'));
@@ -497,7 +482,7 @@ function openBlueprint(i) {
 const navs = [$('#tabs'), $('#dock')];
 navs.forEach((nav) => {
   nav.innerHTML = '<span class="tab-bar"></span>' + TABS.map((id) =>
-    '<a class="tab' + (id === 'inventory' ? ' has-sub' : '') + '" href="#' + id + '" data-tab="' + id + '" data-sfx><span class="t"></span>' + (id === 'inventory' ? '<span class="sub"></span>' : '') + '</a>').join('');
+    '<a class="tab' + (id === 'inventory' ? ' has-sub' : '') + '" href="#' + id + '" data-tab="' + id + '"><span class="t"></span>' + (id === 'inventory' ? '<span class="sub"></span>' : '') + '</a>').join('');
 });
 
 /* The bar glides with a transform only: its box takes the new tab's size at once,
@@ -541,7 +526,6 @@ function paintChrome() {
   $$('[data-t]').forEach((el) => { el.textContent = t(el.dataset.t); });
   $$('[data-t-label]').forEach((el) => el.setAttribute('aria-label', t(el.dataset.tLabel)));
   $$('.seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === st.lang)));
-  $('#pgBack').innerHTML = icon('back') + '<span>' + esc(t('← BACK TO INVENTORY').replace(/^←\s*/, '')) + '</span>';
   markTab();
 }
 
@@ -730,13 +714,12 @@ view.addEventListener('focusout', () => setTimeout(() => { const a = document.ac
 
 /* ---------- events ---------- */
 document.addEventListener('click', (e) => {
-  if (e.target.closest('[data-sfx]')) select();
   const opener = e.target.closest('[data-open]');
   if (opener) { origin = opener; st.fromGrid = st.tab === 'inventory' && !st.id; }
   const el = e.target.closest('[data-act]'), i = el ? +el.dataset.sys : 0;
   switch (el && el.dataset.act) {
-    case 'lang': select(); setLang(el.dataset.lang); break;
-    case 'leave': select(); leave(); break;
+    case 'lang': setLang(el.dataset.lang); break;
+    case 'leave': leave(); break;
     /* Next project: replace the entry, so Back still leads out of the page. */
     case 'swap': e.preventDefault(); go(el.getAttribute('href'), true); break;
     case 'skip': e.preventDefault(); panels[st.tab].focus(); break;
@@ -805,7 +788,6 @@ addEventListener('keydown', (e) => {
   if (page.open || openOv()) return;
   const k = e.key && e.key.toLowerCase();
   if (k !== 'e' && k !== 'q') return;
-  select();
   go('#' + TABS[(TABS.indexOf(st.tab) + (k === 'e' ? 1 : TABS.length - 1)) % TABS.length]);
 });
 
@@ -838,10 +820,9 @@ html.lang = st.lang;
 paintChrome();
 route(true);
 
-/* While idle: fetch the click sound and build the other tabs, so the first visit to
+/* While idle: build the other tabs, so the first visit to
    each is as quick as every later one and the inventory's covers are already loaded. */
 (window.requestIdleCallback || ((f) => setTimeout(f, 500)))(() => {
-  fetch('assets/ui-select.wav').then((r) => r.arrayBuffer()).then((b) => { clickData = b; }).catch(() => {});
   if (!(navigator.connection && navigator.connection.saveData)) TABS.forEach(panel);
 });
 
